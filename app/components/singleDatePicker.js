@@ -1,5 +1,5 @@
 import React from 'react'
-import PubSub from 'pubsub-js'
+import Pubsub from 'pubsub-js'
 import '../less/singleDatePicker.less'
 import DatePickBar from './datePickBar.js'
 
@@ -48,6 +48,39 @@ class SingleDatePicker extends React.Component {
         })
     }
 
+    handlePicked(date) {
+        let nowDate = new Date().format('yyyyMMdd');
+        if (date <= nowDate) {
+            let tmp = new Date(date.slice(0,4), parseInt(date.slice(4, 6)-1), date.slice(6, 8));
+            let nowTmp = new Date(nowDate.slice(0,4), parseInt(nowDate.slice(4, 6)-1), nowDate.slice(6, 8));
+            let offsetDay = Math.ceil(Math.abs(tmp.getTime() - nowTmp.getTime()) / (3600 * 24 * 1e3));
+            this.setState((prevState) => {
+                prevState.pickedDate = date;
+                prevState.week = updateWeek(date);
+                prevState.offset = offsetDay;
+                this.props.handleDate(date, "date");
+            })
+        } else {
+            Tip.error('日期选择不合理');
+        }
+
+
+    }
+
+    componentDidMount() {
+        Pubsub.subscribe('HIDE_PICKER', () => {
+            this.setState({
+                dateBarState: {
+                    toggled: false,
+                    firstIn: false
+                }
+            })
+        });
+    }
+
+    componentWillUnmount() {
+        Pubsub.unsubscribe('HIDE_PICKER');
+    }
 
     render() {
         return (
@@ -58,7 +91,7 @@ class SingleDatePicker extends React.Component {
                     <span>{this.state.week}</span>
                 </div>
                 <div className="nextDateBtn" onClick={this.updateDate.bind(this, 'next')}>后一天</div>
-                <DatePickBar dateBarState={this.state.dateBarState} />
+                <DatePickBar dateBarState={this.state.dateBarState} handlePicked={this.handlePicked.bind(this)}/>
             </div>
         )
     }
