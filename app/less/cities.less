@@ -1,12 +1,10 @@
 .component-cities {
-    z-index: 310;
     .cities-mask {
         position: fixed;
         left: 0;
         width: 100vw;
         height: 100vh;
         background: rgba(0, 0, 0, 0.2);
-        z-index: 300;
         opacity: 0;
         display: none;
     }
@@ -28,15 +26,14 @@
         -webkit-animation-fill-mode:forwards;
     }
     .cities {
+        position: fixed;
         width: 100vw;
         height: 5.5rem;
-        position: fixed;
         top: 100vh;
         left: 0rem;
         font-size: .29rem;
         background-color: #d5d8df;
         box-shadow: 0 0 0.15rem 0 rgba(37, 42, 48, 0.5);
-        z-index: 310;
         .cities-bar {
             width: 100vw;
             height: 1rem;
@@ -51,6 +48,7 @@
             }
             p:last-child {
                 float: right;
+                margin-right: .18rem;
             }
         }
         ul {
@@ -78,28 +76,25 @@
         -webkit-animation-iteration-count: 1;
         -webkit-animation-fill-mode:forwards;
     }
-}
+
+    @keyframes pmask_fadeIn {
+        from { opacity: 0;}
+        to { opacity: 1;}
+    }
+    @keyframes pmask_fadeOut {
+        from { opacity: 1;}
+        to { opacity: 0; display: none;}
+    }
 
 
 
+    @keyframes picker_slideIn {
+        from {top: 100vh;}
+        to {top: calc(100vh - 5.5rem);}
+    }
 
-@keyframes pmask_fadeIn {
-    from { opacity: 0;}
-    to { opacity: 1;}
-}
-@keyframes pmask_fadeOut {
-    from { opacity: 1;}
-    to { opacity: 0; display: none;}
-}
-
-
-
-@keyframes picker_slideIn {
-    from {top: 100vh;}
-    to {top: calc(100vh - 5.5rem);}
-}
-
-@keyframes picker_slideOut {
-    from {top: calc(100vh - 5.5rem);}
-    to {top: 100vh;}
+    @keyframes picker_slideOut {
+        from {top: calc(100vh - 5.5rem);}
+        to {top: 100vh;}
+    }
 }

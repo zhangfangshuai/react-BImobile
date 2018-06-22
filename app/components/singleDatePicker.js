@@ -1,6 +1,7 @@
-import React from 'react';
-import PubSub from 'pubsub-js';
-import '../less/singleDatePicker.less';
+import React from 'react'
+import PubSub from 'pubsub-js'
+import '../less/singleDatePicker.less'
+import DatePickBar from './datePickBar.js'
 
 class SingleDatePicker extends React.Component {
     constructor(props) {
@@ -9,7 +10,11 @@ class SingleDatePicker extends React.Component {
             id: this.props.selfId,
             offset: -1,
             pickedDate: getDateOffset(-1),
-            week: getWeekOffset(-1)
+            week: getWeekOffset(-1),
+            dateBarState: {
+                toggled: false,
+                firstIn: true
+            }
         }
     }
 
@@ -34,16 +39,26 @@ class SingleDatePicker extends React.Component {
         })
     }
 
+    pickDate() {
+        this.setState({
+            dateBarState: {
+                toggled: true,
+                firstIn: false
+            }
+        })
+    }
+
 
     render() {
         return (
-            <div className="singleDatePicker">
+            <div className="component-singleDatePicker">
                 <div className="preDateBtn" onClick={this.updateDate.bind(this, 'prev')}>前一天</div>
-                <div className="showDate">
+                <div className="showDate" onClick={this.pickDate.bind(this)}>
                     <div className="appDateTime" >{this.state.pickedDate}</div>
                     <span>{this.state.week}</span>
                 </div>
                 <div className="nextDateBtn" onClick={this.updateDate.bind(this, 'next')}>后一天</div>
+                <DatePickBar dateBarState={this.state.dateBarState} />
             </div>
         )
     }

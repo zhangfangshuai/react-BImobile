@@ -41,6 +41,16 @@ class Income extends React.Component {
                 })
             }, false)
         }
+        this.state.rechargeReq.cityId = c.value;
+        if (isParamValid(this.state.rechargeReq, 'income')) {
+            axiosGet(this.state.rechargeReq, (res) => {
+                this.setState({
+                    rechargeData: res,
+                    rechargeIndex: 0
+                });
+                sessionStorage.RECHARGE = JSON.stringify(res);
+            }, false)
+        }
     }
 
     handleIncome(cb, type) {
