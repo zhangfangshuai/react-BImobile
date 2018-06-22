@@ -1,0 +1,137 @@
+.menu-mask {
+    position: fixed;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 20, 0.4);
+    z-index: 300;
+    opacity: 0;
+    display: none;
+}
+.mask-show {
+    display: block;
+    animation: fadeIn 1s ease-out;
+    animation-iteration-count:1;
+    animation-fill-mode:forwards;
+    -webkit-animation:fadeIn 1s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-fill-mode:forwards;
+}
+.mask-hide {
+    animation: fadeOut 1s ease-out;
+    animation-iteration-count:1;
+    animation-fill-mode:forwards;
+    -webkit-animation:fadeOut 1s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-fill-mode:forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0;}
+    to { opacity: 1;}
+}
+@keyframes fadeOut {
+    from { opacity: 1;}
+    to { opacity: 0; display: none;}
+}
+
+
+.components-menu {
+    width: 3.8rem;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: -4rem;
+    font-size: .29rem;
+    background-image: linear-gradient(-224deg, #3F4955 0%, #171C22 72%);
+    box-shadow: 0.1rem 0 0.15rem 0 rgba(37, 42, 48, 0.7);
+    z-index: 310;
+    .user-msg {
+        width: 100%;
+        height: 1.1rem;
+        margin-top: 1.1rem;
+        .user-icon {
+            width: 1.1rem;
+            height: 1.1rem;
+            background: url(/static/images/portrait.png);
+            -webkit-background-size: cover;
+            background-size: cover;
+            margin-left: .5rem;
+            float: left;
+        }
+        .nickname {
+            height: 1.1rem;
+            line-height: 1.1rem;
+            font-size: .35rem;
+            color: #768998;
+            letter-spacing: .02rem;
+            margin-left: .2rem;
+            float: left;
+        }
+    }
+    ul {
+        width: 100%;
+        height: calc(100vh - 2.2rem);
+        padding: 0.48rem 0 0 0;
+        box-sizing: border-box;
+        li {
+            width: 100%;
+            height: .88rem;
+            display: flex;
+            align-items: center;
+            padding: 0 0 0 .37rem;
+            box-sizing: border-box;
+            img {
+                width: .31rem;
+                height: .31rem;
+                vertical-align: middle;
+            }
+            span {
+                color: #ABB7C1;
+                margin-left: .2rem;
+                letter-spacing: .03rem;
+                vertical-align: middle;
+            }
+        }
+        .focus {
+            span {
+                color: #09CA65;
+            }
+        }
+    }
+    .logout {
+        position: absolute;
+        bottom: 0.3rem;
+        left: 0;
+        width: 100%;
+        // height: .8rem;
+        text-align: center;
+        color: #768998;
+    }
+}
+.menu-show {
+  animation: slideIn 0.7s ease-out;
+  animation-iteration-count:1;
+  animation-fill-mode:forwards;
+  -webkit-animation:slideIn 0.7s;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-fill-mode:forwards;
+}
+.menu-hide {
+  animation: slideOut 0.5s ease-out;
+  animation-iteration-count:1;
+  animation-fill-mode:forwards;
+  -webkit-animation:slideOut 0.5s;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-fill-mode:forwards;
+}
+
+@keyframes slideIn {
+    from {left: -4rem;}
+    to {left: 0rem;}
+}
+
+@keyframes slideOut {
+    from {left: 0rem;}
+    to {left: -4rem;}
+}

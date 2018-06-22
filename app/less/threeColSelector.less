@@ -1,0 +1,27 @@
+@h: 0.5rem;
+.threeColSelector {
+    width: 4.6rem;
+    height: @h;
+    margin: 0 auto 0.2rem;
+    .active {
+        color: #FFFFFF;
+        background: #09CA65;
+    }
+    p {
+        float: left;
+        width: 33.3%;
+        height: 100%;
+        text-align: center;
+        line-height: @h;
+        font-size: 0.24rem;
+        color: #647888;
+        background: #F2F3F5;
+    }
+    p:first-child {
+        border-radius: @h/2 0 0 @h/2;
+    }
+    p:last-child {
+        border-radius: 0 @h/2 @h/2 0;
+    }
+
+}

@@ -1,0 +1,46 @@
+@font-size: 0.28rem;
+@height: 0.5rem;
+
+.dutyPerson-box {
+    position: relative;
+    display: none;
+    justify-content: flex-end;
+    height: @height;
+    line-height: @height;
+    padding: 0.1rem .27rem 0 0;
+    font-size: @font-size;
+    color: #647888;
+    border-top: solid 0.03rem #EAEFF3;
+    .dutyPerson {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .phoneBubble {
+        position: absolute;
+        top: -.8rem;
+        right: .3rem;
+        height: @height + 0.1rem;
+        line-height: @height + 0.1rem;
+        padding: 0 .22rem;
+        color: #ffffff;
+        border-radius: .15rem;
+        opacity: .7;
+        display: none;
+        background-color: #0d900b;
+        :before {
+            content: '';
+            position: absolute;
+            bottom: -.16rem;
+            right: .4rem;
+            width: 0px;
+            height: 0px;
+            border-top: solid .18rem #0d900b;
+            border-right: solid .12rem transparent;
+            border-left: solid .2rem transparent;
+            border-bottom: 0;
+        }
+        a {
+            color: #ffffff;
+        }
+    }
+}

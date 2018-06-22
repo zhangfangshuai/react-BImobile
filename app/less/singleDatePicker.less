@@ -1,0 +1,35 @@
+.singleDatePicker {
+    @h: .6rem;
+    @font: .24rem;
+    @fc: #0DB95F;
+    display: flex;
+    width: 5rem;
+    height: @h;
+    line-height: @h;
+    margin: 0 auto 0.2rem;
+    background: #F2F3F5;
+    border-radius: 2.67rem;
+    letter-spacing: 0;
+    box-shadow: inset 0 0.027rem 0.1rem 0 #D5D9DD;
+    .preDateBtn {
+        font-size: @font;
+        color: #647888;
+        margin-left: 0.31rem;
+    }
+    .showDate {
+        width: 2.2rem;
+        font-size: @font + 0.04rem;
+        color: @fc;
+        margin-left: 0.5rem;
+        .appDateTime {
+            width: 1.4rem;
+            display: inline-block;
+            background: transparent;
+        }
+    }
+    .nextDateBtn {
+        font-size: @font;
+        color: #647888;
+        margin-left: 0.31rem;
+    }
+}
