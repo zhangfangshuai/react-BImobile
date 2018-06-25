@@ -52,6 +52,7 @@ class SingleDatePicker extends React.Component {
         let nowDate = new Date().format('yyyyMMdd');
         if (date <= nowDate) {
             let tmp = new Date(date.slice(0,4), parseInt(date.slice(4, 6)-1), date.slice(6, 8));
+            // 只获取当日0时0分0秒时间
             let nowTmp = new Date(nowDate.slice(0,4), parseInt(nowDate.slice(4, 6)-1), nowDate.slice(6, 8));
             let offsetDay = Math.ceil(Math.abs(tmp.getTime() - nowTmp.getTime()) / (3600 * 24 * 1e3));
             this.setState((prevState) => {
@@ -91,7 +92,7 @@ class SingleDatePicker extends React.Component {
                     <span>{this.state.week}</span>
                 </div>
                 <div className="nextDateBtn" onClick={this.updateDate.bind(this, 'next')}>后一天</div>
-                <DatePickBar dateBarState={this.state.dateBarState} handlePicked={this.handlePicked.bind(this)}/>
+                <DatePickBar dateBarState={this.state.dateBarState} nowDate={this.state.pickedDate} handlePicked={this.handlePicked.bind(this)} />
             </div>
         )
     }

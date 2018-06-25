@@ -7,7 +7,7 @@ import SingleDatePicker from '../components/singleDatePicker'
 import DoubleDatePicker from '../components/doubleDatePicker'
 import ThreeColSelector from '../components/threeColSelector'
 import DutyPerson from '../components/dutyPerson'
-import Table from '../components/table.js'
+import Table from '../components/table'
 
 class Income extends React.Component {
     constructor(props) {
@@ -99,15 +99,16 @@ class Income extends React.Component {
             });
         }
         if (this.state.rechargeData.length != 0) {
+            let idx = this.state.rechargeIndex;
             var rechargeTb = this.state.rechargeData.data.map((d) => {
                 return (
                     <li key={this.state.rechargeData.data.indexOf(d)}>
                         <p>{d.data0}</p>
-                        <p>{this.state.rechargeIndex == 0 ? d.data1 : this.state.rechargeIndex == 1 ? d.data5 : d.data9}</p>
-                        <p>{this.state.rechargeIndex == 0 ? d.data2 : this.state.rechargeIndex == 1 ? d.data6 : d.data10}</p>
-                        <p>{this.state.rechargeIndex == 0 ? d.data3 : this.state.rechargeIndex == 1 ? d.data7 : d.data11}</p>
-                        <p>{this.state.rechargeIndex == 0 ? d.data4 : this.state.rechargeIndex == 1 ? d.data8 : d.data12}</p>
-                        <p>{this.state.rechargeIndex == 2 ? d.data13 : '--'}</p>
+                        <p>{idx == 0 ? d.data1 : idx == 1 ? d.data5 : d.data9}</p>
+                        <p>{idx == 0 ? d.data2 : idx == 1 ? d.data6 : d.data10}</p>
+                        <p>{idx == 0 ? d.data3 : idx == 1 ? d.data7 : d.data11}</p>
+                        <p>{idx == 0 ? d.data4 : idx == 1 ? d.data8 : d.data12}</p>
+                        <p>{idx == 2 ? d.data13 : '--'}</p>
                     </li>
                 )
             })
