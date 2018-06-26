@@ -1,7 +1,7 @@
 import React from 'react'
 import Pubsub from 'pubsub-js'
+import DatePickBar from './datePickBar'
 import '../less/singleDatePicker.less'
-import DatePickBar from './datePickBar.js'
 
 class SingleDatePicker extends React.Component {
     constructor(props) {
@@ -54,18 +54,16 @@ class SingleDatePicker extends React.Component {
             let tmp = new Date(date.slice(0,4), parseInt(date.slice(4, 6)-1), date.slice(6, 8));
             // 只获取当日0时0分0秒时间
             let nowTmp = new Date(nowDate.slice(0,4), parseInt(nowDate.slice(4, 6)-1), nowDate.slice(6, 8));
-            let offsetDay = Math.ceil(Math.abs(tmp.getTime() - nowTmp.getTime()) / (3600 * 24 * 1e3));
+            let offsets = Math.ceil((tmp.getTime() - nowTmp.getTime()) / (3600 * 24 * 1e3));
             this.setState((prevState) => {
                 prevState.pickedDate = date;
                 prevState.week = updateWeek(date);
-                prevState.offset = offsetDay;
+                prevState.offset = offsets;
                 this.props.handleDate(date, "date");
             })
         } else {
             Tip.error('日期选择不合理');
         }
-
-
     }
 
     componentDidMount() {

@@ -6,15 +6,19 @@ import '../less/datePickBar.less'
 class DatePickBar extends React.Component {
     constructor(props) {
         super(props);
+        let tmpMonth = parseInt(this.props.nowDate.slice(4,6)) - 1;
         this.state = {
             picker: {
-                year: [],
-                month: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
-                date: [],
+                // 预置数据只起占位作用(月份除外),并不参与真实效果,如果今年大于2024年,需要继续往后增加占位数据
+                year: ['2016','2017','2018','2019','2020','2021','2022','2023','2024'],
+                month: ['01','02','03','04','05','06','07','08','09','10','11','12'],
+                date: ['01','02','03','04','05','06','07','08','09','10',
+                       '11','12','13','14','15','16','17','18','19','20',
+                       '21','22','23','24','25','26','27','28','29','30','31'],
             },
             picked: {
                 year: this.props.nowDate.slice(0,4),
-                month: parseInt(this.props.nowDate.slice(4,6)) - 1,
+                month: tmpMonth > 9 ? tmpMonth + '' : '0' + tmpMonth,
                 date: this.props.nowDate.slice(6,8)
             },
             preScrollIndex: 0
@@ -23,20 +27,32 @@ class DatePickBar extends React.Component {
 
     cancel(e) {
         e.stopPropagation();
+        let renewBar = {
+            year: this.props.nowDate.slice(0,4),
+            month: parseInt(this.props.nowDate.slice(4,6)) - 1,
+            date: this.props.nowDate.slice(6,8)
+        }
         Pubsub.publish('HIDE_PICKER');
+        this.resetScrollPosition(renewBar);
     }
 
     today(e) {
         e.stopPropagation();
-        this.setState({
-            picked: {
-                year: new Date().getFullYear(),
-                month: (new Date().getMonth() + 1) > 10 ? new Date().getMonth() + 1 : '0' + (new Date().getMonth() + 1),
-                date: new Date().getDate()
+        this.setState((prevState) => {
+            let d = new Date();
+            prevState.picked = {
+                year: d.getFullYear().toString(),
+                month: d.getMonth() > 9 ? d.getMonth()+1 : '0' + (d.getMonth()+1),
+                date: d.getDate().toString()
             }
+            // 矫正月份加1产生的滚动条多滚动的问题
+            let resetScrollerPicked = {
+                year: prevState.picked.year,
+                month: parseInt(prevState.picked.month) - 1,
+                date: prevState.picked.date
+            }
+            this.resetScrollPosition(resetScrollerPicked);
         })
-
-
     }
 
     sure(e) {
@@ -47,8 +63,6 @@ class DatePickBar extends React.Component {
     }
 
     autoMatch(bar, e) {
-        e.preventDefault();
-        console.log(this.refs[bar].scrollTop);
         let index = parseInt((this.refs[bar].scrollTop + 40) / 100);
         if (index < this.state.picker[bar].length && Math.abs(index - this.state.preScrollIndex) > 0) {
             if (bar == 'year') {
@@ -71,6 +85,14 @@ class DatePickBar extends React.Component {
         }
     }
 
+    refreshYears(_state) {
+        let years = [], loop = new Date().getFullYear() - 2016;
+        for (let i = 0; i <= loop; i++) {
+            years.push(2016 + i + '');
+        }
+        _state.picker = Object.assign({}, _state.picker, { year: years });
+    }
+
     refreshDays(_state) {
         let days = [], dayNum = 30;
         if ( ['01','03','05','07','08','10','12'].indexOf(_state.picked.month) >= 0 ) {
@@ -89,20 +111,16 @@ class DatePickBar extends React.Component {
     }
 
     resetScrollPosition(picked) {
-        console.log(picked);
-        this.refs.year.scrollTop = (parseInt(picked.year) - 2017) * 100;
+        this.refs.year.scrollTop = (parseInt(picked.year) - 2016) * 100;
         this.refs.month.scrollTop = parseInt(picked.month) * 100;
         this.refs.date.scrollTop = (parseInt(picked.date) - 1) * 100;
     }
 
     componentDidMount() {
-        let loop = new Date().getFullYear() - 2016;
-        for (let i = 0; i <= loop; i++) {
-            this.state.picker.year.push(2016 + i);
-        }
-        this.resetScrollPosition(this.state.picked);
         this.setState((prevState) => {
+            this.refreshYears(prevState);
             this.refreshDays(prevState);
+            this.resetScrollPosition(this.state.picked);
         })
     }
 

@@ -51,6 +51,9 @@ class Income extends React.Component {
                 sessionStorage.RECHARGE = JSON.stringify(res);
             }, false)
         }
+        this.setState({
+            currentCity: c
+        })
     }
 
     handleIncome(cb, type) {
@@ -117,6 +120,7 @@ class Income extends React.Component {
         return (
             <div className="container">
                 <Header city={this.state.currentCity} handleCity={this.selectCity.bind(this)} />
+
                 <section className="section-box">
                     <div className="wrap clearTopGap">
                         <Title name="营收概况" />
@@ -124,7 +128,7 @@ class Income extends React.Component {
                         <SingleDatePicker handleDate={this.handleIncome.bind(this)} />
                         <Table tbody={incomeTb}
                             thead={['指标名称', '昨日', '前日', '同比', '同比增幅']} />
-                        <DutyPerson sectionId="58" />
+                        <DutyPerson sectionId="58" city={this.state.currentCity} />
                     </div>
                 </section>
 
@@ -137,7 +141,7 @@ class Income extends React.Component {
                         <DoubleDatePicker handleDate={this.handleDDP.bind(this)} />
                         <Table self="recharge" tbody={rechargeTb}
                             thead={['日期', '用户数', '次数', '次均充值金额', '充值金额', '消费金额']} />
-                        <DutyPerson sectionId="59" />
+                        <DutyPerson sectionId="59" city={this.state.currentCity} />
                     </div>
                 </section>
             </div>
