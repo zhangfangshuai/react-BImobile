@@ -1,14 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Router, HashRouter, hashHistory, Route, Redirect, Switch } from 'react-router-dom';
-import Pubsub from 'pubsub-js';
-import { MENU_LIST } from './config/menu_config';
-import './less/master.less';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Router, HashRouter, hashHistory, Route, Redirect, Switch } from 'react-router-dom'
+import Pubsub from 'pubsub-js'
+import { MENU_LIST } from './config/menu_config'
+import './less/master.less'
 
-import Menu from './components/menu';
-import Login from './pages/login';
-import Watch from './pages/watch';
-import Income from './pages/income';
+import Menu from './components/menu'
+import Login from './pages/login'
+import Watch from './pages/watch'
+import Operation from './pages/operation'
+import Income from './pages/income'
 
 
 class App extends React.Component {
@@ -67,7 +68,7 @@ class App extends React.Component {
 
     render() {
         let view = this.state.currentMenu.id;
-        view = 10;
+        view = 9;
         return (
             <div>
                 <Menu
@@ -83,7 +84,7 @@ class App extends React.Component {
                     { view == 6 && <Watch city={this.state.currentCity}/> }
                     { view == 7 && <Watch city={this.state.currentCity}/> }
                     { view == 8 && <Watch city={this.state.currentCity}/> }
-                    { view == 9 && <Watch city={this.state.currentCity}/> }
+                    { view == 9 && <Operation city={this.state.currentCity}/> }
                     { view == 10 && <Income city={this.state.currentCity}/> }
             </div>
         )
