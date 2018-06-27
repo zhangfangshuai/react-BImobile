@@ -9,7 +9,7 @@ class DatePickBar extends React.Component {
         let tmpMonth = parseInt(this.props.nowDate.slice(4,6)) - 1;
         this.state = {
             picker: {
-                // 预置数据只起占位作用(月份除外),并不参与真实效果,如果今年大于2024年,需要继续往后增加占位数据
+                // 预置数据只起占位作用,并不参与真实效果,如果今年大于2024年,需要继续往后增加占位数据
                 year: ['2016','2017','2018','2019','2020','2021','2022','2023','2024'],
                 month: ['01','02','03','04','05','06','07','08','09','10','11','12'],
                 date: ['01','02','03','04','05','06','07','08','09','10',
@@ -69,12 +69,14 @@ class DatePickBar extends React.Component {
                 this.setState((prevState) => {
                     prevState.picked = Object.assign({}, prevState.picked, { year: prevState.picker.year[index] });
                     prevState.preScrollIndex = index;
+                    this.refreshMonths(prevState);
                     this.refreshDays(prevState);
                 })
             } else if (bar == 'month') {
                 this.setState((prevState) => {
                     prevState.picked = Object.assign({}, prevState.picked, { month: prevState.picker.month[index] });
                     prevState.preScrollIndex = index;
+                    this.refreshMonths(prevState);
                     this.refreshDays(prevState);
                 })
             } else {
@@ -86,28 +88,42 @@ class DatePickBar extends React.Component {
     }
 
     refreshYears(_state) {
-        let years = [], loop = new Date().getFullYear() - 2016;
+        let Ys = [], loop = new Date().getFullYear() - 2016;
         for (let i = 0; i <= loop; i++) {
-            years.push(2016 + i + '');
+            Ys.push(2016 + i + '');
         }
-        _state.picker = Object.assign({}, _state.picker, { year: years });
+        _state.picker = Object.assign({}, _state.picker, { year: Ys });
+    }
+
+    refreshMonths(_state) {
+        let Ms = [], loop = 12;
+        if (_state.picked.year == new Date().getFullYear()) {
+            loop = new Date().getMonth() + 1;
+        }
+        for (let i = 1; i <= loop; i++) {
+            i < 10 ? Ms.push('0'+i) : Ms.push(i.toString());
+        }
+        _state.picker = Object.assign({}, _state.picker, { month: Ms });
     }
 
     refreshDays(_state) {
-        let days = [], dayNum = 30;
+        let Ds = [], loop = 30;
         if ( ['01','03','05','07','08','10','12'].indexOf(_state.picked.month) >= 0 ) {
-            dayNum = 31;
+            loop = 31;
         } else if ( _state.picked.month == '02' ) {
             let Y = parseInt(_state.picked.year);
-            dayNum = 28;  // 平年
+            loop = 28;  // 平年
             if ((Y % 4 == 0) && (Y % 100 != 0) || (Y % 400 == 0)) {
-                dayNum = 29  // 闰年
+                loop = 29  // 闰年
             }
         }
-        for (let i = 1; i <= dayNum; i++) {
-            i < 10 ? days.push('0'+i) : days.push(i.toString());
+        if ( _state.picked.year == new Date().getFullYear() && _state.picked.month == new Date().getMonth() + 1) {
+            loop = new Date().getDate();
         }
-        _state.picker = Object.assign({}, _state.picker, { date: days });
+        for (let i = 1; i <= loop; i++) {
+            i < 10 ? Ds.push('0'+i) : Ds.push(i.toString());
+        }
+        _state.picker = Object.assign({}, _state.picker, { date: Ds });
     }
 
     resetScrollPosition(picked) {
@@ -119,21 +135,23 @@ class DatePickBar extends React.Component {
     componentDidMount() {
         this.setState((prevState) => {
             this.refreshYears(prevState);
+            this.refreshMonths(prevState);
             this.refreshDays(prevState);
             this.resetScrollPosition(this.state.picked);
         })
     }
 
+    // TODO: 选择器再次被拉出数据没更新
     // componentDidUpdate() {
-    //     let renewBar = {
-    //         year: this.props.nowDate.slice(0,4),
-    //         month: parseInt(this.props.nowDate.slice(4,6)) - 1,
-    //         date: this.props.nowDate.slice(6,8)
+    //     if (this.entry) {
+    //         let renewBar = {
+    //           year: this.props.nowDate.slice(0,4),
+    //           month: parseInt(this.props.nowDate.slice(4,6)) - 1,
+    //           date: this.props.nowDate.slice(6,8)
+    //         }
+    //         this.resetScrollPosition(renewBar);
     //     }
-    //     this.resetScrollPosition(renewBar);
     // }
-
-    // TODO: 选择器再次被拉出数据没更新可以尝试用强制卸载组件再触发来做
 
     render() {
         let yearBar = this.state.picker.year.map((item) => {

@@ -42,6 +42,7 @@ class DoubleDatePicker extends React.Component {
 
     handlePicked(date) {
         this.state.pickerActive == "start" ? this.setState({ startDate: date }) : this.setState({ endDate: date });
+        this.props.handleDate(date, this.state.pickerActive);
     }
 
     componentDidMount() {

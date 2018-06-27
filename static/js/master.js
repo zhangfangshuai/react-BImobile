@@ -150,6 +150,22 @@ function isParamValid(param, section) {
 
 
 
+/**
+ * Created: zhangfs by Atom
+ * Date: 2018/04/27 11:20
+ * Func: 日历选择控件,接受1到2个参数; 1个参数检查单日期控件, 2个参数检查双日期控件
+ */
+function isPickerValid(s, e) {
+    let start = new Date(s.slice(0,4), parseInt(s.slice(4, 6))-1, s.slice(6, s.length));
+    let end = e ? new Date(e.slice(0,4), parseInt(e.slice(4, 6))-1, e.slice(6, e.length)) : new Date();
+    if (start.getTime() > end.getTime()) {
+        Tip.error('日期选择不合理');
+        return false;
+    }
+    return true;
+}
+
+
 
 
 

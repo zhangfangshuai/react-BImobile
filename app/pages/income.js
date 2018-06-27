@@ -6,13 +6,15 @@ import CarOption from '../components/carOption'
 import SingleDatePicker from '../components/singleDatePicker'
 import DoubleDatePicker from '../components/doubleDatePicker'
 import ThreeColSelector from '../components/threeColSelector'
-import DutyPerson from '../components/dutyPerson'
 import Table from '../components/table'
+import DutyPerson from '../components/dutyPerson'
+import Pagination from '../components/pagination'
 
 class Income extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            pageSize: 10,
             currentCity: CITY_LIST[0],
             incomeData: [],
             incomeReq : {
@@ -23,6 +25,7 @@ class Income extends React.Component {
             },
             rechargeData: [],
             rechargeIndex: 0,
+            rechargePage: 1,
             rechargeReq : {
                 interface: 'getRechargeInfo',
                 cityId: CITY_LIST[0].value,
@@ -46,9 +49,9 @@ class Income extends React.Component {
             axiosGet(this.state.rechargeReq, (res) => {
                 this.setState({
                     rechargeData: res,
-                    rechargeIndex: 0
+                    rechargeIndex: 0,
+                    rechargePage: 1
                 });
-                sessionStorage.RECHARGE = JSON.stringify(res);
             }, false)
         }
         this.setState({
@@ -73,8 +76,28 @@ class Income extends React.Component {
         })
     }
 
-    handleDDP(startDate, endDate) {
-        console.log(startDate, endDate);
+
+    handleDDP(date, picker) {
+        picker === "start" ? this.state.rechargeReq.startDate = date : this.state.rechargeReq.endDate = date;
+        if (isPickerValid(this.state.rechargeReq.startDate, this.state.rechargeReq.endDate)) {
+            axiosGet(this.state.rechargeReq, (res) => {
+                this.setState({
+                    rechargeData: res,
+                    rechargePage: 1
+                })
+            }, false)
+        } else {
+            this.setState({
+                rechargeData: [],
+                rechargePage: 1
+            })
+        }
+    }
+
+    handlePage(page) {
+        this.setState({
+            rechargePage: page
+        })
     }
 
     componentDidMount() {
@@ -83,7 +106,6 @@ class Income extends React.Component {
         }, false);
         axiosGet(this.state.rechargeReq, (res) => {
             this.setState({ rechargeData: res });
-            sessionStorage.RECHARGE = JSON.stringify(res);
         }, false)
     }
 
@@ -101,11 +123,15 @@ class Income extends React.Component {
                 )
             });
         }
-        if (this.state.rechargeData.length != 0) {
+
+        let D = this.state.rechargeData;
+        let P = this.state.rechargePage, size = this.state.pageSize;
+        let RECHARGE = D == 0 ? [] : D.data.slice((P-1)*size, P*size);
+        if (RECHARGE.length != 0) {
             let idx = this.state.rechargeIndex;
-            var rechargeTb = this.state.rechargeData.data.map((d) => {
+            var rechargeTb = RECHARGE.map((d) => {
                 return (
-                    <li key={this.state.rechargeData.data.indexOf(d)}>
+                    <li key={RECHARGE.indexOf(d)}>
                         <p>{d.data0}</p>
                         <p>{idx == 0 ? d.data1 : idx == 1 ? d.data5 : d.data9}</p>
                         <p>{idx == 0 ? d.data2 : idx == 1 ? d.data6 : d.data10}</p>
@@ -138,10 +164,14 @@ class Income extends React.Component {
                         <ThreeColSelector
                             cols={['500元以下', '500元以上', '合计']}
                             handleTCS={this.handleTCS.bind(this)} />
-                        <DoubleDatePicker handleDate={this.handleDDP.bind(this)} />
+                          <DoubleDatePicker handleDate={this.handleDDP.bind(this)}/>
                         <Table self="recharge" tbody={rechargeTb}
                             thead={['日期', '用户数', '次数', '次均充值金额', '充值金额', '消费金额']} />
                         <DutyPerson sectionId="59" city={this.state.currentCity} />
+                        <Pagination
+                            handlePage={this.handlePage.bind(this)}
+                            length={this.state.rechargeData.data ? this.state.rechargeData.data.length : 0}
+                            pageSize={this.state.pageSize} />
                     </div>
                 </section>
             </div>
