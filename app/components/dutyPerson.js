@@ -77,11 +77,11 @@ class DutyPerson extends React.Component {
 
     render() {
         return (
-            <div className="dutyPerson-box" style={this.state.boxStyle}>
-                <p className="phoneBubble" style={this.state.bbStyle}>
+            <div className="component-dutyPerson" style={this.state.boxStyle}>
+                <p className="bubble" style={this.state.bbStyle}>
                     <a href={`tel:${this.state.phone}`}>{this.state.phone}</a>
                 </p>
-                <p className="dutyPerson" onClick={this.showBubble.bind(this)}>责任人: {this.state.person}</p>
+                <p className="person" onClick={this.showBubble.bind(this)}>责任人: {this.state.person}</p>
             </div>
         )
     }

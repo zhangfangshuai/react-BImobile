@@ -152,7 +152,7 @@ class Income extends React.Component {
                         <Title name="营收概况" />
                         <CarOption handleCar={this.handleIncome.bind(this)} />
                         <SingleDatePicker handleDate={this.handleIncome.bind(this)} />
-                        <Table tbody={incomeTb}
+                        <Table self="income" tbody={incomeTb}
                             thead={['指标名称', '昨日', '前日', '同比', '同比增幅']} />
                         <DutyPerson sectionId="58" city={this.state.currentCity} />
                     </div>
