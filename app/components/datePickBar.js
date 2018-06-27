@@ -124,6 +124,17 @@ class DatePickBar extends React.Component {
         })
     }
 
+    componentDidUpdate() {
+        let renewBar = {
+            year: this.props.nowDate.slice(0,4),
+            month: parseInt(this.props.nowDate.slice(4,6)) - 1,
+            date: this.props.nowDate.slice(6,8)
+        }
+        this.resetScrollPosition(renewBar);
+    }
+
+    // TODO: 选择器再次被拉出数据没更新可以尝试用强制卸载组件再触发来做
+
     render() {
         let yearBar = this.state.picker.year.map((item) => {
             return (
