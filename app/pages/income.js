@@ -167,11 +167,11 @@ class Income extends React.Component {
                           <DoubleDatePicker handleDate={this.handleDDP.bind(this)}/>
                         <Table self="recharge" tbody={rechargeTb}
                             thead={['日期', '用户数', '次数', '次均充值金额', '充值金额', '消费金额']} />
-                        <DutyPerson sectionId="59" city={this.state.currentCity} />
                         <Pagination
                             handlePage={this.handlePage.bind(this)}
                             length={this.state.rechargeData.data ? this.state.rechargeData.data.length : 0}
                             pageSize={this.state.pageSize} />
+                        <DutyPerson sectionId="59" city={this.state.currentCity} />
                     </div>
                 </section>
             </div>

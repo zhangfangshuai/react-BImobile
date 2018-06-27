@@ -44,19 +44,26 @@ class DutyPerson extends React.Component {
         }
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         // 该条件避免update中使用setState造成死循环,
         // shouldComponentUpdate()以后可能废除,不用.
         if (this.state.currentCity != this.props.city) {
             if (this.props.city.value != 1) {
                 this.state.inchargeReq.cityId = this.props.city.value;
                 axiosGet(this.state.inchargeReq, (res) => {
-                    this.setState({
-                        currentCity: this.props.city,
-                        phone: res[0].sim,
-                        person: res[0].liablename,
-                        boxStyle: { display: 'block' }
-                    })
+                      if (res.length > 0) {
+                          this.setState({
+                              currentCity: this.props.city,
+                              phone: res[0].sim,
+                              person: res[0].liablename,
+                              boxStyle: { display: 'block' }
+                          })
+                      } else {
+                          this.setState({
+                              boxStyle: { display: 'none' },
+                              currentCity: this.props.city
+                          })
+                      }
                 })
             } else {
                 this.setState({

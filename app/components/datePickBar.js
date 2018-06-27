@@ -141,7 +141,6 @@ class DatePickBar extends React.Component {
         })
     }
 
-    // 选择器再次被拉出时滚动条更随需选中日期
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.nowDate != this.props.nowDate) {
             let renewBar = {
