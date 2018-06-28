@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Pubsub from 'pubsub-js';
-import { MENU_LIST } from '../config/menu_config';
+import { MENU_LIST } from '../config/config';
 import '../less/login.less';
 
 class Login extends React.Component {

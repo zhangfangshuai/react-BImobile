@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, HashRouter, hashHistory, Route, Redirect, Switch } from 'react-router-dom'
 import Pubsub from 'pubsub-js'
-import { MENU_LIST } from './config/menu_config'
+import { MENU_LIST } from './config/config'
 import './less/master.less'
 
 import Menu from './components/menu'

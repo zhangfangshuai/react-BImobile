@@ -1,7 +1,7 @@
 import React from 'react';
 import Pubsub from 'pubsub-js';
 import { Link } from 'react-router-dom';
-import { MENU_LIST } from '../config/menu_config';
+import { MENU_LIST } from '../config/config';
 import MenuItem from './menuitem';
 import '../less/menu.less';
 

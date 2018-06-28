@@ -1,5 +1,5 @@
 import React from 'react'
-import { CITY_LIST } from '../config/city_config'
+import { CITY_LIST, PAGESIZE } from '../config/config'
 import Header from '../components/header'
 import Title from '../components/title'
 import CarOption from '../components/carOption'
@@ -14,7 +14,6 @@ class Income extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            pageSize: 10,
             currentCity: CITY_LIST[0],
             incomeData: [],
             incomeReq : {
@@ -78,7 +77,7 @@ class Income extends React.Component {
 
 
     handleDDP(date, picker) {
-        picker === "start" ? this.state.rechargeReq.startDate = date : this.state.rechargeReq.endDate = date;
+        picker == "start" ? this.state.rechargeReq.startDate = date : this.state.rechargeReq.endDate = date;
         if (isPickerValid(this.state.rechargeReq.startDate, this.state.rechargeReq.endDate)) {
             axiosGet(this.state.rechargeReq, (res) => {
                 this.setState({
@@ -124,9 +123,8 @@ class Income extends React.Component {
             });
         }
 
-        let D = this.state.rechargeData;
-        let P = this.state.rechargePage, size = this.state.pageSize;
-        let RECHARGE = D == 0 ? [] : D.data.slice((P-1)*size, P*size);
+        let D = this.state.rechargeData, P = this.state.rechargePage;
+        let RECHARGE = D.length == 0 ? [] : D.data.slice((P-1)*PAGESIZE, P*PAGESIZE);
         if (RECHARGE.length != 0) {
             let idx = this.state.rechargeIndex;
             var rechargeTb = RECHARGE.map((d) => {
@@ -164,13 +162,13 @@ class Income extends React.Component {
                         <ThreeColSelector
                             cols={['500元以下', '500元以上', '合计']}
                             handleTCS={this.handleTCS.bind(this)} />
-                          <DoubleDatePicker handleDate={this.handleDDP.bind(this)}/>
+                        <DoubleDatePicker handleDate={this.handleDDP.bind(this)}/>
                         <Table self="recharge" tbody={rechargeTb}
                             thead={['日期', '用户数', '次数', '次均充值金额', '充值金额', '消费金额']} />
                         <Pagination
                             handlePage={this.handlePage.bind(this)}
                             length={this.state.rechargeData.data ? this.state.rechargeData.data.length : 0}
-                            pageSize={this.state.pageSize} />
+                            pageSize={PAGESIZE} />
                         <DutyPerson sectionId="59" city={this.state.currentCity} />
                     </div>
                 </section>

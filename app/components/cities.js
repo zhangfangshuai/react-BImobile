@@ -1,7 +1,7 @@
 import React from 'react';
 import Pubsub from 'pubsub-js';
 import '../less/cities.less';
-import { CITY_LIST } from '../config/city_config';
+import { CITY_LIST } from '../config/config';
 import CityItem from './cityitem';
 
 class Cities extends React.Component {
