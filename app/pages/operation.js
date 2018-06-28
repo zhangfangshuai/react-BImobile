@@ -7,6 +7,7 @@ import CarOption from '../components/carOption'
 import Table from '../components/table'
 import DutyPerson from '../components/dutyPerson'
 import DoubleDatePicker from '../components/doubleDatePicker'
+import SingleDatePicker from '../components/singleDatePicker'
 import Pagination from '../components/pagination'
 
 class Operation extends React.Component {
@@ -28,6 +29,14 @@ class Operation extends React.Component {
                 carType: 0,
                 startDate: getDateOffset(-7),
                 endDate: getDateOffset(-1)
+            },
+            detailData: [],
+            detailPage: 1,
+            detailReq: {
+                interface: 'getPeccancyDetail',
+                cityId: CITY_LIST[0].value,
+                carType: 0,
+                dateId: getDateOffset(-1)
             }
         }
     }
@@ -38,6 +47,8 @@ class Operation extends React.Component {
         this.accidentRequest(this.state.accidentReq);
         this.state.lawReq.cityId = city.value;
         this.lawRequest(this.state.lawReq);
+        this.state.detailReq.cityId = city.value;
+        this.detailRequst(this.state.detailReq);
     }
 
     accidentRequest(p) {
@@ -68,14 +79,35 @@ class Operation extends React.Component {
         this.lawRequest(this.state.lawReq);
     }
     handleDateLaw(date, picker) {
-        console.log(date, picker);
         picker == 'start' ? this.state.lawReq.startDate = date : this.state.lawReq.endDate = date;
         if (isPickerValid(this.state.lawReq.startDate, this.state.lawReq.endDate)) {
             this.lawRequest(this.state.lawReq);
         }
     }
     handlePageLaw(page) {
-        this.setState({ lawPage: page })
+        this.setState({ lawPage: page });
+    }
+
+    detailRequst(p) {
+        if (isParamValid(p, 'peccancyDetail')) {
+            axiosGet(p, (res) => {
+                this.setState({
+                    detailData: res.data,
+                    detailPage: 1
+                })
+            })
+        }
+    }
+    handleCarDetail(car) {
+        this.state.detailReq.carType = car;
+        this.detailRequst(this.state.detailReq);
+    }
+    handleDateDetail(date) {
+        this.state.detailReq.dateId = date;
+        isPickerValid(this.state.detailReq.dateId) && this.detailRequst(this.state.detailReq);
+    }
+    handlePageDetail(page) {
+        this.setState({ detailPage: page });
     }
 
     componentDidMount() {
@@ -83,12 +115,11 @@ class Operation extends React.Component {
             this.setState({ accidentData: res.data });
         })
         axiosGet(this.state.lawReq, (res) => {
-            this.setState({ lawData: res.data })
+            this.setState({ lawData: res.data });
         })
-    }
-
-    componentDidUpdate() {
-      console.log(this.state.lawData);
+        axiosGet(this.state.detailReq, (res) => {
+            this.setState({ detailData: res.data });
+        })
     }
 
     render() {
@@ -104,8 +135,8 @@ class Operation extends React.Component {
             });
         }
 
-        let D = this.state.lawData, P = this.state.lawPage;
-        let L = D.length < 10 ? D : D.slice((P-1)*PAGESIZE, P*PAGESIZE);
+        let LD = this.state.lawData, LP = this.state.lawPage;
+        let L = LD.length < 10 ? LD : LD.slice((LP-1)*PAGESIZE, LP*PAGESIZE);
         if (L.length > 0) {
             var illegalTb = L.map((i) => {
                 return (
@@ -118,6 +149,19 @@ class Operation extends React.Component {
             });
         }
 
+        let DD = this.state.detailData, DP = this.state.detailPage;
+        let DETAIL = DD.length < 10 ? DD : DD.slice((DP-1)*PAGESIZE, DP*PAGESIZE);
+        if (DETAIL.length > 0) {
+            var detailTb = DETAIL.map((i) => {
+                let mark = i.detail > 3 ? '***' : '';
+                return (
+                    <li key={DETAIL.indexOf(i)}>
+                        <p>{i.data0}</p><p>{i.data1}</p><p>{i.data2}</p><p>{i.data3}</p>
+                        <p style={{color: 'red'}}>{mark}</p>
+                    </li>
+                )
+            });
+        }
         return (
             <div className="container">
                 <Header city={this.state.currentCity} handleCity={this.selectCity.bind(this)} />
@@ -137,7 +181,7 @@ class Operation extends React.Component {
                         <Title name="违法概况" />
                         <CarOption handleCar={this.handleCarLaw.bind(this)} />
                         <DoubleDatePicker handleDate={this.handleDateLaw.bind(this)} />
-                        <Table self="illegalBase" tbody={illegalTb}
+                        <Table self="illegal" tbody={illegalTb}
                             thead={['日期','累计违法订单','单均违法次数','违法率','未处理违法','平均处理天数']} />
                         <Pagination
                             handlePage={this.handlePageLaw.bind(this)}
@@ -145,6 +189,21 @@ class Operation extends React.Component {
                             pageSize={PAGESIZE} />
                         <DutyPerson sectionId="55" city={this.state.currentCity} />
                     </div>
+                </section>
+
+                <section className="section-box">
+                    <div className="wrap">
+                        <Title name="车辆违法详情" />
+                        <CarOption handleCar={this.handleCarDetail.bind(this)} />
+                        <SingleDatePicker handleDate={this.handleDateDetail.bind(this)} />
+                        <Table self="" tbody={detailTb}
+                            thead={['车牌号','违法次数','已处理','未处理','报警']} />
+                        <Pagination
+                            handlePage={this.handlePageDetail.bind(this)}
+                            length={this.state.detailData ? this.state.detailData.length : 0}
+                            pageSize={PAGESIZE} />
+                        <DutyPerson sectionId="56" city={this.state.currentCity} />
+                  </div>
                 </section>
             </div>
         )
