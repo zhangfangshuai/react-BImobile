@@ -37,6 +37,15 @@ class Operation extends React.Component {
                 cityId: CITY_LIST[0].value,
                 carType: 0,
                 dateId: getDateOffset(-1)
+            },
+            pushData: [],
+            pushPage: 1,
+            pushReq: {
+                interface: 'getPushMoneyData',
+                cityId: CITY_LIST[0].value,
+                carType: 0,
+                startDate: getDateOffset(-7),
+                endDate: getDateOffset(-1)
             }
         }
     }
@@ -51,6 +60,7 @@ class Operation extends React.Component {
         this.detailRequst(this.state.detailReq);
     }
 
+    // TOP 10
     accidentRequest(p) {
         if (isParamValid(p, 'Top 10')) {
             axiosGet(p, (res) => {
@@ -64,6 +74,7 @@ class Operation extends React.Component {
         this.accidentRequest(this.state.accidentReq);
     }
 
+    // 违法概述
     lawRequest(p) {
         if (isParamValid(p, 'peccancyInfo')) {
             axiosGet(p, (res) => {
@@ -80,14 +91,13 @@ class Operation extends React.Component {
     }
     handleDateLaw(date, picker) {
         picker == 'start' ? this.state.lawReq.startDate = date : this.state.lawReq.endDate = date;
-        if (isPickerValid(this.state.lawReq.startDate, this.state.lawReq.endDate)) {
-            this.lawRequest(this.state.lawReq);
-        }
+        isPickerValid(this.state.lawReq.startDate, this.state.lawReq.endDate) && this.lawRequest(this.state.lawReq);
     }
     handlePageLaw(page) {
         this.setState({ lawPage: page });
     }
 
+    // 车辆违法详情
     detailRequst(p) {
         if (isParamValid(p, 'peccancyDetail')) {
             axiosGet(p, (res) => {
@@ -95,7 +105,7 @@ class Operation extends React.Component {
                     detailData: res.data,
                     detailPage: 1
                 })
-            })
+            });
         }
     }
     handleCarDetail(car) {
@@ -110,16 +120,34 @@ class Operation extends React.Component {
         this.setState({ detailPage: page });
     }
 
+    // 推费概述
+    pushRequest(p) {
+        if (isParamValid(p, 'pushMoney')) {
+            axiosGet(p, (res) => {
+                this.setState({
+                    pushData: res.data,
+                    pushPage: 1
+                })
+            });
+        }
+    }
+    handleCarPush(car) {
+        this.state.pushReq.carType = car;
+        this.pushRequest(this.state.pushReq);
+    }
+    handleDatePush(date, picker) {
+        picker == "start" ? this.state.pushReq.startDate = date : this.state.pushReq.endDate = date;
+        isPickerValid(this.state.pushReq.startDate, this.state.pushReq.endDate) && this.pushRequest(this.state.pushReq);
+    }
+    handlePagePush(page) {
+        this.setState({ pushPage: page })
+    }
+
     componentDidMount() {
-        axiosGet(this.state.accidentReq, (res) => {
-            this.setState({ accidentData: res.data });
-        })
-        axiosGet(this.state.lawReq, (res) => {
-            this.setState({ lawData: res.data });
-        })
-        axiosGet(this.state.detailReq, (res) => {
-            this.setState({ detailData: res.data });
-        })
+        this.accidentRequest(this.state.accidentReq);
+        this.lawRequest(this.state.lawReq);
+        this.detailRequst(this.state.detailReq);
+        this.pushRequest(this.state.pushReq);
     }
 
     render() {
@@ -129,7 +157,7 @@ class Operation extends React.Component {
                 return (
                     <li key={A.indexOf(i)}>
                         <p>{A.indexOf(i) + 1}</p> <p>{i.data0}</p>
-                        <p>{i.data1}'%'</p> <p>{i.data2}</p>
+                        <p>{i.data1}%</p> <p>{i.data2}</p>
                     </li>
                 )
             });
@@ -142,7 +170,7 @@ class Operation extends React.Component {
                 return (
                     <li key={L.indexOf(i)}>
                         <p>{i.data0}</p><p>{i.data5}</p><p>{i.data1}</p>
-                        <p>{i.data2.toFixed(2)}'%'</p><p>{i.data3}</p>
+                        <p>{i.data2.toFixed(2)}%</p><p>{i.data3}</p>
                         <p>{i.data4.toFixed(2)}</p>
                     </li>
                 )
@@ -162,11 +190,24 @@ class Operation extends React.Component {
                 )
             });
         }
+
+        let PD = this.state.pushData, PP = this.state.pushPage;
+        let PUSH = PD.length < 10 ? PD : PD.slice((PP-1)*PAGESIZE, PP*PAGESIZE);
+        if (PUSH.length > 0) {
+            var pushTb = PUSH.map((i) => {
+                return (
+                    <li key={PUSH.indexOf(i)}>
+                        <p>{i.data0}</p><p>{i.data5}</p><p>{i.data1}</p>
+                        <p>{i.data2}</p><p>{i.data3}</p><p>{i.data4}%</p>
+                    </li>
+                )
+            })
+        }
         return (
             <div className="container">
                 <Header city={this.state.currentCity} handleCity={this.selectCity.bind(this)} />
 
-                <section className="section-box">
+                <section>
                     <div className="wrap clearTopGap">
                         <TitleWithBubble name="保险/事故" />
                         <CarOption handleCar={this.handleTop10.bind(this)} />
@@ -176,7 +217,7 @@ class Operation extends React.Component {
                     </div>
                 </section>
 
-                <section className="section-box">
+                <section>
                     <div className="wrap">
                         <Title name="违法概况" />
                         <CarOption handleCar={this.handleCarLaw.bind(this)} />
@@ -191,7 +232,7 @@ class Operation extends React.Component {
                     </div>
                 </section>
 
-                <section className="section-box">
+                <section>
                     <div className="wrap">
                         <Title name="车辆违法详情" />
                         <CarOption handleCar={this.handleCarDetail.bind(this)} />
@@ -203,7 +244,22 @@ class Operation extends React.Component {
                             length={this.state.detailData ? this.state.detailData.length : 0}
                             pageSize={PAGESIZE} />
                         <DutyPerson sectionId="56" city={this.state.currentCity} />
-                  </div>
+                    </div>
+                </section>
+
+                <section>
+                    <div className="wrap">
+                        <Title name="推费概述" />
+                        <CarOption handleCar={this.handleCarPush.bind(this)} />
+                        <DoubleDatePicker handleDate={this.handleDatePush.bind(this)} />
+                        <Table self="push" tbody={pushTb}
+                            thead={['日期','累计未交推费总额','推费总额','推费缴纳','逾期未交','缴纳比例']} />
+                        <Pagination
+                            handlePage={this.handlePagePush.bind(this)}
+                            length={this.state.pushData ? this.state.pushData.length : 0}
+                            pageSize={PAGESIZE} />
+                        <DutyPerson sectionId="57" city={this.state.currentCity} />
+                    </div>
                 </section>
             </div>
         )

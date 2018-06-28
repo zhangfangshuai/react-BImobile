@@ -145,7 +145,7 @@ class Income extends React.Component {
             <div className="container">
                 <Header city={this.state.currentCity} handleCity={this.selectCity.bind(this)} />
 
-                <section className="section-box">
+                <section>
                     <div className="wrap clearTopGap">
                         <Title name="营收概况" />
                         <CarOption handleCar={this.handleIncome.bind(this)} />
@@ -156,7 +156,7 @@ class Income extends React.Component {
                     </div>
                 </section>
 
-                <section className="section-box">
+                <section>
                     <div className="wrap">
                         <Title name="用户充值" />
                         <ThreeColSelector

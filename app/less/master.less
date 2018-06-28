@@ -90,7 +90,7 @@ a:hover {
 /*
  * section container style
  */
-.section-box {
+section {
     width: 100%;
     height: auto;
     z-index: 1;
@@ -120,19 +120,20 @@ a:hover {
             p:nth-child(6) { width: 17%; }
         }
         .accident, .accident ul li {
-            p {
-                width: 25%;
-            }
+            p { width: 25%; }
         }
         .illegal, .illegal ul li {
             width: 11rem;
-            p:nth-child(1) { width: 15%; }
-            p:nth-child(2) { width: 19%; }
-            p:nth-child(3) { width: 19%; }
+            p:nth-child(1), p:nth-child(5) { width: 15%; }
+            p:nth-child(2), p:nth-child(3) { width: 19%; }
             p:nth-child(4) { width: 14%; }
-            p:nth-child(5) { width: 15%; }
             p:nth-child(6) { width: 18%; }
         }
-        
+        .push, .push ul li {
+            width: 10rem;
+            p { width: 15% }
+            p:nth-child(1) { width: 11.5% }
+            p:nth-child(2) { width: 28.5% }
+        }
     }
 }
