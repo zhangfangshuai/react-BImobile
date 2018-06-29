@@ -8,6 +8,7 @@ import './less/master.less'
 import Menu from './components/menu'
 import Login from './pages/login'
 import Watch from './pages/watch'
+import Service from './pages/service'
 import Operation from './pages/operation'
 import Income from './pages/income'
 
@@ -67,15 +68,14 @@ class App extends React.Component {
     }
 
     render() {
-        let view = this.state.currentMenu.id;
-        view = 9;
-        return (
-            <div>
-                <Menu
-                    menuState={this.state.menuState}
-                    user={this.state.user}
-                    cItem={this.state.currentMenu} />
-
+        let view = this.state.currentMenu.id || 8;
+        if (!view) {
+            window.location.href = "./#/login";
+            return null;
+        } else {
+            return (
+                <div>
+                    <Menu menuState={this.state.menuState} user={this.state.user} cItem={this.state.currentMenu} />
                     { view == 2 && <Watch city={this.state.currentCity}/> }
                     { view == 3 && <Watch city={this.state.currentCity}/> }
                     { view == 4 && <Watch city={this.state.currentCity}/> }
@@ -83,11 +83,12 @@ class App extends React.Component {
                     { view == 5 && <Watch city={this.state.currentCity}/> }
                     { view == 6 && <Watch city={this.state.currentCity}/> }
                     { view == 7 && <Watch city={this.state.currentCity}/> }
-                    { view == 8 && <Watch city={this.state.currentCity}/> }
+                    { view == 8 && <Service city={this.state.currentCity}/> }
                     { view == 9 && <Operation city={this.state.currentCity}/> }
                     { view == 10 && <Income city={this.state.currentCity}/> }
-            </div>
-        )
+                </div>
+            )
+        }
     }
 }
 
