@@ -6,6 +6,7 @@ import DoubleDatePicker from '../components/doubleDatePicker'
 import Table from '../components/table'
 import Pagination from '../components/pagination'
 import DutyPerson from '../components/dutyPerson'
+import PieChart from '../components/charts'
 
 class Service extends React.Component {
     constructor(props) {
@@ -27,9 +28,22 @@ class Service extends React.Component {
                 endDate: getDateOffset(-1)
             },
             pieData: [],
-            piePage: 1,
             pieReq: {
                 interface: 'getWorkOrderType',
+                startDate: getDateOffset(-7),
+                endDate: getDateOffset(-1)
+            },
+            woDetailData: [],
+            woDetailPage: 1,
+            woDetailReq: {
+                interface: 'getWorkOrderdetails',
+                startDate: getDateOffset(-7),
+                endDate: getDateOffset(-1)
+            },
+            worksData: [],
+            worksPage: 1,
+            worksReq: {
+                interface: 'getWorkOrderAmount',
                 startDate: getDateOffset(-7),
                 endDate: getDateOffset(-1)
             }
@@ -78,15 +92,10 @@ class Service extends React.Component {
         this.setState({ cardsPage: page });
     }
 
-    // 工单类型分布
+    // 工单类型分布饼图
     pieRequest(p) {
         if (isParamValid(p, 'workOrderPie')) {
-            axiosGet(p, (r) => {
-                this.setState({
-                    pieData: r.data,
-                    piePage: 1
-                });
-            })
+            axiosGet(p, (r) => { this.setState({ pieData: r }); })
         }
     }
     handleDatePie(date, picker) {
@@ -94,10 +103,51 @@ class Service extends React.Component {
         this.pieRequest(this.state.pieReq);
     }
 
+    // 工单类型详情
+    woDetailRequest(p) {
+        if (isParamValid(p, 'workOrderdetails')) {
+            axiosGet(p, (r) => {
+                this.setState({
+                    woDetailData: r,
+                    woDetailPage: 1
+                })
+            })
+        }
+    }
+    handleDateWoDetail(date, picker) {
+        picker == 'start' ? this.state.woDetailReq.startDate = date : this.state.woDetailReq.endDate;
+        this.woDetailRequest(this.state.woDetailReq);
+    }
+    handlePageWoDetail(page) {
+        this.setState({ woDetailPage: page });
+    }
+
+    // 工作量统计
+    worksRequest(p) {
+        if (isParamValid(p, 'workload')) {
+            axiosGet(p, (r) => {
+                console.log(r);
+                this.setState ({
+                    worksData: r,
+                    worksPage: 1
+                })
+            })
+        }
+    }
+    handleDateWorkload(date, picker) {
+        picker == 'start' ? this.state.worksReq.startDate = date : this.state.worksReq.endDate = date;
+        this.worksRequest(this.state.worksReq);
+    }
+    handlePageWorks(page) {
+        this.setState({ worksPage: page });
+    }
+
     componentDidMount() {
         this.serviceRequest(this.state.serviceReq);
         this.cardsRequest(this.state.cardsReq);
         this.pieRequest(this.state.pieReq);
+        this.woDetailRequest(this.state.woDetailReq);
+        this.worksRequest(this.state.worksReq);
     }
 
     render() {
@@ -123,6 +173,31 @@ class Service extends React.Component {
                     <li key={CARDS.indexOf(i)}>
                         <p>{i.date_id}</p><p>{i.user_card_num}</p><p>{i.car_card_num}</p><p>{i.double_card_num}</p>
                         <p>{i.user_card_rate}%</p><p>{i.car_card_rate}%</p><p>{i.double_card_rate}%</p>
+                    </li>
+                )
+            })
+        }
+
+        let WD = this.state.woDetailData, WP = this.state.woDetailPage;
+        let WODETAIL = WD.length < 10 ? WD : WD.slice((WP-1)*PAGESIZE, WP*PAGESIZE);
+        if (WODETAIL.length > 0) {
+            var woTypeTb = WODETAIL.map((i) => {
+                return (
+                    <li key={WODETAIL.indexOf(i)}>
+                        <p>{i.date_id}</p><p>{i.cl}%</p><p>{i.dd}%</p><p>{i.wd}%</p><p>{i.zc}%</p>
+                    </li>
+                )
+            })
+        }
+
+        let WKD = this.state.worksData, WKP = this.state.worksPage;
+        let WORKS = WKD.length < 10 ? WKD : WKD.slice((WKP-1)*PAGESIZE, WKP*PAGESIZE);
+        if (WORKS.length > 0) {
+            var worksTb = WORKS.map((i) => {
+                return (
+                    <li key={WORKS.indexOf(i)}>
+                        <p>{i.date_id}</p><p>{i.total_num}</p><p>{i.ing_num}</p>
+                        <p>{i.succ_num}</p><p>{i.succ_rate}%</p>
                     </li>
                 )
             })
@@ -161,7 +236,33 @@ class Service extends React.Component {
                     <div className="wrap">
                         <Title name="工单类型分布" />
                         <DoubleDatePicker handleDate={this.handleDatePie.bind(this)} />
-                        
+                        <PieChart data={this.state.pieData} />
+                    </div>
+                </section>
+
+                <section>
+                    <div className="wrap">
+                        <Title name="工单类型详情" />
+                        <DoubleDatePicker handleDate={this.handleDateWoDetail.bind(this)} />
+                        <Table self="woType" tbody={woTypeTb}
+                            thead={['日期','车辆使用占比','订单问题占比','网店问题占比','注册问题占比']} />
+                        <Pagination
+                            handlePage={this.handlePageWoDetail.bind(this)}
+                            length={this.state.woDetailData ? this.state.woDetailData.length : 0}
+                            pageSize={PAGESIZE} />
+                    </div>
+                </section>
+
+                <section>
+                    <div className="wrap">
+                        <Title name="工单量统计" />
+                        <DoubleDatePicker handleDate={this.handleDateWorkload.bind(this)} />
+                        <Table self="woks" tbody={worksTb}
+                            thead={['日期','工单总数','当日跟进中总数','当日新增工单(已完成)','完成率']} />
+                        <Pagination
+                            handlePage={this.handlePageWorks.bind(this)}
+                            length={this.state.worksData ? this.state.worksData.length : 0}
+                            pageSize={PAGESIZE} />
                     </div>
                 </section>
             </div>

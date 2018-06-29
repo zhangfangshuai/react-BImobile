@@ -68,7 +68,7 @@ class App extends React.Component {
     }
 
     render() {
-        let view = this.state.currentMenu.id || 8;
+        let view = this.state.currentMenu.id;
         if (!view) {
             window.location.href = "./#/login";
             return null;
@@ -76,7 +76,7 @@ class App extends React.Component {
             return (
                 <div>
                     <Menu menuState={this.state.menuState} user={this.state.user} cItem={this.state.currentMenu} />
-                    { view == 2 && <Watch city={this.state.currentCity}/> }
+                    { view == 2 && <Service city={this.state.currentCity}/> }
                     { view == 3 && <Watch city={this.state.currentCity}/> }
                     { view == 4 && <Watch city={this.state.currentCity}/> }
                     { view == 64 && <Watch city={this.state.currentCity}/> }
