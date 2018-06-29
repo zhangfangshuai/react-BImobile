@@ -56,24 +56,18 @@ class Header extends React.Component {
     render() {
         return (
             <div className="components-header">
-                <img
-                    className="menu-icon"
-                    onClick={this.toggleMenu.bind(this)}
+                <img onClick={this.toggleMenu.bind(this)}
                     src="/static/images/icon_menu.png" alt="" />
+                <img src="/static/images/gofun.png" alt="" />
+                <div
+                    className={`location${this.props.disLocat ? ' locat-hide' : ' locat-show'}`}
+                    onClick={this.toggleCity.bind(this)}>{this.state.city.text}</div>
                 <img
-                    className="logo-icon"
-                    src="/static/images/gofun.png" alt="" />
-                <div className="location" onClick={this.toggleCity.bind(this)}>
-                    {this.state.city.text}
-                </div>
-                <Cities
-                    city={this.state.city}
-                    cityState={this.state.cityState}
-                />
-                <img
-                    className="location-icon"
+                    className={`location-icon${this.props.disLocat ? ' locat-hide' : ' locat-show'}`}
                     src="/static/images/icon_location.png" alt=""
                     onClick={this.toggleCity.bind(this)} />
+                <div className={`empty${this.props.disLocat ? ' locat-show' : ' locat-hide'}`} />
+                <Cities city={this.state.city} cityState={this.state.cityState} />
             </div>
         );
     }

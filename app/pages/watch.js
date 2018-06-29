@@ -19,6 +19,7 @@ class Watch extends React.Component {
         return (
             <div className="container">
                 <Header city={this.state.currentCity} handleCity={this.selectCity.bind(this)} />
+                watch
             </div>
         )
     }
