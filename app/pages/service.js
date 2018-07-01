@@ -235,7 +235,7 @@ class Service extends React.Component {
                     <div className="wrap">
                         <Title name="工单类型分布" />
                         <DoubleDatePicker handleDate={this.handleDatePie.bind(this)} />
-                        <Charts data={this.state.pieData} />
+                        <Charts type="pie" data={this.state.pieData} />
                     </div>
                 </section>
 

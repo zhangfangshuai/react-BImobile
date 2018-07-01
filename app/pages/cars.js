@@ -59,11 +59,11 @@ class Cars extends React.Component {
     // 上架率
     onlineRequest(p) {
         if (isParamValid(p, 'online')) {
-            axiosGet(p, (r) => { console.log(r); this.setState({ onlineData: r }) });
+            axiosGet(p, (r) => { this.setState({ onlineData: r }) });
         }
     }
     handleTCS(index) {
-        let timestamp = index == 0 ? 10 : index = 1 ? 17 : -1;
+        let timestamp = index == 0 ? 10 : index == 1 ? 17 : -1;
         this.state.onlineReq.hourId = timestamp;
         this.onlineRequest(this.state.onlineReq);
     }
@@ -74,6 +74,7 @@ class Cars extends React.Component {
 
     componentDidMount() {
         this.carsRequest(this.state.carsReq);
+        this.onlineRequest(this.state.onlineReq);
     }
 
     render() {
@@ -112,10 +113,10 @@ class Cars extends React.Component {
                 <section>
                     <div className="wrap">
                         <Title name="上架率" />
-                          <ThreeColSelector cols={['10点上架率', '17点上架率', '全天上架率']}
-                              handleTCS={this.handleTCS.bind(this)} />
-                          <DoubleDatePicker handleDate={this.handleDateOnline.bind(this)}/>
-                          
+                        <ThreeColSelector cols={['10点', '17点', '全天']}
+                            handleTCS={this.handleTCS.bind(this)} />
+                        <DoubleDatePicker handleDate={this.handleDateOnline.bind(this)}/>
+                        <Charts type="stacked_area" data={this.state.onlineData} />
                     </div>
                 </section>
             </div>
