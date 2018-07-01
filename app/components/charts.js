@@ -24,9 +24,12 @@ class Charts extends React.Component {
             case 'pie':
                 option = this.pieOption(this.props.data);
                 break;
-            case 'stacked_area':
+            case 'line_stacked_area':
                 option = this.stackedAreaOption(this.props.data);
                 break;
+            case 'line_basic':
+                option = this.lineOption(this.props.data);
+                break
         }
         chart.setOption(option)
     }
@@ -47,26 +50,25 @@ class Charts extends React.Component {
         )
     }
 
-    // option defined
-    pieOption(data) {
+
+    /*
+     * Create: zhangfs with Atom by 2018/07/01
+     * Func: option generator
+     */
+    pieOption(opt) {
         return {
-            textStyle:{
-                color:'#647888',
-                fontSize:30
-            },
+            textStyle: { color: '#647888', fontSize: 24},
             tooltip : {
                 trigger: 'item',
                 formatter: '{b}<br/>{c} ({d}%)',
                 textStyle: { fontSize: 40 }
             },
             legend: {
-                data: data.length,
-                show: true,
                 x: 'center',
-                y: 'bottom'
+                y: 'bottom',
+                data: opt.length
             },
-
-            series : [
+            series: [
                 {
                     type: 'pie',
                     legendHoverLink: true,
@@ -78,7 +80,7 @@ class Charts extends React.Component {
                             position: 'outside'
                         },
                     },
-                    data: data.series,
+                    data: opt.series,
                     itemStyle: {
                         emphasis: {
                             shadowBlur: 10,
@@ -91,29 +93,17 @@ class Charts extends React.Component {
         }
     }
 
-    stackedAreaOption(data) {
+    stackedAreaOption(opt) {
         return {
             color:['#09CA65','#0DB0FF','#FF7263','#F5A623','#C584FF','#4D68E5'],
-            textStyle:{
-                color:'#647888',
-                fontSize:30
-            },
+            textStyle:{ color:'#647888', fontSize:24 },
             tooltip : {
                 trigger: 'axis',
-                textStyle : {
-                    color: '#fff',
-                    decoration: 'none',
-                    fontFamily: 'Verdana, sans-serif',
-                    fontSize: 24,
-                    fontStyle: 'italic',
-                    fontWeight: 'bold'
-                },
-
+                textStyle: { color: '#fff', fontWeight: 'bold' },
             },
             legend: {
                 x: 'center',
                 y: 'bottom',
-                textStyle: { fontSize: 20 },
                 data:[
                     { name:'上架率', icon : 'circle' },
                     { name:'故障下架率', icon : 'circle' },
@@ -126,53 +116,68 @@ class Charts extends React.Component {
                 bottom: '10%',
                 containLabel: true
             },
-            xAxis : [
-                {
-                    type : 'category',
-                    data : data.date,
-                    axisLabel:{'fontSize':20}
-                }
-            ],
-            yAxis : [
-                {
+            xAxis: [{ type: 'category', data: opt.date }],
+            yAxis: [{
                     name: '百分比',
-                    nameTextStyle: { fontSize: 20 },
+                    nameTextStyle: { fontSize:24 },
                     type : 'value',
-                    axisLabel:{'fontSize':20}
-                }
-            ],
-            series : [
+                    axisLabel: { fontSize:24 }
+            }],
+            series: [
                 {
                     type: 'line',
                     name:'上架率',
                     stack: true,
                     areaStyle: { opacity:1 },
-                    data:data.data1
-                },
-                {
+                    data:opt.data1
+                }, {
                     type: 'line',
                     name:'故障下架率',
                     stack: true,
                     areaStyle: { opacity:1 },
-                    data:data.data2
-                },
-                {
+                    data:opt.data2
+                }, {
                     type: 'line',
                     name:'低电下架率',
                     stack: true,
                     areaStyle: { opacity:1 },
-                    data:data.data3
-                },
-                {
+                    data:opt.data3
+                }, {
                     type: 'line',
                     name:'运维下架率',
                     stack: true,
                     areaStyle: { opacity:1 },
-                    data:data.data4
+                    data:opt.data4
                 }
             ]
         };
     }
+
+    lineOption(opt) {
+        return {
+            color : ['#09CA65'],
+            textStyle:{ color:'#647888', fontSize:24 },
+            tooltip: {
+                trigger: 'axis',
+                textStyle: { color: '#fff', fontWeight: 'bold' },
+            },
+            legend: {
+                x: 'center',
+                y: 'top',
+                data:[{ name:'数量', icon: 'circle' }],
+            },
+            grid:{ left: '10%', right:'15%' },
+            xAxis:  [{ type: 'category', data: opt.axisList }],
+            yAxis: [{ type: 'value', name: '数量' }],
+            series: [{
+                name:'离线数',
+                type:'line',
+                lineStyle: { width:7 },
+                data: opt.dataList,
+            }]
+        }
+    }
+
 
 };
 

@@ -23,10 +23,26 @@ class Cars extends React.Component {
                 endDate: getDateOffset(-1)
             },
             onlineData: [],
+            onlineAvg: 0,
             onlineReq: {
                 interface: 'car/getKpiCarRate',
                 cityId: CITY_LIST[0].value,
                 hourId: 10,
+                startDate: getDateOffset(-7),
+                endDate: getDateOffset(-1)
+            },
+            offlineData: [],
+            offlineReq: {
+                interface: 'car/getKpiCarofflineData',
+                cityId: CITY_LIST[0].value,
+                startDate: getDateOffset(-7),
+                endDate: getDateOffset(-1)
+            },
+            offlineTableData: [],
+            offlineTablePage: 1,
+            offlineTableReq: {
+                interface: 'car/getCarofflineTableData',
+                cityId: CITY_LIST[0].value,
                 startDate: getDateOffset(-7),
                 endDate: getDateOffset(-1)
             }
@@ -35,11 +51,19 @@ class Cars extends React.Component {
 
     handleCity(c) {
         this.setState({ currentCity: c });
+        this.state.carsReq.cityId = c.value;
+        this.carsRequest(this.state.carsReq);
+        this.state.onlineReq.cityId = c.value;
+        this.onlineRequest(this.state.onlineReq);
+        this.state.offlineReq.cityId = c.value;
+        this.offlineRequest(this.state.offlineReq);
+        this.state.offlineTableReq.cityId = c.value;
+        this.offlineTableRequest(this.state.offlineTableReq);
     }
 
     // 车辆概况
     carsRequest(p) {
-        if (isParamValid(p, 'carsInfo')) {
+        if (isParamValid(p, 'cars_info')) {
             axiosGet(p, (r) => {
                 this.setState({
                     carsData: r,
@@ -58,8 +82,13 @@ class Cars extends React.Component {
 
     // 上架率
     onlineRequest(p) {
-        if (isParamValid(p, 'online')) {
-            axiosGet(p, (r) => { this.setState({ onlineData: r }) });
+        if (isParamValid(p, 'cars_online')) {
+            axiosGet(p, (r) => {
+                this.setState({
+                    onlineData: r,
+                    onlineAvg: r.AvgPutawayRate
+                })
+            });
         }
     }
     handleTCS(index) {
@@ -72,9 +101,45 @@ class Cars extends React.Component {
         this.onlineRequest(this.state.onlineReq);
     }
 
+    // 离线图
+    offlineRequest(p) {
+        if (isParamValid(p, 'cars_offline')) {
+            axiosGet(p, (r) => { this.setState({ offlineData: r }) });
+        }
+    }
+    handleDateOffline(date, picker) {
+        if (picker == 'start') {
+            this.state.offlineReq.startDate = date;
+            this.state.offlineTableReq.startDate = date;
+        } else {
+            this.state.offlineReq.endDate = date;
+            this.state.offlineTableReq.endDate = date;
+        }
+        this.offlineRequest(this.state.offlineReq);
+        this.offlineTableRequest(this.state.offlineTableReq);
+    }
+
+    // 离线状况
+    offlineTableRequest(p) {
+        if (isParamValid(p, 'car_offline_table')) {
+            axiosGet(p, (r) => {
+                this.setState({
+                    offlineTableData: r.table,
+                    offlineTablePage: 1
+                });
+            })
+        }
+    }
+    handlePageOfflineTable(page) {
+        this.setState({ offlineTablePage: page });
+    }
+
+
     componentDidMount() {
         this.carsRequest(this.state.carsReq);
         this.onlineRequest(this.state.onlineReq);
+        this.offlineRequest(this.state.offlineReq);
+        this.offlineTableRequest(this.state.offlineTableReq);
     }
 
     render() {
@@ -90,6 +155,18 @@ class Cars extends React.Component {
                     </li>
                 )
             });
+        }
+
+        let OD = this.state.offlineTableData, OP = this.state.offlineTablePage;
+        let ODT = OD.length < 10 ? OD : OD.slice((OP-1)*PAGESIZE, OP*PAGESIZE);
+        if (ODT.length > 0) {
+            var offlineTb = ODT.map((i) => {
+                return (
+                    <li key={ODT.indexOf(i)}>
+                        <p>{i.data0}</p><p>{i.data1}</p><p>{i.data2}</p>
+                    </li>
+                )
+            })
         }
 
         return (
@@ -116,7 +193,30 @@ class Cars extends React.Component {
                         <ThreeColSelector cols={['10点', '17点', '全天']}
                             handleTCS={this.handleTCS.bind(this)} />
                         <DoubleDatePicker handleDate={this.handleDateOnline.bind(this)}/>
-                        <Charts type="stacked_area" data={this.state.onlineData} />
+                        <Charts self="cars_online" type="line_stacked_area" data={this.state.onlineData} />
+                        <div className="onlineAvg">平均上架率: {this.state.onlineAvg}%</div>
+                        <DutyPerson sectionId="41" city={this.state.currentCity} />
+                    </div>
+                </section>
+
+                <section>
+                    <div className="wrap">
+                        <Title name="机车离线图" />
+                        <DoubleDatePicker handleDate={this.handleDateOffline.bind(this)}/>
+                        <Charts self="cars_offline" type="line_basic" data={this.state.offlineData} />
+                        <DutyPerson sectionId="42" city={this.state.currentCity} />
+                    </div>
+                </section>
+
+                <section>
+                    <div className="wrap clearTopGap">
+                        <Title name="机车离线状况" />
+                        <Table self="cars_offline_data" tbody={offlineTb} thead={['城市','日期','离线数量']} />
+                        <Pagination
+                            handlePage={this.handlePageOfflineTable.bind(this)}
+                            length={this.state.offlineTableData ? this.state.offlineTableData.length : 0}
+                            pageSize={PAGESIZE} />
+                        <DutyPerson sectionId="43" city={this.state.currentCity} />
                     </div>
                 </section>
             </div>
