@@ -6,7 +6,7 @@ import 'echarts/lib/chart/pie'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/legendScroll'
 
-export default class PieChart extends React.Component {
+class Charts extends React.Component {
 
     pieOption(data) {
         return {
@@ -51,18 +51,18 @@ export default class PieChart extends React.Component {
         }
     }
 
-    initPieChart() {
+    initChart() {
         let pie = echarts.init(this.refs.pie);
         let option = this.pieOption(this.props.data);
         pie.setOption(option)
     }
 
     componentDidMount() {
-        this.initPieChart();
+        this.initChart();
     }
 
     componentDidUpdate() {
-        this.initPieChart();
+        this.initChart();
     }
 
     render() {
@@ -73,3 +73,5 @@ export default class PieChart extends React.Component {
         )
     }
 };
+
+export default Charts;

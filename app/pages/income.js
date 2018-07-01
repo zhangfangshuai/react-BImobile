@@ -162,7 +162,7 @@ class Income extends React.Component {
                         <ThreeColSelector
                             cols={['500元以下', '500元以上', '合计']}
                             handleTCS={this.handleTCS.bind(this)} />
-                        <DoubleDatePicker handleDate={this.handleDDP.bind(this)}/>
+                        <DoubleDatePicker handleDate={this.handleDDP.bind(this)} />
                         <Table self="recharge" tbody={rechargeTb}
                             thead={['日期', '用户数', '次数', '次均充值金额', '充值金额', '消费金额']} />
                         <Pagination

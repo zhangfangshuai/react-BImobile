@@ -6,7 +6,7 @@ import DoubleDatePicker from '../components/doubleDatePicker'
 import Table from '../components/table'
 import Pagination from '../components/pagination'
 import DutyPerson from '../components/dutyPerson'
-import PieChart from '../components/charts'
+import Charts from '../components/charts'
 
 class Service extends React.Component {
     constructor(props) {
@@ -126,7 +126,6 @@ class Service extends React.Component {
     worksRequest(p) {
         if (isParamValid(p, 'workload')) {
             axiosGet(p, (r) => {
-                console.log(r);
                 this.setState ({
                     worksData: r,
                     worksPage: 1
@@ -236,7 +235,7 @@ class Service extends React.Component {
                     <div className="wrap">
                         <Title name="工单类型分布" />
                         <DoubleDatePicker handleDate={this.handleDatePie.bind(this)} />
-                        <PieChart data={this.state.pieData} />
+                        <Charts data={this.state.pieData} />
                     </div>
                 </section>
 
