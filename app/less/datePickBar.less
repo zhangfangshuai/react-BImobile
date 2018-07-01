@@ -43,12 +43,21 @@
         .selected {
             width: 90%;
             height: @show-h;
-            line-height: @show-h + 0.2rem;
+            line-height: @show-h + 0.1rem;
             margin: 0 auto;
             text-align: center;
             color: @color;
             font-weight: bold;
-            border-bottom: solid 1px #333;
+            border-bottom: solid 1px #aaa;
+        }
+        .marquee {
+            width: 100%;
+            height: 100px;;
+            background: lightgreen;
+            opacity: .3;
+            position: absolute;
+            top: 41%;
+            left: 0;
         }
         .scrollPicker {
             width: 100%;
@@ -63,9 +72,10 @@
                 text-align: center;
                 color: @color;
                 overflow: scroll;
-                background-image: linear-gradient(-180deg, #2e2e2e 0%, #fff 48%, #2e2e2e 100%);
-                box-shadow: 0 0 0.3rem 0 rgba(20, 20, 20, 0.5);
+                // background-image: linear-gradient(-180deg, #2e2e2e 0%, #fff 48%, #2e2e2e 100%);
+                // box-shadow: 0 0 0.3rem 0 rgba(20, 20, 20, 0.5);
                 box-sizing: border-box;
+                z-index: 303;
             }
         }
         .btnGroup {
@@ -77,8 +87,12 @@
                 width: 33.3%;
                 text-align: center;
                 color: @color;
-                box-shadow: 0 0 0.3rem 0 rgba(20, 20, 20, 0.5);
+                box-shadow: 0 0 0.05rem 0 rgba(20, 20, 20, 0.5);
                 box-sizing: border-box;
+            }
+            div:last-child {
+                background: #09CA65;
+                color: #fff;
             }
         }
     }

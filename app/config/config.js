@@ -4,6 +4,10 @@ export const CITY_LIST = [
     {
         value: '1',
         text: '全国'
+    },
+    {
+        value: '2',
+        text: '北京'
     }
 ];
 

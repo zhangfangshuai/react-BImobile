@@ -179,6 +179,7 @@ class DatePickBar extends React.Component {
                         <span onChange={this.refreshDays.bind(this)}>{this.state.picked.month}</span> /&nbsp;
                         <span>{this.state.picked.date}</span>
                     </div>
+                    <div className="marquee"></div>
                     <div className="scrollPicker">
                         <div onScroll={this.autoMatch.bind(this, 'year')} ref='year'>{yearBar}</div>
                         <div onScroll={this.autoMatch.bind(this, 'month')} ref='month'>{monthBar}</div>
