@@ -10,9 +10,9 @@ class DutyPerson extends React.Component {
             bbStyle: { display: 'none' },
             boxStyle: { display: 'none' },
             inchargeReq: {
-              interface: 'getPrincipal',
-              id: this.props.sectionId,
-              cityId: this.props.city.value
+                interface: 'getPrincipal',
+                id: this.props.sectionId,
+                cityId: this.props.city.value
             },
             phone: '',
             person: ''
@@ -34,7 +34,7 @@ class DutyPerson extends React.Component {
                   boxStyle: { display: 'none' }
               })
         } else {
-            axiosGet(_state.inchargeReq, (res) => {
+            axiosGet(this.state.inchargeReq, (res) => {
                 this.setState({
                     phone: res[0].sim,
                     person: res[0].liablename,
