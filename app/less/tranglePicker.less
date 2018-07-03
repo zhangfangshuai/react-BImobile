@@ -1,0 +1,29 @@
+@h: .8rem;
+@color: #0DB95F;
+.component-tranglePicker {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    > p {
+        position: relative;
+        display: inline-block;
+        width: 20%;
+        height: @h;
+        line-height: @h;
+        color: @color;
+        font-size: .24rem;
+    }
+    > p::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        top: @h/2 - 0.05rem;
+        margin-left: .1rem;
+        border-top: solid .09rem @color;
+        border-right: solid .09rem transparent;
+        border-left: solid .09rem transparent;
+        border-bottom: none;
+        z-index: 200;
+    }
+}

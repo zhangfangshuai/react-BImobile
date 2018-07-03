@@ -1,6 +1,6 @@
-import React from 'react';
-import Pubsub from 'pubsub-js';
-import '../less/cityitem.less';
+import React from 'react'
+import Pubsub from 'pubsub-js'
+import '../less/cityitem.less'
 
 class CityItem extends React.Component {
     getCityItem(item, e) {

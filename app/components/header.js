@@ -1,8 +1,7 @@
-import React from 'react';
-import Pubsub from 'pubsub-js';
-import '../less/header.less';
-
-import Cities from './cities';
+import React from 'react'
+import Pubsub from 'pubsub-js'
+import '../less/header.less'
+import Cities from './cities'
 
 class Header extends React.Component {
     constructor(props) {

@@ -7,13 +7,14 @@ import DutyPerson from '../components/dutyPerson'
 import DoubleDatePicker from '../components/doubleDatePicker'
 import Pagination from '../components/pagination'
 import ThreeColSelector from '../components/threeColSelector'
-// import TrangleSelector from '../components/trangleSelector'
+import TranglePicker from '../components/tranglePicker'
 
 class Sites extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             currentCity: CITY_LIST[1],
+            trangleData: [],
             parkData: [],
             parkPage:1,
             parkReq: {
@@ -28,7 +29,6 @@ class Sites extends React.Component {
                 startDate: getDateOffset(-7),
                 endDate: getDateOffset(-1)
             },
-            selectorData: [],
             detailData: [],
             datailPage: 1,
             detailReq: {
@@ -91,7 +91,8 @@ class Sites extends React.Component {
             })
         }
     }
-    handleTCS(i) {
+    handleTCSPark(i) {
+        console.log(i, 'park');
         this.state.detailReq.selectType = i + 1;
         this.detailRequest(this.state.detailReq);
     }
@@ -127,7 +128,7 @@ class Sites extends React.Component {
                     <li key={PARKUPDATE.indexOf(i)}>
                         <p><span>{i.parkName}</span></p><p>{i.parkType == 0 ? '实体' : '虚拟'}</p>
                         <p>{i.carportNum}</p><p>{i.updateType == 1 ? '开启' : '关闭'}</p>
-                        <p>{d.format('yyyyMMdd')}</p>
+                        <p>{d.format('yyyyMMdd').slice(4)}</p>
                     </li>
                 )
             })
@@ -163,8 +164,8 @@ class Sites extends React.Component {
                 <section>
                     <div className="wrap">
                         <Title name="网点明细" />
-                        <ThreeColSelector cols={['20佳', '20差', '全部']} handleTCS={this.handleTCS.bind(this)} />
-
+                        <ThreeColSelector cols={['20佳', '20差', '全部']} handleTCS={this.handleTCSPark.bind(this)} />
+                        <TranglePicker selectors={['商圈','近7日','全部']} city={this.state.currentCity} />
                     </div>
                 </section>
             </div>
