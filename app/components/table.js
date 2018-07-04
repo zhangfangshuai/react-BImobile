@@ -1,5 +1,5 @@
-import React from 'react';
-import '../less/table.less';
+import React from 'react'
+import '../less/table.less'
 
 class Table extends React.Component {
 

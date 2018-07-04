@@ -60,10 +60,8 @@ class TrangleSelector extends React.Component {
 
     componentDidMount() {
         for (let s of this.props.selectors) {
-          console.log(s);
             switch (s) {
                 case '商圈':
-                console.log(s, 'sq');
                     this.bussAreaRequest(this.state.bussAreaReq);
                     break;
                 case '周期':
@@ -86,8 +84,6 @@ class TrangleSelector extends React.Component {
             }
         }
 
-        console.log(this.state.selectors);
-
         Pubsub.subscribe('HIDE_ITEMLIST', () => {
             this.setState({
                 barState: {
@@ -108,7 +104,6 @@ class TrangleSelector extends React.Component {
 
     render() {
         let Selector = this.props.selectors.map((item) => {
-            console.log(this.state.selectors[item]);
             if (!this.state.selectors[item]) {
                 return (
                     <div key={this.props.selectors.indexOf(item)}>

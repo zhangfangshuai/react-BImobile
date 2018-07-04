@@ -30,7 +30,7 @@ class Sites extends React.Component {
                 endDate: getDateOffset(-1)
             },
             detailData: [],
-            datailPage: 1,
+            detailPage: 1,
             detailReq: {
                 interface: 'park/getParkDetail',
                 cityId: 2,
@@ -46,6 +46,8 @@ class Sites extends React.Component {
         Tip.success('请选择具体城市')
         this.setState({ currentCity: c.value == 1 ? CITY_LIST[1] : c });
     }
+
+
 
     // 网点概况
     siteRequest(p) {
@@ -91,10 +93,18 @@ class Sites extends React.Component {
             })
         }
     }
-    handleTCSPark(i) {
-        console.log(i, 'park');
-        this.state.detailReq.selectType = i + 1;
+    handleTCSPark(index) {
+        this.state.detailReq.selectType = index + 1;
         this.detailRequest(this.state.detailReq);
+    }
+    handleTPickDetail(params) {
+        params.master == 0 ? this.state.detailReq.businessareaid = params.item.businessareaid :
+        params.master == 1 ? this.state.detailReq.reportType = params.item.id :
+        params.master == 2 ? this.state.detailReq.parkingKind = params.item.id : '';
+        this.detailRequest(this.state.detailReq);
+    }
+    handlePageParkDetail(page) {
+        this.setState({ detailPage: page });
     }
 
 
@@ -122,18 +132,29 @@ class Sites extends React.Component {
         let PARKUPDATE = PD.length < 10 ? PD : PD.slice((PP-1)*PAGESIZE, PP*PAGESIZE);
         if (PARKUPDATE.length > 0) {
             var parkUpdateTb = PARKUPDATE.map((i) => {
-                let d = new Date();
-                d.setTime(i.updateDate);
                 return (
                     <li key={PARKUPDATE.indexOf(i)}>
                         <p><span>{i.parkName}</span></p><p>{i.parkType == 0 ? '实体' : '虚拟'}</p>
                         <p>{i.carportNum}</p><p>{i.updateType == 1 ? '开启' : '关闭'}</p>
-                        <p>{d.format('yyyyMMdd').slice(4)}</p>
+                        <p>{time2date(i.updateDate).format('MM-dd')}</p>
                     </li>
                 )
             })
         }
 
+        let DD = this.state.detailData, DP = this.state.detailPage;
+        let DETAIL = DD.length < 10 ? DD : DD.slice((DP-1)*PAGESIZE, DP*PAGESIZE);
+        if (DETAIL.length > 0) {
+            var parkDetailTb = DETAIL.map((i) => {
+                return (
+                    <li key={DETAIL.indexOf(i)}>
+                        <p><span>{i.parkName}</span></p><p>{time2date(i.openDate).format('yyyy-MM-dd')}</p>
+                        <p>{i.carportNum}</p><p>{i.executAvgnum}</p><p>{i.carportAvgorder}</p>
+                        <p>{i.retrunAvgnum}</p><p>{i.userAvgnum}</p>
+                    </li>
+                )
+            })
+        }
         return (
             <div className="container">
                 <Header city={this.state.currentCity} handleCity={this.selectCity.bind(this)} />
@@ -141,8 +162,7 @@ class Sites extends React.Component {
                 <section>
                     <div className="wrap clearTopGap">
                         <Title name="网点概况" />
-                        <Table tbody={parkTb}
-                            thead={['指标名称','昨日','前日', '同比','同比增浮']} />
+                        <Table tbody={parkTb} thead={['指标名称','昨日','前日', '同比','同比增浮']} />
                         <DutyPerson sectionId="34" city={this.state.currentCity} />
                     </div>
                 </section>
@@ -165,7 +185,17 @@ class Sites extends React.Component {
                     <div className="wrap">
                         <Title name="网点明细" />
                         <ThreeColSelector cols={['20佳', '20差', '全部']} handleTCS={this.handleTCSPark.bind(this)} />
-                        <TranglePicker selectors={['商圈','近7日','全部']} city={this.state.currentCity} />
+                        <TranglePicker
+                            selectors={['商圈','近7日','全部']}
+                            city={this.state.currentCity}
+                            handleTPick={this.handleTPickDetail.bind(this)} />
+                        <Table self="parkDetail" tbody={parkDetailTb}
+                            thead={['网点名称','开启日期','车位数','车位均单','日均取车单','日均还车单','日均服务用户']} />
+                        <Pagination
+                            handlePage={this.handlePageParkDetail.bind(this)}
+                            length={this.state.detailData ? this.state.detailData.length : 0}
+                            pageSize={PAGESIZE} />
+                        <DutyPerson sectionId="36" city={this.state.currentCity} />
                     </div>
                 </section>
             </div>

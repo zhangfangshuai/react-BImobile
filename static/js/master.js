@@ -63,6 +63,14 @@ function str2Date(str) {
     str = (str.length == 8) ? (str.slice(0,4)+'/'+str.slice(4,6)+'/'+str.slice(6,8)) : (str.slice(0,4)+'/'+str.slice(4,6)+'/01');
     return new Date(str);
 }
+/**
+ * Func: 时间戳转日期
+ */
+function time2date(timestamp) {
+    let date = new Date();
+    date.setTime(timestamp);
+    return date;
+}
 
 
 

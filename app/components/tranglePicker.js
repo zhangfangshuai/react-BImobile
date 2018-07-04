@@ -28,6 +28,7 @@ class TranglePicker extends React.Component {
             periodActive: '近7日',
             parkActive: '全部',
             hourActive: '0时',
+            master: 0,  // 0:商圈; 1:周期; 2:网点类型; 4:时刻
             dataBar: []
         }
     }
@@ -38,15 +39,19 @@ class TranglePicker extends React.Component {
             switch (item) {
                 case '商圈':
                     prevState.dataBar = this.state.bussOption;
+                    prevState.master = 0;
                     break;
                 case '近7日':
                     prevState.dataBar = this.state.periodOption;
+                    prevState.master = 1;
                     break;
                 case '全部':
                     prevState.dataBar = this.state.parkOption;
+                    prevState.master = 2;
                     break;
                 case '时刻':
                     prevState.dataBar = this.state.hourOption;
+                    prevState.master = 3;
                     break;
                 default:
                     Tip.success('该选择器还未配置');
@@ -76,8 +81,25 @@ class TranglePicker extends React.Component {
                 }
             })
         });
-        Pubsub.subscribe('ITEM_SELECTED', (msg, item) => {
-            // TODO: 选出谁应该呗更新
+        Pubsub.subscribe('ITEM_SELECTED', (msg, params) => {
+            let cb = params.item.value || params.item.businessareaname;
+            switch (params.master) {
+                case 0:
+                    this.setState({ bussActive: cb });
+                    break;
+                case 1:
+                    this.setState({ periodActive: cb });
+                    break;
+                case 2:
+                    this.setState({ parkActive: cb });
+                    break;
+                case 3:
+                    this.setState({ hourActive: cb });
+                    break;
+                default:
+                  Tip.success('该项还未被配置');
+            }
+            this.props.handleTPick(params);
         })
     }
 
@@ -97,7 +119,7 @@ class TranglePicker extends React.Component {
                 <p onClick={this.callBar.bind(this, this.props.selectors[2])}>
                     { this.state.parkActive }
                 </p>
-                <TrangleBar data={this.state.dataBar} state={this.state.barState} />
+                <TrangleBar data={this.state.dataBar} state={this.state.barState} master={this.state.master} />
             </div>
 
         )
