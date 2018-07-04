@@ -1,3 +1,9 @@
+/**
+ * Create: zhangfs by Atom
+ * Time: 2018/07/04
+ * Usage: <TranglePicker selectors={['商圈']} city={this.state.city} handleTPick={this.handleTPick.bind(this)} />
+ **/
+
 import React from 'react'
 import Pubsub from 'pubsub-js'
 import TrangleBar from './trangleBar'
@@ -27,8 +33,11 @@ class TranglePicker extends React.Component {
             bussActive: '商圈',
             periodActive: '近7日',
             parkActive: '全部',
-            hourActive: '0时',
-            master: 0,  // 0:商圈; 1:周期; 2:网点类型; 4:时刻
+            hourActive: '时刻',
+            master: {
+                id: 0,
+                name: '商圈'
+            },  // 0:商圈; 1:周期; 2:网点类型; 4:时刻
             dataBar: []
         }
     }
@@ -39,19 +48,23 @@ class TranglePicker extends React.Component {
             switch (item) {
                 case '商圈':
                     prevState.dataBar = this.state.bussOption;
-                    prevState.master = 0;
+                    prevState.master.id = 0;
+                    prevState.master.name = item;
                     break;
-                case '近7日':
+                case '周期':
                     prevState.dataBar = this.state.periodOption;
-                    prevState.master = 1;
+                    prevState.master.id = 1;
+                    prevState.master.name = item;
                     break;
-                case '全部':
+                case '网点类型':
                     prevState.dataBar = this.state.parkOption;
-                    prevState.master = 2;
+                    prevState.master.id = 2;
+                    prevState.master.name = item;
                     break;
                 case '时刻':
                     prevState.dataBar = this.state.hourOption;
-                    prevState.master = 3;
+                    prevState.master.id = 3;
+                    prevState.master.name = item;
                     break;
                 default:
                     Tip.success('该选择器还未配置');
@@ -83,7 +96,7 @@ class TranglePicker extends React.Component {
         });
         Pubsub.subscribe('ITEM_SELECTED', (msg, params) => {
             let cb = params.item.value || params.item.businessareaname;
-            switch (params.master) {
+            switch (params.master.id) {
                 case 0:
                     this.setState({ bussActive: cb });
                     break;
@@ -108,17 +121,25 @@ class TranglePicker extends React.Component {
     }
 
     render() {
+        let bussHTML = null, periodHTML = null, parkHTML = null, hourHTML = null;
+
+        for (let selector of this.props.selectors) {
+            if (selector == '商圈') {
+                bussHTML = <p onClick={this.callBar.bind(this, selector)}> { this.state.bussActive } </p>
+            } else if (selector == '周期') {
+                periodHTML = <p onClick={this.callBar.bind(this, selector)}> { this.state.periodActive } </p>
+            } else if (selector == '网点类型') {
+                parkHTML = <p onClick={this.callBar.bind(this, selector)}> { this.state.parkActive } </p>
+            } else if (selector == '时刻') {
+                hourHTML = <p onClick={this.callBar.bind(this, selector)}> { this.state.hourActive } </p>
+            }
+        }
         return (
             <div className="component-tranglePicker">
-                <p onClick={this.callBar.bind(this, this.props.selectors[0])}>
-                    { this.state.bussActive }
-                </p>
-                <p onClick={this.callBar.bind(this, this.props.selectors[1])}>
-                    { this.state.periodActive }
-                </p>
-                <p onClick={this.callBar.bind(this, this.props.selectors[2])}>
-                    { this.state.parkActive }
-                </p>
+                { bussHTML }
+                { periodHTML }
+                { parkHTML }
+                { hourHTML }
                 <TrangleBar data={this.state.dataBar} state={this.state.barState} master={this.state.master} />
             </div>
 
