@@ -1,3 +1,9 @@
+/**
+ * Create: zhangfs by Atom
+ * Time: 2018/06/28
+ * Usage: <SingleDatePicker handleDate={this.handleDate.bind(this)} />
+ **/
+
 import React from 'react'
 import Pubsub from 'pubsub-js'
 import DatePickBar from './datePickBar'

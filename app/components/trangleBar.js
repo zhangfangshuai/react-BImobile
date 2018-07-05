@@ -12,7 +12,12 @@ class TrangleBar extends React.Component {
     render() {
         let Items = this.props.data.map((item) => {
             return (
-                <ItemList key={this.props.data.indexOf(item)} data={item} focus={this.props.cItem == item} />
+                <ItemList
+                    key={this.props.data.indexOf(item)}
+                    data={item}
+                    focus={this.props.cItem == item}
+                    master={this.props.master}
+                />
             )
         })
 
