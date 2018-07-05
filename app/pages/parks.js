@@ -198,10 +198,11 @@ class Parks extends React.Component {
         let PARK = PD.length < 10 ? PD : PD.slice((PP-1)*PAGESIZE, PP*PAGESIZE);
         if (PARK.length > 0) {
             var parkTb = PARK.map((i) => {
+                let icon = <i className={i.tongbiRate > 0 ? 'rise' : i.tongbiRate == 0 ? '' : 'down'}></i>;
                 return (
                     <li key={PARK.indexOf(i)}>
                         <p>{i.kpiname}</p><p>{i.kpiCurrent}</p><p>{i.kpiYes}</p>
-                        <p>{i.kpiTongbi}</p><p>{i.tongbiRate}</p>
+                        <p>{i.kpiTongbi}</p><p>{i.tongbiRate}{icon}</p>
                     </li>
                 )
             });
@@ -273,7 +274,7 @@ class Parks extends React.Component {
                 <section>
                     <div className="wrap clearTopGap">
                         <Title name="网点概况" />
-                        <Table tbody={parkTb} thead={['指标名称','昨日','前日', '同比','同比增浮']} />
+                        <Table tbody={parkTb} thead={['指标名称','昨日','前日', '同比','同比增幅']} />
                         <DutyPerson sectionId="34" city={this.state.currentCity} />
                     </div>
                 </section>

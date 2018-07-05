@@ -1,3 +1,4 @@
+@arrow: 0.1rem;
 .scroll-cont {
     width: 98%;
     margin-left: 1%;
@@ -46,6 +47,48 @@
                     float: left;
                     text-align: left;
                     white-space: nowrap;
+                }
+                .down {
+                    display: inline-block;
+                    position: relative;
+                    width: @arrow;
+                    height: @arrow - 0.02rem;
+                    margin-left: @arrow;
+                    top: 0 - @arrow;
+                    box-sizing: border-box;
+                    background: red;
+                }
+                .down::after {
+                    content: '';
+                    display: inline-block;
+                    position: absolute;
+                    top: 100%;
+                    left: -50%;
+                    width: 0;
+                    height: 0;
+                    border-top: solid @arrow + 0.02rem red;
+                    border-right: solid @arrow transparent;
+                    border-left: solid @arrow transparent;
+                }
+                .rise {
+                    display: inline-block;
+                    position: relative;
+                    width: @arrow;
+                    height: @arrow - 0.02rem;
+                    margin-left: @arrow;
+                    background: green;
+                }
+                .rise::before {
+                    content: '';
+                    display: inline-block;
+                    position: absolute;
+                    top: -150%;
+                    left: -50%;
+                    width: 0;
+                    height: 0;
+                    border-right: solid @arrow transparent;
+                    border-left: solid @arrow transparent;
+                    border-bottom: solid @arrow + 0.02rem green;
                 }
             }
         }

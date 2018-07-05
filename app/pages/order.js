@@ -48,10 +48,11 @@ class Order extends React.Component {
     render() {
         if (this.state.infoData.length > 0) {
             var infoTb = this.state.infoData.map((i) => {
+                let icon = <i className={i.avg_rate > 0 ? 'rise' : i.avg_rate == 0 ? '' : 'down'}></i>;
                 return (
                     <li key={this.state.infoData.indexOf(i)}>
                         <p>{i.kpiname}</p><p>{i.month_t}</p><p>{i.month_avg}</p>
-                        <p>{i.month_last_t}</p><p>{i.month_last_avg}</p><p>{i.avg_rate}</p>
+                        <p>{i.month_last_t}</p><p>{i.month_last_avg}</p><p>{i.avg_rate}{icon}</p>
                     </li>
                 )
             })
