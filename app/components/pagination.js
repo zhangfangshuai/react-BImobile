@@ -1,3 +1,10 @@
+/**
+ * Create: zhangfs by Atom
+ * Time: 2018/07/01
+ * Usage: <Pagination handlePage={this.handlePage.bind(this)} length={length} pageSize={PAGESIZE} />
+ **/
+
+
 import React from 'react'
 import '../less/pagination.less'
 

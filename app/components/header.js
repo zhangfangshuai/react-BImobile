@@ -1,3 +1,10 @@
+/**
+ * Create: zhangfs by Atom
+ * Time: 2018/06/26
+ * Usage: <Header city={} handleCity={this.selectCity.bind(this)} noCountry={true} />
+ * Note: noCountry属性标志是否去除全国选项
+ **/
+
 import React from 'react'
 import Pubsub from 'pubsub-js'
 import '../less/header.less'

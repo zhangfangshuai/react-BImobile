@@ -1,3 +1,9 @@
+/**
+ * Create: zhangfs by Atom
+ * Time: 2018/07/03
+ * Usage: <CarOption handleCar={this.handleCar.bind(this)} />
+ **/
+
 import React from 'react';
 import '../less/carOption.less';
 

@@ -1,3 +1,9 @@
+/**
+ * Create: zhangfs by Atom
+ * Time: 2018/07/06
+ * Usage: <DutyPerson sectionId="" city={this.state.currentCity} />
+ **/
+
 import React from 'react'
 import '../less/dutyPerson.less'
 
@@ -47,7 +53,7 @@ class DutyPerson extends React.Component {
     componentDidUpdate(prevProps) {
         // 该条件避免update中使用setState造成死循环,
         // shouldComponentUpdate()以后可能废除,不用.
-        if (this.state.currentCity != this.props.city) {
+        if (this.state.currentCity != this.props.city && this.props.sectionId) {
             if (this.props.city.value != 1) {
                 this.state.inchargeReq.cityId = this.props.city.value;
                 axiosGet(this.state.inchargeReq, (res) => {

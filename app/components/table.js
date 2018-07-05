@@ -1,3 +1,9 @@
+/**
+ * Create: zhangfs by Atom
+ * Time: 2018/07/02
+ * Usage: <Table self="selfStyle" tbody={tbody} thead={['','']} />
+ **/
+
 import React from 'react'
 import '../less/table.less'
 

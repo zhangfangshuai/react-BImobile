@@ -1,3 +1,9 @@
+/**
+ * Create: zhangfs by Atom
+ * Time: 2018/07/06
+ * Usage: <DoubleDatePicker handleDate={this.handleDate.bind(this)} />
+ **/
+
 import React from 'react'
 import Pubsub from 'pubsub-js'
 import DatePickBar from './datePickBar'
