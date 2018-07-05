@@ -79,11 +79,11 @@ class App extends React.Component {
             return (
                 <div>
                     <Menu menuState={this.state.menuState} user={this.state.user} cItem={this.state.currentMenu} />
-                    { view == 2 && <Parks city={this.state.currentCity}/> }
+                    { view == 2 && <Order city={this.state.currentCity}/> }
                     { view == 3 && <Watch city={this.state.currentCity}/> }
                     { view == 4 && <Watch city={this.state.currentCity}/> }
                     { view == 64 && <Watch city={this.state.currentCity}/> }
-                    { view == 5 && <Watch city={this.state.currentCity}/> }
+                    { view == 5 && <Order city={this.state.currentCity}/> }
                     { view == 6 && <Parks city={this.state.currentCity}/> }
                     { view == 7 && <Cars city={this.state.currentCity}/> }
                     { view == 8 && <Service city={this.state.currentCity}/> }

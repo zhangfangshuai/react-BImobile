@@ -23,9 +23,7 @@ class Cities extends React.Component {
                     res[i].value == 1 && res.splice(i, 1);
                 }
             }
-            this.setState({
-                cityList: res
-            })
+            this.setState({ cityList: res });
         }, false)
     }
 

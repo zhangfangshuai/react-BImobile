@@ -10,10 +10,13 @@ class CarOption extends React.Component {
     }
 
     selectCar(type) {
-        this.setState({
-            ct: type
+        // 连续点击同一个,不重复执行
+        this.setState((prevState) => {
+            if (prevState.ct != type) {
+                prevState.ct = type
+                this.props.handleCar(type, 'car');
+            }
         })
-        this.props.handleCar(type, 'car');
     }
 
     render() {

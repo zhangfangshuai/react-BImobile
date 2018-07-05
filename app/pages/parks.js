@@ -15,19 +15,19 @@ class Parks extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentCity: CITY_LIST[1],
+            currentCity: {text: "北京", value: "2"},
             trangleData: [],
             parkData: [],
             parkPage:1,
             parkReq: {
                 interface: 'park/getGeneralSituationData',
-                cityId: CITY_LIST[1].value
+                cityId: CITY_LIST[0].value
             },
             parkUpdateData: [],
             parkUpdatePage: 1,
             parkUpdateReq: {
                 interface: 'park/getParkingUpdateData',
-                cityId: CITY_LIST[1].value,
+                cityId: CITY_LIST[0].value,
                 startDate: getDateOffset(-7),
                 endDate: getDateOffset(-1)
             },
@@ -35,7 +35,7 @@ class Parks extends React.Component {
             detailPage: 1,
             detailReq: {
                 interface: 'park/getParkDetail',
-                cityId: CITY_LIST[1].value,
+                cityId: CITY_LIST[0].value,
                 reportType: 1,
                 selectType: 1,
                 parkingKind: '',
@@ -45,7 +45,7 @@ class Parks extends React.Component {
             parkCarPage: 1,
             parkCarReq: {
                 interface: 'park/getParkCarDetail',
-                cityId: CITY_LIST[1].value,
+                cityId: CITY_LIST[0].value,
                 dateId: getDateOffset(-1),
                 hourId: '',
                 businessareaid: ''
@@ -54,7 +54,7 @@ class Parks extends React.Component {
             parkOrderPage: 1,
             parkOrderReq: {
                 interface: 'park/getParkOrderDetail',
-                cityId: CITY_LIST[1].value,
+                cityId: CITY_LIST[0].value,
                 typeId: 0,
                 startDate: getDateOffset(-7),
                 endDate: getDateOffset(-1)
@@ -63,11 +63,7 @@ class Parks extends React.Component {
     }
 
     selectCity(c) {
-        if(c.value == 1) {
-             Tip.success('请选择具体城市');
-             return;
-        }
-        this.setState({ currentCity: c.value == 1 ? CITY_LIST[1] : c });
+        this.setState({ currentCity: c });
         this.state.parkReq.cityId = c.value;
         this.siteRequest(this.state.parkReq);
         this.state.parkUpdateReq.cityId = c.value;
