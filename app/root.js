@@ -8,7 +8,8 @@ import './less/master.less'
 import Menu from './components/menu'
 import Login from './pages/login'
 import Watch from './pages/watch'
-import Sites from './pages/sites'
+import Order from './pages/order'
+import Parks from './pages/parks'
 import Cars from './pages/cars'
 import Service from './pages/service'
 import Operation from './pages/operation'
@@ -78,12 +79,12 @@ class App extends React.Component {
             return (
                 <div>
                     <Menu menuState={this.state.menuState} user={this.state.user} cItem={this.state.currentMenu} />
-                    { view == 2 && <Sites city={this.state.currentCity}/> }
+                    { view == 2 && <Parks city={this.state.currentCity}/> }
                     { view == 3 && <Watch city={this.state.currentCity}/> }
                     { view == 4 && <Watch city={this.state.currentCity}/> }
                     { view == 64 && <Watch city={this.state.currentCity}/> }
                     { view == 5 && <Watch city={this.state.currentCity}/> }
-                    { view == 6 && <Sites city={this.state.currentCity}/> }
+                    { view == 6 && <Parks city={this.state.currentCity}/> }
                     { view == 7 && <Cars city={this.state.currentCity}/> }
                     { view == 8 && <Service city={this.state.currentCity}/> }
                     { view == 9 && <Operation city={this.state.currentCity}/> }

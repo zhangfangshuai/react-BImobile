@@ -18,6 +18,11 @@ class Cities extends React.Component {
 
     componentWillMount() {
         axiosGet(this.state.cityReq, (res) => {
+            if (this.props.noCountry) {
+                for (let i in res) {
+                    res[i].value == 1 && res.splice(i, 1);
+                }
+            }
             this.setState({
                 cityList: res
             })

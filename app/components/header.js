@@ -66,7 +66,7 @@ class Header extends React.Component {
                     src="/static/images/icon_location.png" alt=""
                     onClick={this.toggleCity.bind(this)} />
                 <div className={`empty${this.props.disLocat ? ' locat-show' : ' locat-hide'}`} />
-                <Cities city={this.state.city} cityState={this.state.cityState} />
+                <Cities city={this.state.city} cityState={this.state.cityState} noCountry={this.props.noCountry} />
             </div>
         );
     }

@@ -11,7 +11,7 @@ import ThreeColSelector from '../components/threeColSelector'
 import TranglePicker from '../components/tranglePicker'
 import CarOption from '../components/carOption'
 
-class Sites extends React.Component {
+class Parks extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -21,13 +21,13 @@ class Sites extends React.Component {
             parkPage:1,
             parkReq: {
                 interface: 'park/getGeneralSituationData',
-                cityId: 2
+                cityId: CITY_LIST[1].value
             },
             parkUpdateData: [],
             parkUpdatePage: 1,
             parkUpdateReq: {
                 interface: 'park/getParkingUpdateData',
-                cityId: 2,
+                cityId: CITY_LIST[1].value,
                 startDate: getDateOffset(-7),
                 endDate: getDateOffset(-1)
             },
@@ -35,7 +35,7 @@ class Sites extends React.Component {
             detailPage: 1,
             detailReq: {
                 interface: 'park/getParkDetail',
-                cityId: 2,
+                cityId: CITY_LIST[1].value,
                 reportType: 1,
                 selectType: 1,
                 parkingKind: '',
@@ -45,7 +45,7 @@ class Sites extends React.Component {
             parkCarPage: 1,
             parkCarReq: {
                 interface: 'park/getParkCarDetail',
-                cityId: 2,
+                cityId: CITY_LIST[1].value,
                 dateId: getDateOffset(-1),
                 hourId: '',
                 businessareaid: ''
@@ -54,7 +54,7 @@ class Sites extends React.Component {
             parkOrderPage: 1,
             parkOrderReq: {
                 interface: 'park/getParkOrderDetail',
-                cityId: 2,
+                cityId: CITY_LIST[1].value,
                 typeId: 0,
                 startDate: getDateOffset(-7),
                 endDate: getDateOffset(-1)
@@ -63,8 +63,21 @@ class Sites extends React.Component {
     }
 
     selectCity(c) {
-        c.value == 1 && Tip.success('请选择具体城市');
+        if(c.value == 1) {
+             Tip.success('请选择具体城市');
+             return;
+        }
         this.setState({ currentCity: c.value == 1 ? CITY_LIST[1] : c });
+        this.state.parkReq.cityId = c.value;
+        this.siteRequest(this.state.parkReq);
+        this.state.parkUpdateReq.cityId = c.value;
+        this.parkUpdateRequest(this.state.parkUpdateReq);
+        this.state.detailReq.cityId = c.value;
+        this.detailRequest(this.state.detailReq);
+        this.state.parkCarReq.cityId = c.value;
+        this.parkCarRequest(this.state.parkCarReq);
+        this.state.parkOrderReq.cityId = c.value;
+        this.parkOrderRequest(this.state.parkOrderReq);
     }
 
 
@@ -259,7 +272,7 @@ class Sites extends React.Component {
         }
         return (
             <div className="container">
-                <Header city={this.state.currentCity} handleCity={this.selectCity.bind(this)} />
+                <Header city={this.state.currentCity} handleCity={this.selectCity.bind(this)} noCountry={true} />
 
                 <section>
                     <div className="wrap clearTopGap">
@@ -341,4 +354,4 @@ class Sites extends React.Component {
     }
 }
 
-export default Sites;
+export default Parks;
