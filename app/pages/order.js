@@ -8,6 +8,7 @@ import Table from '../components/table'
 import DutyPerson from '../components/dutyPerson'
 import DoubleDatePicker from '../components/doubleDatePicker'
 import Pagination from '../components/pagination'
+import Charts from '../components/charts'
 
 class Order extends React.Component {
     constructor(props) {
@@ -29,6 +30,14 @@ class Order extends React.Component {
                 typeId: 0,
                 startDate: getDateOffset(-7),
                 endDate: getDateOffset(-1)
+            },
+            reasonData: [],
+            reasonReq: {
+                interface: 'getCancelReason',
+                cityId: CITY_LIST[0].value,
+                typeId: 0,
+                startDate: getDateOffset(-7),
+                endDate: getDateOffset(-1)
             }
         }
     }
@@ -39,6 +48,8 @@ class Order extends React.Component {
         this.infoRequest(this.state.infoReq);
         this.state.detailReq.cityId = c.value;
         this.detailRequest(this.state.detailReq);
+        this.state.resonReq.cityId = c.value;
+        this.reasonRequest(this.state.resonReq);
     }
 
     // 订单概况
@@ -74,14 +85,33 @@ class Order extends React.Component {
         this.detailRequest(this.state.detailReq);
     }
     handlePageDetail(page) {
-        this.setState({ detailPage: page });
+        this.state.detailPage != page && this.setState({ detailPage: page });
     }
 
+    // 订单取消原因
+    reasonRequest(p) {
+        if (isParamValid(p, 'order_cancel_reason')) {
+            axiosGet(p, (r) => {
+                this.setState({
+                    reasonData: r
+                })
+            })
+        }
+    }
+    handleCarReason(carType) {
+        this.state.reasonReq.typeId = carType;
+        this.reasonRequest(this.state.reasonReq);
+    }
+    handleDateReason(date, picker) {
+        picker == 'start' ? this.state.reasonReq.startDate = date : this.state.reasonReq.endDate = date;
+        this.reasonRequest(this.state.reasonReq);
+    }
 
 
     componentDidMount() {
         this.infoRequest(this.state.infoReq);
         this.detailRequest(this.state.detailReq);
+        this.reasonRequest(this.state.reasonReq);
     }
 
     render() {
@@ -98,6 +128,7 @@ class Order extends React.Component {
         }
 
         let DD = this.state.detailData, DP = this.state.detailPage;
+        DD = (DD.length > 0 && DD[DD.length-1].date_id=="累计值") ? DD.reverse() : DD;
         let DETAIL = DD.length < 10 ? DD : DD.slice((DP-1)*PAGESIZE, DP*PAGESIZE);
         if (DETAIL.length > 0) {
             var detailTb = DETAIL.map((i) => {
@@ -138,6 +169,15 @@ class Order extends React.Component {
                             length={this.state.detailData ? this.state.detailData.length : 0}
                             pageSize={PAGESIZE} />
                         <DutyPerson sectionId="" city={this.state.currentCity} />
+                    </div>
+                </section>
+
+                <section>
+                    <div className="wrap">
+                        <Title name="订单取消原因" />
+                        <CarOption handleCar={this.handleCarReason.bind(this)} />
+                        <DoubleDatePicker handleDate={this.handleDateReason.bind(this)} />
+                        <Charts type="bar" data={this.state.reasonData} />
                     </div>
                 </section>
             </div>

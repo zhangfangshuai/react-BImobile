@@ -1,0 +1,101 @@
+.component-appVersionBar {
+    .version-mask {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        display: none;
+    }
+    .vmshow {
+        display: block;
+        animation: vmask_fadeIn 1s ease-out;
+        animation-iteration-count:1;
+        animation-fill-mode:forwards;
+        -webkit-animation: vmask_fadeIn 1s;
+        -webkit-animation-iteration-count: 1;
+        -webkit-animation-fill-mode:forwards;
+    }
+    .vmhide {
+        animation: vmask_fadeOut 1s ease-out;
+        animation-iteration-count:1;
+        animation-fill-mode:forwards;
+        -webkit-animation: vmask_fadeOut 1s;
+        -webkit-animation-iteration-count: 1;
+        -webkit-animation-fill-mode:forwards;
+    }
+    .version {
+        position: fixed;
+        width: 100vw;
+        height: 5.5rem;
+        top: 100vh;
+        left: 0rem;
+        font-size: .29rem;
+        background-color: #d5d8df;
+        box-shadow: 0 0 0.15rem 0 rgba(37, 42, 48, 0.5);
+        .version-bar {
+            width: 100vw;
+            height: 1rem;
+            color: #0575f2;
+            background: #ffffff;
+            p {
+                width: 1.5rem;
+                line-height: 1rem;
+                float: left;
+                text-align: center;
+                font-size: .4rem;
+            }
+            p:last-child {
+                float: right;
+                margin-right: .18rem;
+            }
+        }
+        ul {
+            width: 100%;
+            height: 100%;
+            padding: 2rem 0 0;
+            overflow: scroll;
+            box-sizing: border-box;
+        }
+    }
+
+    .vshow {
+        animation: v_slideIn 0.5s ease-out;
+        animation-iteration-count:1;
+        animation-fill-mode:forwards;
+        -webkit-animation: v_slideIn 0.5s;
+        -webkit-animation-iteration-count: 1;
+        -webkit-animation-fill-mode:forwards;
+    }
+    .vhide {
+        animation: v_slideOut 0.3s ease-out;
+        animation-iteration-count:1;
+        animation-fill-mode:forwards;
+        -webkit-animation: v_slideOut 0.3s;
+        -webkit-animation-iteration-count: 1;
+        -webkit-animation-fill-mode:forwards;
+    }
+
+    @keyframes vmask_fadeIn {
+        from { opacity: 0;}
+        to { opacity: 1;}
+    }
+    @keyframes vmask_fadeOut {
+        from { opacity: 1;}
+        to { opacity: 0; display: none;}
+    }
+
+
+
+    @keyframes v_slideIn {
+        from {top: 100vh;}
+        to {top: calc(100vh - 5.5rem);}
+    }
+
+    @keyframes v_slideOut {
+        from {top: calc(100vh - 5.5rem);}
+        to {top: 100vh;}
+    }
+}

@@ -1,3 +1,10 @@
+/**
+ * Create: zhangfs by Atom
+ * Date: 2018/07/09
+ * type参数: 图表类型;  data参数: 构建图形的参数
+ * Sample: <Charts type="bar" data={this.state.data} />
+ */
+
 import React from 'react'
 import '../less/charts.less'
 import echarts from 'echarts/lib/echarts'
@@ -29,7 +36,10 @@ class Charts extends React.Component {
                 break;
             case 'line_basic':
                 option = this.lineOption(this.props.data);
-                break
+                break;
+            case 'bar':
+                option = this.barOption(this.props.data);
+                break;
         }
         chart.setOption(option)
     }
@@ -175,6 +185,61 @@ class Charts extends React.Component {
                 lineStyle: { width:7 },
                 data: opt.dataList,
             }]
+        }
+    }
+
+    barOption(opt) {
+        return {
+            color : ['#09CA65'],
+            label:{ position:'bottom' },
+            legend: { fontSize:30 },
+            textStyle:{
+                color:'#647888',
+                fontSize:30
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                },
+                textStyle : {
+                    color: '#fff',
+                    decoration: 'none',
+                    fontFamily: 'Verdana, sans-serif',
+                    fontSize: 24,
+                    fontStyle: 'italic',
+                    fontWeight: 'bold'
+                },
+            },
+            grid: {
+                left: '2%',
+                // right: '4%',
+                bottom: '1%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: opt.axis,
+                axisLabel:{'fontSize':30,'interval':0,'rotate':90}
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel:{'fontSize':30,'interval':0}
+            },
+            series: [
+                {
+                    name: '',
+                    type: 'bar',
+                    data: opt.series,
+                    itemStyle : {
+                        normal : {
+                            lineStyle:{
+                                color: '#5B9BD5'
+                            }
+                        }
+                    }
+                }
+            ]
         }
     }
 

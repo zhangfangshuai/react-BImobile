@@ -8,6 +8,7 @@ import './less/master.less'
 import Menu from './components/menu'
 import Login from './pages/login'
 import Watch from './pages/watch'
+import App from './pages/app'
 import Order from './pages/order'
 import Parks from './pages/parks'
 import Cars from './pages/cars'
@@ -16,7 +17,7 @@ import Operation from './pages/operation'
 import Income from './pages/income'
 
 
-class App extends React.Component {
+class Root_App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -79,10 +80,10 @@ class App extends React.Component {
             return (
                 <div>
                     <Menu menuState={this.state.menuState} user={this.state.user} cItem={this.state.currentMenu} />
-                    { view == 2 && <Order city={this.state.currentCity}/> }
+                    { view == 2 && <App city={this.state.currentCity}/> }
                     { view == 3 && <Watch city={this.state.currentCity}/> }
                     { view == 4 && <Watch city={this.state.currentCity}/> }
-                    { view == 64 && <Watch city={this.state.currentCity}/> }
+                    { view == 64 && <App city={this.state.currentCity}/> }
                     { view == 5 && <Order city={this.state.currentCity}/> }
                     { view == 6 && <Parks city={this.state.currentCity}/> }
                     { view == 7 && <Cars city={this.state.currentCity}/> }
@@ -102,7 +103,7 @@ class Root extends React.Component {
                 <Switch>
                     <Route exact path='/' component={ () => <Redirect to='/login' /> } />
                     <Route exact path='/login' component={Login} />
-                    <Route exact path='/app' component={App} />
+                    <Route exact path='/cockpit' component={Root_App} />
                 </Switch>
             </HashRouter>
         );

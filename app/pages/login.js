@@ -55,7 +55,7 @@ class Login extends React.Component {
                                         }
                                     }
                                 }
-                                window.location.href = '../#/app';
+                                window.location.href = '../#/cockpit';
                             }
                         } else {
                             Tip.error(res.data.desc + "(" + res.data.code + ")");
