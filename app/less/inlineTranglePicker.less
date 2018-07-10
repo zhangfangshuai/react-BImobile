@@ -1,19 +1,21 @@
 @color: #0DB95F;
 .component-inlineTranglePicker {
     position: absolute;
-    top: .3rem;
+    top: 0;
     right: .6rem;
+    line-height: 0.9rem;
     color: @color;
     font-size: .24rem;
+    z-index: 300;
     .name::after {
         content: '';
         position: absolute;
-        top: 0.15rem;
-        margin-left: 0.02rem;
+        top: 0.45rem;
+        margin-left: 0.05rem;
         width: 0;
         height: 0;
-        border-top: solid .1rem @color;
-        border-left: solid .1rem transparent;
-        border-right: solid .1rem transparent;
+        border-top: solid .09rem @color;
+        border-left: solid .09rem transparent;
+        border-right: solid .09rem transparent;
     }
 }

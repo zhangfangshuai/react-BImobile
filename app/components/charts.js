@@ -11,6 +11,7 @@ import echarts from 'echarts/lib/echarts'
 import 'echarts/lib/chart/bar'
 import 'echarts/lib/chart/pie'
 import 'echarts/lib/chart/line'
+import 'echarts/lib/chart/funnel'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/legendScroll'
 
@@ -39,6 +40,9 @@ class Charts extends React.Component {
                 break;
             case 'bar':
                 option = this.barOption(this.props.data);
+                break;
+            case 'funnel':
+                option = this.funnelOption(this.props.data);
                 break;
         }
         chart.setOption(option)
@@ -243,6 +247,38 @@ class Charts extends React.Component {
         }
     }
 
+    funnelOption(opt) {
+        return {
+            color:['#98ecc0','#59E39B','#09CA65','#00B054'],
+            tooltip: {
+                trigger: 'item',
+                fontStyle: { fontSize: 28 }
+            },
+            series: [ {
+                name:'DAU占比分析',
+                type:'funnel',
+                width: '80%',
+                left: '10%',
+                min: 0,
+                // max: 100,  // 大于max宽度显示为100%
+                data: opt,
+                label: {
+                    fontSize: 24,
+                    position: 'inside',
+                    formatter: (p) => {
+                        let r = this.funnelOption(this.props.data).series[0].data;
+                        let key = p.name.slice(0, p.name.length-2)
+                        if (p.dataIndex == 0 ) {
+                            return key + ": " + (p.value ? p.value : '-') + "人次";
+                        } else {
+                          var perc = (r[p.dataIndex].value / r[p.dataIndex-1].value * 100).toFixed(2);
+                          return key +": " + (isNaN(perc) ? '-' : perc) + '%';
+                        }
+                    }
+                }
+            }]
+        }
+    }
 
 };
 

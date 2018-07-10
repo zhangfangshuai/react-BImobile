@@ -25,6 +25,7 @@ class InlineTranglePicker extends React.Component {
     }
 
     componentDidMount() {
+      console.log(this.props.master);
         Pubsub.subscribe('HIDE_ITEMLIST', () => {
             this.setState({
                 barState: {
@@ -37,18 +38,19 @@ class InlineTranglePicker extends React.Component {
             this.setState({
                 cItem: item
             })
-            // TODO: 修改了CITEM后如何更新axios请求
+            this.props.handlePick(item, this.props.master);
         })
     }
     componentWillUnmount() {
         Pubsub.unsubscribe('HIDE_ITEMLIST');
     }
 
+
     render() {
         let component;
         switch (this.props.type) {
             case "appVersion":
-                component = <AppVersionBar barState={this.state.barState} />;
+                component = <AppVersionBar barState={this.state.barState} cItem={this.state.cItem}/>;
                 break;
             default:
                 component = '';

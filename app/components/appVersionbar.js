@@ -15,6 +15,7 @@ class AppVersionBar extends React.Component {
     appVersionRequest(p) {
         if (isParamValid(p, 'get_app_version')) {
             axiosGet(p, (r) => {
+                r.unshift('全部');
                 this.setState({
                     appVersions: r
                 })
