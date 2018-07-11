@@ -4,6 +4,7 @@ import Header from '../components/header'
 import Title from '../components/title'
 import DoubleDatePicker from '../components/doubleDatePicker'
 import Table from '../components/table'
+import TableBody from '../components/tableBody'
 import Pagination from '../components/pagination'
 import DutyPerson from '../components/dutyPerson'
 import Charts from '../components/charts'
@@ -153,54 +154,36 @@ class Service extends React.Component {
         let SD = this.state.serviceData, SP = this.state.servicePage;
         let SERVICE = SD.length < 10 ? SD : SD.slice((SP-1)*PAGESIZE, SP*PAGESIZE);
         if (SERVICE.length > 0) {
-            var serviceTb = SERVICE.map((i) => {
-                return (
-                    <li key={SERVICE.indexOf(i)}>
-                        <p>{i.date_id}</p><p>{i.total_num}</p><p>{i.ivr_num}</p><p>{i.topeople_num}</p>
-                        <p>{i.success_num}</p><p>{i.success_rate}%</p><p>{i.phone_num}</p><p>{i.phonesucc_num}</p>
-                        <p>{i.phonesucc_rate}%</p><p>{i.cpo}%</p><p>{i.agent_eff}</p><p>{i.first_rate}%</p>
-                    </li>
-                )
+            var serviceTb = SERVICE.map((i, idx) => {
+              return <TableBody key={idx} data={[i.date_id, i.total_num, i.ivr_num, i.topeople_num, i.success_num, i.success_rate+'%',
+                    i.phone_num, i.phonesucc_num, i.phonesucc_rate+'%', i.cpo+'%', i.agent_eff, i.first_rate+'%']} />
             })
         }
 
         let CD = this.state.cardsData, CP = this.state.cardsPage;
         let CARDS = CD.length < 10 ? CD : CD.slice((CP-1)*PAGESIZE, CP*PAGESIZE);
         if (CARDS.length > 0) {
-            var cardsTb = CARDS.map((i) => {
-                return (
-                    <li key={CARDS.indexOf(i)}>
-                        <p>{i.date_id}</p><p>{i.user_card_num}</p><p>{i.car_card_num}</p><p>{i.double_card_num}</p>
-                        <p>{i.user_card_rate}%</p><p>{i.car_card_rate}%</p><p>{i.double_card_rate}%</p>
-                    </li>
-                )
+            var cardsTb = CARDS.map((i, idx) => {
+                return <TableBody key={idx} data={[i.date_id, i.user_card_num, i.car_card_num, i.double_card_num, i.user_card_rate+'%', i.car_card_rate+'%', i.double_card_rate+'%']} />
             })
         }
 
         let WD = this.state.woDetailData, WP = this.state.woDetailPage;
         let WODETAIL = WD.length < 10 ? WD : WD.slice((WP-1)*PAGESIZE, WP*PAGESIZE);
         if (WODETAIL.length > 0) {
-            var woTypeTb = WODETAIL.map((i) => {
-                return (
-                    <li key={WODETAIL.indexOf(i)}>
-                        <p>{i.date_id}</p><p>{i.cl}%</p><p>{i.dd}%</p><p>{i.wd}%</p><p>{i.zc}%</p>
-                    </li>
-                )
+            var woTypeTb = WODETAIL.map((i, idx) => {
+              return <TableBody key={idx} data={[i.date_id, i.cl+'%', i.dd+'%', i.wd+'%', i.zc+'%' ]} />
             })
         }
 
         let WKD = this.state.worksData, WKP = this.state.worksPage;
         let WORKS = WKD.length < 10 ? WKD : WKD.slice((WKP-1)*PAGESIZE, WKP*PAGESIZE);
         if (WORKS.length > 0) {
-            var worksTb = WORKS.map((i) => {
-                return (
-                    <li key={WORKS.indexOf(i)}>
-                        <p>{i.date_id}</p><p>{i.total_num}</p><p>{i.ing_num}</p>
-                        <p>{i.succ_num}</p><p>{i.succ_rate}%</p>
-                    </li>
-                )
+            var worksTb = WORKS.map((i, idx) => {
+              return <TableBody key={idx} data={[i.date_id, i.total_num, i.ing_num, i.succ_num, i.succ_rate+'%' ]}/>
             })
         }
+
         return (
             <div className="container">
                 <Header city={this.state.currentCity} disLocat={true} handleCity={this.selectCity.bind(this)} />

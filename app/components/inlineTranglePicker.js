@@ -25,7 +25,6 @@ class InlineTranglePicker extends React.Component {
     }
 
     componentDidMount() {
-      console.log(this.props.master);
         Pubsub.subscribe('HIDE_ITEMLIST', () => {
             this.setState({
                 barState: {

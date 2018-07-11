@@ -252,7 +252,7 @@ class Charts extends React.Component {
             color:['#98ecc0','#59E39B','#09CA65','#00B054'],
             tooltip: {
                 trigger: 'item',
-                fontStyle: { fontSize: 28 }
+                textStyle: { fontSize: 28 }
             },
             series: [ {
                 name:'DAU占比分析',

@@ -9,6 +9,7 @@ import ThreeColSelector from '../components/threeColSelector'
 import Table from '../components/table'
 import DutyPerson from '../components/dutyPerson'
 import Pagination from '../components/pagination'
+import TableBody from '../components/tableBody'
 
 class Income extends React.Component {
     constructor(props) {
@@ -110,16 +111,9 @@ class Income extends React.Component {
 
     render() {
         if (this.state.incomeData.length != 0) {
-            var incomeTb = this.state.incomeData.data.map((item) => {
-                return (
-                    <li key={this.state.incomeData.data.indexOf(item)}>
-                        <p>{item.data0}</p>
-                        <p>{item.data1}</p>
-                        <p>{item.data2}</p>
-                        <p>{item.data3}</p>
-                        <p>{item.data4}</p>
-                    </li>
-                )
+            var incomeTb = this.state.incomeData.data.map((item, i) => {
+                return <TableBody key={i}
+                  data={[item.data0, item.data1, item.data2, item.data3, item.data4]} />
             });
         }
 
@@ -127,9 +121,9 @@ class Income extends React.Component {
         let RECHARGE = D.length == 0 ? [] : D.data.slice((P-1)*PAGESIZE, P*PAGESIZE);
         if (RECHARGE.length != 0) {
             let idx = this.state.rechargeIndex;
-            var rechargeTb = RECHARGE.map((d) => {
+            var rechargeTb = RECHARGE.map((d, i) => {
                 return (
-                    <li key={RECHARGE.indexOf(d)}>
+                    <li key={i}>
                         <p>{d.data0}</p>
                         <p>{idx == 0 ? d.data1 : idx == 1 ? d.data5 : d.data9}</p>
                         <p>{idx == 0 ? d.data2 : idx == 1 ? d.data6 : d.data10}</p>

@@ -5,6 +5,7 @@ import Title from '../components/title'
 import TitleWithBubble from '../components/titleWithBubble'
 import CarOption from '../components/carOption'
 import Table from '../components/table'
+import TableBody from '../components/tableBody'
 import DutyPerson from '../components/dutyPerson'
 import DoubleDatePicker from '../components/doubleDatePicker'
 import SingleDatePicker from '../components/singleDatePicker'
@@ -102,7 +103,7 @@ class Operation extends React.Component {
         if (isParamValid(p, 'peccancyDetail')) {
             axiosGet(p, (res) => {
                 this.setState({
-                    detailData: res.data,
+                    detailData: res.data.reverse(),
                     detailPage: 1
                 })
             });
@@ -151,56 +152,34 @@ class Operation extends React.Component {
     }
 
     render() {
-        let A = this.state.accidentData, accidentTb;
+        let A = this.state.accidentData;
         if (A.length > 0) {
-            accidentTb = A.map((i) => {
-                return (
-                    <li key={A.indexOf(i)}>
-                        <p>{A.indexOf(i) + 1}</p> <p>{i.data0}</p>
-                        <p>{i.data1}%</p> <p>{i.data2}</p>
-                    </li>
-                )
+            var accidentTb = A.map((i, idx) => {
+                return <TableBody key={idx} data={[idx+1, i.data0, i.data1, i.data2]} />
             });
         }
 
         let LD = this.state.lawData, LP = this.state.lawPage;
         let L = LD.length < 10 ? LD : LD.slice((LP-1)*PAGESIZE, LP*PAGESIZE);
         if (L.length > 0) {
-            var illegalTb = L.map((i) => {
-                return (
-                    <li key={L.indexOf(i)}>
-                        <p>{i.data0}</p><p>{i.data5}</p><p>{i.data1}</p>
-                        <p>{i.data2.toFixed(2)}%</p><p>{i.data3}</p>
-                        <p>{i.data4.toFixed(2)}</p>
-                    </li>
-                )
+            var illegalTb = L.map((i, idx) => {
+                return <TableBody key={idx} data={[i.data0, i.data5, i.data1, i.data2.toFixed(2), i.data3, i.data4.toFixed(2)]} />
             });
         }
 
         let DD = this.state.detailData, DP = this.state.detailPage;
         let DETAIL = DD.length < 10 ? DD : DD.slice((DP-1)*PAGESIZE, DP*PAGESIZE);
         if (DETAIL.length > 0) {
-            var detailTb = DETAIL.map((i) => {
-                let mark = i.detail > 3 ? '***' : '';
-                return (
-                    <li key={DETAIL.indexOf(i)}>
-                        <p>{i.data0}</p><p>{i.data1}</p><p>{i.data2}</p><p>{i.data3}</p>
-                        <p style={{color: 'red'}}>{mark}</p>
-                    </li>
-                )
+            var detailTb = DETAIL.map((i, idx) => {
+                return <TableBody key={idx} data={[i.data0, i.data1, i.data4, i.data5, i.data1 >= 3 ? '***' : '']} />
             });
         }
 
         let PD = this.state.pushData, PP = this.state.pushPage;
         let PUSH = PD.length < 10 ? PD : PD.slice((PP-1)*PAGESIZE, PP*PAGESIZE);
         if (PUSH.length > 0) {
-            var pushTb = PUSH.map((i) => {
-                return (
-                    <li key={PUSH.indexOf(i)}>
-                        <p>{i.data0}</p><p>{i.data5}</p><p>{i.data1}</p>
-                        <p>{i.data2}</p><p>{i.data3}</p><p>{i.data4}%</p>
-                    </li>
-                )
+            var pushTb = PUSH.map((i, idx) => {
+                return <TableBody key={idx} data={[i.data0, i.data5, i.data1, i.data2, i.data3, i.data4]} />
             })
         }
         return (

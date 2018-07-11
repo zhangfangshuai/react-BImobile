@@ -4,6 +4,7 @@ import Header from '../components/header'
 import Title from '../components/title'
 import DoubleDatePicker from '../components/doubleDatePicker'
 import Table from '../components/table'
+import TableBody from '../components/tableBody'
 import Pagination from '../components/pagination'
 import DutyPerson from '../components/dutyPerson'
 import ThreeColSelector from '../components/threeColSelector'
@@ -146,26 +147,17 @@ class Cars extends React.Component {
         let CD = this.state.carsData, CP = this.state.carsPage;
         let CARS = CD.length < 10 ? CD : CD.slice((CP-1)*PAGESIZE, CP*PAGESIZE);
         if (CARS.length > 0) {
-            var carsTb = CARS.map((i) => {
-                return (
-                    <li key={CARS.indexOf(i)}>
-                        <p>{i.dateId}</p><p>{i.totalCarNum}</p><p>{i.operateCarNum}</p><p>{i.onNum}</p>
-                        <p>{i.offNum}</p><p>{i.lowVoltageNum}</p><p>{i.upkeepNum}</p><p>{i.accidentNum}</p>
-                        <p>{i.maintainNum}</p><p>{i.offlineNum}</p><p>{i.missMateriailNum}</p>
-                    </li>
-                )
+            var carsTb = CARS.map((i, idx) => {
+                return <TableBody key={idx}
+                  data={[i.dateId, i.totalCarNum, i.operateCarNum, i.onNum, i.offNum, i.lowVoltageNum, i.upkeepNum, i.accidentNum, i.maintainNum, i.offlineNum, i.missMateriailNum]} />
             });
         }
 
         let OD = this.state.offlineTableData, OP = this.state.offlineTablePage;
         let ODT = OD.length < 10 ? OD : OD.slice((OP-1)*PAGESIZE, OP*PAGESIZE);
         if (ODT.length > 0) {
-            var offlineTb = ODT.map((i) => {
-                return (
-                    <li key={ODT.indexOf(i)}>
-                        <p>{i.data0}</p><p>{i.data1}</p><p>{i.data2}</p>
-                    </li>
-                )
+            var offlineTb = ODT.map((i,idx) => {
+                return <TableBody key={idx} data={[i.data0, i.data1, i.data2]} />
             })
         }
 

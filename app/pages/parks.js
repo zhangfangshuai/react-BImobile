@@ -3,6 +3,7 @@ import { CITY_LIST, PAGESIZE } from '../config/config'
 import Header from '../components/header'
 import Title from '../components/title'
 import Table from '../components/table'
+import TableBody from '../components/tableBody'
 import DutyPerson from '../components/dutyPerson'
 import DoubleDatePicker from '../components/doubleDatePicker'
 import SingleDatePicker from '../components/singleDatePicker'
@@ -197,12 +198,11 @@ class Parks extends React.Component {
         let PD = this.state.parkData, PP = this.state.parkPage;
         let PARK = PD.length < 10 ? PD : PD.slice((PP-1)*PAGESIZE, PP*PAGESIZE);
         if (PARK.length > 0) {
-            var parkTb = PARK.map((i) => {
+            var parkTb = PARK.map((i, idx) => {
                 let icon = <i className={i.tongbiRate > 0 ? 'rise' : i.tongbiRate == 0 ? '' : 'down'}></i>;
                 return (
-                    <li key={PARK.indexOf(i)}>
-                        <p>{i.kpiname}</p><p>{i.kpiCurrent}</p><p>{i.kpiYes}</p>
-                        <p>{i.kpiTongbi}</p><p>{i.tongbiRate}{icon}</p>
+                    <li key={idx}>
+                        <p>{i.kpiname}</p><p>{i.kpiCurrent}</p><p>{i.kpiYes}</p><p>{i.kpiTongbi}</p><p>{i.tongbiRate}{icon}</p>
                     </li>
                 )
             });
@@ -211,60 +211,34 @@ class Parks extends React.Component {
         let UD = this.state.parkUpdateData, UP = this.state.parkUpdatePage;
         let PARKUPDATE = UD.length < 10 ? UD : UD.slice((UP-1)*PAGESIZE, UP*PAGESIZE);
         if (PARKUPDATE.length > 0) {
-            var parkUpdateTb = PARKUPDATE.map((i) => {
-                return (
-                    <li key={PARKUPDATE.indexOf(i)}>
-                        <p><span>{i.parkName}</span></p><p>{i.parkType == 0 ? '实体' : '虚拟'}</p>
-                        <p>{i.carportNum}</p><p>{i.updateType == 1 ? '开启' : '关闭'}</p>
-                        <p>{time2date(i.updateDate).format('MM-dd')}</p>
-                    </li>
-                )
+            var parkUpdateTb = PARKUPDATE.map((i, idx) => {
+                return <TableBody key={idx} data={[i.parkName, i.parkType == 0 ? '实体' : '虚拟', i.carportNum, i.updateType == 1 ? '开启' : '关闭', time2date(i.updateDate).format('MM-dd')]} />
             })
         }
 
         let DD = this.state.detailData, DP = this.state.detailPage;
         let DETAIL = DD.length < 10 ? DD : DD.slice((DP-1)*PAGESIZE, DP*PAGESIZE);
         if (DETAIL.length > 0) {
-            var parkDetailTb = DETAIL.map((i) => {
-                return (
-                    <li key={DETAIL.indexOf(i)}>
-                        <p><span>{i.parkName}</span></p><p>{time2date(i.openDate).format('yyyy-MM-dd')}</p>
-                        <p>{i.carportNum}</p><p>{i.executAvgnum}</p><p>{i.carportAvgorder}</p>
-                        <p>{i.retrunAvgnum}</p><p>{i.userAvgnum}</p>
-                    </li>
-                )
+            var parkDetailTb = DETAIL.map((d, i) => {
+                return <TableBody key={i} data={[d.parkName, time2date(d.openDate).format('yyyy-MM-dd'), d.carportNum, d.executAvgnum, d.carportAvgorder, d.retrunAvgnum, d.userAvgnum]} />
             })
         }
 
         let PCD = this.state.parkCarData, PCP = this.state.parkCarPage;
         let PARKCAR = PCD.length < 10 ? PCD : PCD.slice((PCP-1)*PAGESIZE, PCP*PAGESIZE);
         if (PARKCAR.length > 0) {
-            var parkCarTb = PARKCAR.map((i) => {
-                return (
-                    <li key={PARKCAR.indexOf(i)}>
-                        <p><span>{i.parkName}</span></p><p>{i.parkingkind == 0 ? '实体' : '虚拟'}</p>
-                        <p>{i.parkplacenums}</p><p>{i.useparkplacenums}</p><p>{i.orderparkplacecount}</p>
-                        <p>{i.waitCarnum}</p><p>{i.poweroffCarnum}</p><p>{i.operoffCarnum}</p>
-                        <p>{i.powerCarnum}</p>
-                    </li>
-                )
+            var parkCarTb = PARKCAR.map((d, i) => {
+              return <TableBody key={i} data={[d.parkName, d.parkingkind==0?'实体':'虚拟', d.parkplacenums, d.useparkplacenums, d.orderparkplacecount, d.waitCarnum, d.poweroffCarnum, d.operoffCarnum, d.powerCarnum]} />
             })
         }
 
         let POD = this.state.parkOrderData, POP = this.state.parkOrderPage;
         let PARKORDER = POD.length < 10 ? POD : POD.slice((POP-1)*PAGESIZE, POP*PAGESIZE);
         if (PARKORDER.length > 0) {
-            var parkOdTb = PARKORDER.map((i) => {
-                return (
-                    <li key={PARKORDER.indexOf(i)}>
-                        <p><span>{i.parkName}</span></p><p>{i.operaTime}</p><p>{i.parkState == 0 ? '关闭' : '开启'}</p>
-                        <p>{i.parkPlaceNum}</p><p>{i.createOrderNum}</p><p>{i.execOrderNum}</p>
-                        <p>{i.execOrderRate}%</p><p>{i.finishOrderNum}</p><p>{i.retrunOrderNum}</p>
-                        <p>{i.diffOrderNum}</p><p>{i.avgOrderMileage}</p><p>{i.avgOrderMinute}</p>
-                        <p>{i.avgOrderPayamount}</p><p>{i.amount}</p><p>{i.payamount}</p>
-                        <p>{i.placeAvgExecorder}</p><p>{i.placeAvgReturnorder}</p><p>{i.diffReturnorderRate}%</p>
-                    </li>
-                )
+            var parkOdTb = PARKORDER.map((d,i) => {
+              return <TableBody key={i} data={[d.parkName, d.operaTime, d.parkState==0?'关闭':'开启', d.parkPlaceNum, d.createOrderNum,
+                  d.execOrderNum, d.execOrderRate, d.finishOrderNum, d.retrunOrderNum, d.diffOrderNum, d.avgOrderMileage, d.avgOrderMinute,
+                  d.avgOrderPayamount, d.amount, d.payamount, d.placeAvgExecorder, d.placeAvgReturnorder, d.diffReturnorderRate]} />
             })
         }
         return (

@@ -5,6 +5,7 @@ import Title from '../components/title'
 import CarOption from '../components/carOption'
 import SingleDatePicker from '../components/singleDatePicker'
 import Table from '../components/table'
+import TableBody from '../components/tableBody'
 import DutyPerson from '../components/dutyPerson'
 import DoubleDatePicker from '../components/doubleDatePicker'
 import Pagination from '../components/pagination'
@@ -116,10 +117,11 @@ class Order extends React.Component {
 
     render() {
         if (this.state.infoData.length > 0) {
-            var infoTb = this.state.infoData.map((i) => {
+            var infoTb = this.state.infoData.map((i, idx) => {
                 let icon = <i className={i.avg_rate > 0 ? 'rise' : i.avg_rate == 0 ? '' : 'down'}></i>;
+                // return <TableBody key={idx} data={[i.kpiname, i.month_t, i.month_avg, i.month_last_t, i.month_last_avg, i.avg_rate]} />
                 return (
-                    <li key={this.state.infoData.indexOf(i)}>
+                    <li key={idx}>
                         <p>{i.kpiname}</p><p>{i.month_t}</p><p>{i.month_avg}</p>
                         <p>{i.month_last_t}</p><p>{i.month_last_avg}</p><p>{i.avg_rate}{icon}</p>
                     </li>
@@ -131,14 +133,8 @@ class Order extends React.Component {
         DD = (DD.length > 0 && DD[DD.length-1].date_id=="累计值") ? DD.reverse() : DD;
         let DETAIL = DD.length < 10 ? DD : DD.slice((DP-1)*PAGESIZE, DP*PAGESIZE);
         if (DETAIL.length > 0) {
-            var detailTb = DETAIL.map((i) => {
-                return (
-                    <li key={DETAIL.indexOf(i)}>
-                        <p>{i.date_id}</p><p>{i.avg_sumAmount}</p><p>{i.avg_sumPayAmount}</p>
-                        <p>{i.car_avgamount}</p><p>{i.car_avgpayamount}</p><p>{i.order_total}</p>
-                        <p>{i.order_up}</p><p>{i.order_cancel}</p><p>{i.order_real_avg}</p>
-                    </li>
-                )
+            var detailTb = DETAIL.map((i, idx) => {
+                return <TableBody key={idx} data={[i.date_id, i.avg_sumAmount, i.avg_sumPayAmount, i.car_avgamount, i.car_avgpayamount, i.order_total, i.order_up, i.order_cancel, i.order_real_avg]} />
             })
         }
 
