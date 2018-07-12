@@ -8,7 +8,7 @@ import DutyPerson from '../components/dutyPerson'
 import DoubleDatePicker from '../components/doubleDatePicker'
 import SingleDatePicker from '../components/singleDatePicker'
 import Pagination from '../components/pagination'
-import ThreeColSelector from '../components/threeColSelector'
+import MultiColSelector from '../components/multiColSelector'
 import TranglePicker from '../components/tranglePicker'
 import CarOption from '../components/carOption'
 
@@ -256,7 +256,7 @@ class Parks extends React.Component {
                 <section>
                     <div className="wrap">
                         <Title name="网点明细" />
-                        <ThreeColSelector cols={['20佳', '20差', '全部']} handleTCS={this.handleTCSPark.bind(this)} />
+                        <MultiColSelector cols={['20佳', '20差', '全部']} handleTCS={this.handleTCSPark.bind(this)} />
                         <TranglePicker
                             selectors={['商圈','周期','网点类型']}
                             city={this.state.currentCity}

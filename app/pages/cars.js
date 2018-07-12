@@ -7,7 +7,7 @@ import Table from '../components/table'
 import TableBody from '../components/tableBody'
 import Pagination from '../components/pagination'
 import DutyPerson from '../components/dutyPerson'
-import ThreeColSelector from '../components/threeColSelector'
+import MultiColSelector from '../components/multiColSelector'
 import Charts from '../components/charts'
 
 class Cars extends React.Component {
@@ -182,7 +182,7 @@ class Cars extends React.Component {
                 <section>
                     <div className="wrap">
                         <Title name="上架率" />
-                        <ThreeColSelector cols={['10点', '17点', '全天']}
+                        <MultiColSelector cols={['10点', '17点', '全天']}
                             handleTCS={this.handleTCS.bind(this)} />
                         <DoubleDatePicker handleDate={this.handleDateOnline.bind(this)}/>
                         <Charts self="cars_online" type="line_stacked_area" data={this.state.onlineData} />

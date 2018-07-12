@@ -1,6 +1,6 @@
 @h: 0.5rem;
-.threeColSelector {
-    width: 4.6rem;
+.multiColSelector {
+    width: auto;
     height: @h;
     margin: 0 auto 0.2rem;
     .active {
@@ -8,11 +8,12 @@
         background: #09CA65;
     }
     p {
-        float: left;
-        width: 33.3%;
+        display: inline-block;
+        width: 1.5rem;
         height: 100%;
-        text-align: center;
         line-height: @h;
+        text-align: center;
+        margin: 0.03rem auto;
         font-size: 0.24rem;
         color: #647888;
         background: #F2F3F5;

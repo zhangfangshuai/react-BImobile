@@ -11,7 +11,7 @@ import DoubleDatePicker from '../components/doubleDatePicker'
 import Pagination from '../components/pagination'
 import Charts from '../components/charts'
 
-class Order extends React.Component {
+class Orders extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -181,4 +181,4 @@ class Order extends React.Component {
     }
 }
 
-export default Order;
+export default Orders;

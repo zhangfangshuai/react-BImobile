@@ -3,7 +3,7 @@ import { CITY_LIST, PAGESIZE } from '../config/config'
 import Header from '../components/header'
 import Title from '../components/title'
 import InlineTranglePicker from '../components/inlineTranglePicker'
-import ThreeColSelector from '../components/threeColSelector'
+import MultiColSelector from '../components/multiColSelector'
 import SingleDatePicker from '../components/singleDatePicker'
 import Charts from '../components/charts'
 import DoubleDatePicker from '../components/doubleDatePicker'
@@ -200,7 +200,7 @@ class App extends React.Component {
                     <div className="wrap clearTopGap">
                         <Title name="DAU漏斗" />
                         <InlineTranglePicker type="appVersion" master="dauFunnel" handlePick={this.handlePickVersion.bind(this)} />
-                        <ThreeColSelector cols={['IOS', '安卓', '全部']} handleTCS={this.handleTCS.bind(this)} />
+                        <MultiColSelector cols={['IOS', '安卓', '全部']} handleTCS={this.handleTCS.bind(this)} />
                         <SingleDatePicker handleDate={this.handleDateFunnel.bind(this)} />
                         <Charts self="daufunnel" type="funnel" data={this.state.dauFunnelData.nums} />
                         <Charts self="daufunnel" type="funnel" data={this.state.dauFunnelData.userNum} />
@@ -211,7 +211,7 @@ class App extends React.Component {
                     <div className="wrap">
                         <Title name="DAU统计报表" />
                         <InlineTranglePicker type="appVersion" master="dauList" handlePick={this.handlePickDAUList.bind(this)} />
-                        <ThreeColSelector cols={['IOS', '安卓', '全部']} handleTCS={this.handleTCSDAUList.bind(this)} />
+                        <MultiColSelector cols={['IOS', '安卓', '全部']} handleTCS={this.handleTCSDAUList.bind(this)} />
                         <DoubleDatePicker handleDate={this.handleDateDAUList.bind(this)} />
                         <Table self="dauList" tbody={dauListTb}
                             thead={['日期','APP启动人数','点击取车网点','点击还车网点','点击预约车量']} />

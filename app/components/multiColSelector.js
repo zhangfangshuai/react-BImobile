@@ -1,7 +1,7 @@
 import React from 'react';
-import '../less/threeColSelector.less';
+import '../less/multiColSelector.less';
 
-class ThreeColSelector extends React.Component {
+class MultiColSelector extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -28,11 +28,11 @@ class ThreeColSelector extends React.Component {
         })
 
         return (
-            <div className="threeColSelector">
+            <div className="multiColSelector">
                 { colItem }
             </div>
         )
     }
 }
 
-export default ThreeColSelector;
+export default MultiColSelector;

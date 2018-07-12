@@ -5,7 +5,7 @@ import Title from '../components/title'
 import CarOption from '../components/carOption'
 import SingleDatePicker from '../components/singleDatePicker'
 import DoubleDatePicker from '../components/doubleDatePicker'
-import ThreeColSelector from '../components/threeColSelector'
+import MultiColSelector from '../components/multiColSelector'
 import Table from '../components/table'
 import DutyPerson from '../components/dutyPerson'
 import Pagination from '../components/pagination'
@@ -153,7 +153,7 @@ class Income extends React.Component {
                 <section>
                     <div className="wrap">
                         <Title name="用户充值" />
-                        <ThreeColSelector
+                        <MultiColSelector
                             cols={['500元以下', '500元以上', '合计']}
                             handleTCS={this.handleTCS.bind(this)} />
                         <DoubleDatePicker handleDate={this.handleDDP.bind(this)} />
