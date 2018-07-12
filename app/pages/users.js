@@ -9,7 +9,8 @@ class Users extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentCity: CITY_LIST[0]
+            currentCity: CITY_LIST[0],
+            AddPeriod: false
         }
     }
 
@@ -20,6 +21,10 @@ class Users extends React.Component {
 
     handleFunnel(index) {  // 累计0, 新增1-[近7日2；近15日3；近30日4；近60日5]
         console.log(index);
+        index == 1 ? this.setState({ AddPeriod: true }) : this.setState({ AddPeriod: false });
+    }
+    handleTransfer(idx) {
+        console.log(idx);
     }
 
     render() {
@@ -30,6 +35,7 @@ class Users extends React.Component {
                 <section>
                     <div className="wrap clearTopGap">
                         <Title name="用户转化" />
+                        { this.state.AddPeriod && <InlineTranglePicker type="period" master="transfer" handlePick={this.handleTransfer.bind(this)} /> }
                         <MultiColSelector cols={['累计','新增']} handleTCS={this.handleFunnel.bind(this)}/>
                     </div>
                 </section>
