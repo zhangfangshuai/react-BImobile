@@ -249,7 +249,7 @@ class Charts extends React.Component {
 
     funnelOption(opt) {
         return {
-            color:['#98ecc0','#59E39B','#09CA65','#00B054'],
+            color:['#98ecc0','#59E39B','#19ca6d','#12bf65','#03b557'],
             tooltip: {
                 trigger: 'item',
                 textStyle: { fontSize: 28 }

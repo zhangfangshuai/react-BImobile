@@ -5,7 +5,7 @@ class PeriodBar extends React.Component {
     render() {
         return (
             <div className="component-periodBar">
-                periodBar
+                periodBar_component
             </div>
         )
     }
