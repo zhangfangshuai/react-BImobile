@@ -1,3 +1,11 @@
+/**
+ * Create: zhangfs by Atom
+ * Date: 2018/07/11
+ * Usage: <TrangleBar data={this.state.data} state={:barState} master={:master} />
+ **/
+
+
+
 import React from 'react'
 import Pubsub from 'pubsub-js'
 import '../less/trangleBar.less'
@@ -10,10 +18,10 @@ class TrangleBar extends React.Component {
     }
 
     render() {
-        let Items = this.props.data.map((item) => {
+        let Items = this.props.data.map((item, idx) => {
             return (
                 <ItemList
-                    key={this.props.data.indexOf(item)}
+                    key={idx}
                     data={item}
                     focus={this.props.cItem == item}
                     master={this.props.master}

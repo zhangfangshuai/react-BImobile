@@ -7,7 +7,7 @@
 import React from 'react'
 import Pubsub from 'pubsub-js'
 import AppVersionBar from './appVersionbar'
-import PeriodBar from './periodbar'
+import TrangleBar from './trangleBar'
 import '../less/inlineTranglePicker.less'
 
 class InlineTranglePicker extends React.Component {
@@ -15,16 +15,12 @@ class InlineTranglePicker extends React.Component {
         super(props);
         this.state = {
             cItem: '全部',
+            master: this.props.master || '',
             barState: {
                 toggled: false,
                 firstIn: true
             },
-            periodData: [
-                {id:1, value:'近7日'},
-                {id:2, value:'近15日'},
-                {id:3, value:'近1个月'},
-                {id:3, value:'近2个月'}
-            ]
+            periodOption: [{id:1, value:'近7日'}, {id:2, value:'近15日'}, {id:3, value:'近1个月'}, {id:4, value:'近2个月'}]
         }
     }
 
@@ -38,6 +34,17 @@ class InlineTranglePicker extends React.Component {
     }
 
     componentDidMount() {
+        switch (this.props.type) {
+            case 'appVersion':
+                this.state.cItem = "全部";
+                break;
+            case 'period':
+                this.state.cItem = "近七日";
+                break;
+            default:
+                Tip.error('选择器类型匹配异常');
+        }
+
         Pubsub.subscribe('HIDE_ITEMLIST', () => {
             this.setState({
                 barState: {
@@ -46,15 +53,16 @@ class InlineTranglePicker extends React.Component {
                 }
             })
         })
-        Pubsub.subscribe('ITEM_SELECTED', (msg, item) => {
+        Pubsub.subscribe('ITEM_SELECTED', (msg, p) => {
             this.setState({
-                cItem: item
+                cItem: p.item.value || p.item
             })
-            this.props.handlePick(item, this.props.master);
+            this.props.handlePick(p.item.id || p.item, this.props.master);
         })
     }
     componentWillUnmount() {
         Pubsub.unsubscribe('HIDE_ITEMLIST');
+        Pubsub.unsubscribe('ITEM_SELECTED');
     }
 
 
@@ -62,16 +70,13 @@ class InlineTranglePicker extends React.Component {
         let component;
         switch (this.props.type) {
             case "appVersion":
-                this.state.cItem = '全部';
-                component = <AppVersionBar barState={this.state.barState} cItem={this.state.cItem}/>;
+                component = <AppVersionBar state={this.state.barState} cItem={this.state.cItem} master={this.state.master}/>;
                 break;
             case "period":
-                this.state.cItem = '近7日';
-                component = <PeriodBar barState={this.state.barState} cItem={this.state.cItem}/>;
+                component = <TrangleBar data={this.state.periodOption} state={this.state.barState} master={this.state.master} />
                 break;
             default:
                 component = '';
-                Tip.error('选择器类型匹配异常')
         }
         return (
             <div className="component-inlineTranglePicker">

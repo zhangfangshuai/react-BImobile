@@ -32,15 +32,17 @@ class AppVersionBar extends React.Component {
     }
 
     render() {
-        let  Items = this.state.appVersions.map((i) => {
+        let  Items = this.state.appVersions.map((item, idx) => {
             return (
                 <VersionList
-                    data={i}
-                    key={this.state.appVersions.indexOf(i)}
+                    key={idx}
+                    data={item}
+                    focus={this.props.cItem == item}
+                    master={this.props.master}
                 />
             )
         })
-        let BS = this.props.barState;
+        let BS = this.props.state;
         return (
             <div className="component-appVersionBar">
                 <div className={`version-mask${BS.toggled ? ' vmshow' : ' vmhide'}`}></div>

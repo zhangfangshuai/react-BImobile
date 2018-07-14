@@ -4,17 +4,20 @@ import '../less/itemlist.less'
 
 class VersionList extends React.Component {
 
-    selectItem(item, e) {
+    selectItem(e) {
         e.stopPropagation();
+        let p = {
+            item: this.props.data,
+            master: this.props.master
+        }
         Pubsub.publish('HIDE_ITEMLIST');
-        Pubsub.publish('ITEM_SELECTED', item);
+        Pubsub.publish('ITEM_SELECTED', p);
     }
 
     render() {
-        let  item = this.props.data;
         return (
-            <li className="component-itemlist" onClick={this.selectItem.bind(this, item)}>
-                <span> { item } </span>
+            <li className="component-itemlist" onClick={this.selectItem.bind(this)}>
+                <span> { this.props.data } </span>
             </li>
         )
     }
