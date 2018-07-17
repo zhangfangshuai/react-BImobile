@@ -68,6 +68,13 @@ class Users extends React.Component {
                 interface: 'MUser/getFactOrderTotals',
                 cityId: CITY_LIST[0].value,
                 dateId: getDateOffset().slice(0,6)
+            },
+            newGuyData: [],
+            newGuyPage: 1,
+            newGuyReq: {
+                interface: 'MUser/getfirstOrderUser',
+                cityId: CITY_LIST[0].value,
+                dateId: getDateOffset().slice(0,6)
             }
         }
     }
@@ -184,7 +191,8 @@ class Users extends React.Component {
             axiosGet(p, (r) => {
               r.legend = r.arr;
               r.series = r.listData;
-              this.setState({ pieData: r }) });
+              this.setState({ pieData: r })
+            });
         }
     }
     handleMonthOrderUser(m) {
@@ -192,6 +200,28 @@ class Users extends React.Component {
         this.pieRequest(this.state.pieReq);
         this.state.orderUserReq.dateId = m;
         this.orderUserRequest(this.state.orderUserReq);
+    }
+    handlePageorderUser(p) {
+        this.setState({ orderUserPage: p });
+    }
+
+    // 首单用户分析
+    newGuyRequest(p) {
+        if (isParamValid(p, 'order_user_pie')) {
+            axiosGet(p, (r) => {
+                this.setState({
+                    newGuyData: r,
+                    newGuyPage: 1
+                })
+            });
+        }
+    }
+    handleMonthNewGuy(m) {
+        this.state.newGuyReq.dateId = m;
+        this.newGuyRequest(this.state.newGuyReq);
+    }
+    handlePageNewGuy(p) {
+        this.setState({ newGuyPage: p });
     }
 
 
@@ -204,6 +234,7 @@ class Users extends React.Component {
         this.dealRequest(this.state.dealReq);
         this.orderUserRequest(this.state.orderUserReq);
         this.pieRequest(this.state.pieReq);
+        this.newGuyRequest(this.state.newGuyReq);
     }
 
     selectCity(c) {
@@ -222,6 +253,8 @@ class Users extends React.Component {
         this.orderUserRequest(this.state.orderUserReq);
         this.state.pieReq.cityId = c.value;
         this.pieRequest(this.state.pieReq);
+        this.state.newGuyReq.cityId = c.value;
+        this.newGuyRequest(this.state.newGuyReq);
     }
 
 
@@ -274,6 +307,17 @@ class Users extends React.Component {
                 return (
                     <TableBody key={idx} data={[i.cityName, i.orderUsersTotal, i.ordersMonth, i.fristorderUsers,
                       i.oldorderUsers, i.orderAvg, i.retainUsers, i.recallUsers, i.fristuserRate+'%', i.olduserRate+'%']} />
+                )
+            })
+        }
+
+        let N = this.state.newGuyData, NP = this.state.newGuyPage;
+        let NEW = N.length < 10 ? N : N.slice((NP-1)*PAGESIZE, NP*PAGESIZE);
+        if (NEW.length > 0) {
+            var newGuyTb = NEW.map((i, idx) => {
+                return (
+                    <TableBody key={idx} data={[i.cityName, i.fristorder_users, i.fristorder_nums, i.fristorder_avg,
+                      i.fristorder_rate+'%']} />
                 )
             })
         }
@@ -357,6 +401,23 @@ class Users extends React.Component {
                         <Title name="订单用户数据分析" />
                         <Table self="order-user" tbody={orderUserTb}
                             thead={['城市','总订单用户数','总订单数','首单用户数','老用户数','订单用户下单频率','留存用户数','召回用户数','首单用户占比','老用户占比']} />
+                        <Pagination
+                            handlePage={this.handlePageorderUser.bind(this)}
+                            length={this.state.orderUserData ? this.state.orderUserData.length : 0}
+                            pageSize={PAGESIZE} />
+                  </div>
+                </section>
+
+                <section>
+                    <div className="wrap">
+                        <Title name="首单用户分析" />
+                        <MonthPicker handleMonth={this.handleMonthNewGuy.bind(this)} />
+                        <Table self="newGuy" tbody={newGuyTb}
+                            thead={['城市','首单用户数','首单用户订单数','下单频率','首单用户占比']} />
+                        <Pagination
+                            handlePage={this.handlePageNewGuy.bind(this)}
+                            length={this.state.newGuyData ? this.state.newGuyData.length : 0}
+                            pageSize={PAGESIZE} />
                     </div>
                 </section>
             </div>
