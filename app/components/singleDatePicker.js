@@ -33,15 +33,17 @@ class SingleDatePicker extends React.Component {
     }
 
     updateDate(type = 'prev') {
-        type === 'prev' ? this.updateOffset(-1) : this.state.pickedDate < new Date().format('yyyyMMdd') ? this.updateOffset(1) : '';
+        if (type === 'prev') {
+            this.updateOffset(-1);
+        } else if(this.state.pickedDate < new Date().format('yyyyMMdd')) {
+            this.updateOffset(1)
+        } else {
+            return;
+        }
         this.setState((prevState) => {
-            return {
-                pickedDate: getDateOffset(prevState.offset),
-                week: getWeekOffset(prevState.offset)
-            }
-        })
-        this.setState((prevState) => {
-            this.state.pickedDate != prevState.pickedDate && this.props.handleDate(prevState.pickedDate, "date")
+            prevState.pickedDate = getDateOffset(prevState.offset);
+            prevState.week = getWeekOffset(prevState.offset);
+            this.props.handleDate(prevState.pickedDate, "date");
         })
     }
 
@@ -90,13 +92,20 @@ class SingleDatePicker extends React.Component {
     render() {
         return (
             <div className="component-singleDatePicker">
-                <div className="preDateBtn" onClick={this.updateDate.bind(this, 'prev')}>前一天</div>
+                <div className="preDateBtn" onClick={this.updateDate.bind(this, 'prev')}>
+                    前一天
+                </div>
                 <div className="showDate" onClick={this.pickDate.bind(this)}>
                     <div className="appDateTime" >{this.state.pickedDate}</div>
                     <span>{this.state.week}</span>
                 </div>
-                <div className="nextDateBtn" onClick={this.updateDate.bind(this, 'next')}>后一天</div>
-                <DatePickBar dateBarState={this.state.dateBarState} nowDate={this.state.pickedDate} handlePicked={this.handlePicked.bind(this)} />
+                <div className="nextDateBtn" onClick={this.updateDate.bind(this, 'next')}>
+                    后一天
+                </div>
+                <DatePickBar
+                    dateBarState={this.state.dateBarState}
+                    nowDate={this.state.pickedDate}
+                    handlePicked={this.handlePicked.bind(this)} />
             </div>
         )
     }

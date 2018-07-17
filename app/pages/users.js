@@ -10,6 +10,7 @@ import Table from '../components/table'
 import TableBody from '../components/tableBody'
 import Pagination from '../components/pagination'
 import DutyPerson from '../components/dutyPerson'
+import MonthPicker from '../components/monthPicker'
 
 class Users extends React.Component {
     constructor(props) {
@@ -55,12 +56,18 @@ class Users extends React.Component {
                 startDate: getDateOffset(-7),
                 endDate: getDateOffset(-1)
             },
+            pieData: [],
+            pieReq: {
+                interface: 'MUser/getOrderUserRate',
+                cityId: CITY_LIST[0].value,
+                dateId: getDateOffset().slice(0,6)
+            },
             orderUserData: [],
             orderUserPage: 1,
             orderUserReq: {
                 interface: 'MUser/getFactOrderTotals',
                 cityId: CITY_LIST[0].value,
-                dateId: getDateOffset().slice(0,7)
+                dateId: getDateOffset().slice(0,6)
             }
         }
     }
@@ -159,12 +166,44 @@ class Users extends React.Component {
         this.setState({ dealPage: page });
     }
 
+    // 订单用户数据分析
+    orderUserRequest(p) {
+        if (isParamValid(p, 'order_user')) {
+            axiosGet(p, (r) => {
+                this.setState({
+                    orderUserData: r,
+                    orderUserPage: 1
+                })
+            });
+        }
+    }
+
+    // 订单用户占比分析
+    pieRequest(p) {
+        if (isParamValid(p, 'order_user_pie')) {
+            axiosGet(p, (r) => {
+              r.legend = r.arr;
+              r.series = r.listData;
+              this.setState({ pieData: r }) });
+        }
+    }
+    handleMonthOrderUser(m) {
+        this.state.pieReq.dateId = m;
+        this.pieRequest(this.state.pieReq);
+        this.state.orderUserReq.dateId = m;
+        this.orderUserRequest(this.state.orderUserReq);
+    }
+
+
+    // 挂载
     componentDidMount() {
         this.transferRequest(this.state.transferReq);
         this.registRequest(this.state.registReq);
         this.licenceRequest(this.state.licenceReq);
         this.validUserRequest(this.state.validUserReq);
         this.dealRequest(this.state.dealReq);
+        this.orderUserRequest(this.state.orderUserReq);
+        this.pieRequest(this.state.pieReq);
     }
 
     selectCity(c) {
@@ -179,6 +218,10 @@ class Users extends React.Component {
         this.validUserRequest(this.state.validUserReq);
         this.state.dealReq.cityId = c.value;
         this.dealRequest(this.state.dealReq);
+        this.state.orderUserReq.cityId = c.value;
+        this.orderUserRequest(this.state.orderUserReq);
+        this.state.pieReq.cityId = c.value;
+        this.pieRequest(this.state.pieReq);
     }
 
 
@@ -224,7 +267,16 @@ class Users extends React.Component {
             })
         }
 
-        let orderUserTb;
+        let O = this.state.orderUserData, OP = this.state.orderUserPage;
+        let ORDER = O.length < 10 ? O : O.slice((OP-1)*PAGESIZE, OP*PAGESIZE);
+        if (ORDER.length > 0) {
+            var orderUserTb = ORDER.map((i, idx) => {
+                return (
+                    <TableBody key={idx} data={[i.cityName, i.orderUsersTotal, i.ordersMonth, i.fristorderUsers,
+                      i.oldorderUsers, i.orderAvg, i.retainUsers, i.recallUsers, i.fristuserRate+'%', i.olduserRate+'%']} />
+                )
+            })
+        }
         return (
             <div className="container">
                 <Header city={this.state.currentCity} handleCity={this.selectCity.bind(this)} />
@@ -297,6 +349,11 @@ class Users extends React.Component {
 
                 <section>
                     <div className="wrap">
+                        <Title name="订单用户占比分析" />
+                        <MonthPicker handleMonth={this.handleMonthOrderUser.bind(this)} />
+                        <Charts self="user-pie" type="pie" data={this.state.pieData} />
+                    </div>
+                    <div className="wrap clearTopGap">
                         <Title name="订单用户数据分析" />
                         <Table self="order-user" tbody={orderUserTb}
                             thead={['城市','总订单用户数','总订单数','首单用户数','老用户数','订单用户下单频率','留存用户数','召回用户数','首单用户占比','老用户占比']} />

@@ -96,7 +96,9 @@ class Service extends React.Component {
     // 工单类型分布饼图
     pieRequest(p) {
         if (isParamValid(p, 'workOrderPie')) {
-            axiosGet(p, (r) => { this.setState({ pieData: r }); })
+            axiosGet(p, (r) => {
+              r.legend = r.length;
+              this.setState({ pieData: r }); })
         }
     }
     handleDatePie(date, picker) {
@@ -218,7 +220,7 @@ class Service extends React.Component {
                     <div className="wrap">
                         <Title name="工单类型分布" />
                         <DoubleDatePicker handleDate={this.handleDatePie.bind(this)} />
-                        <Charts type="pie" data={this.state.pieData} />
+                        <Charts type="pie" data={this.state.pieData} hasLegend={true} />
                     </div>
                 </section>
 

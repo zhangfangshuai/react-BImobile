@@ -1,0 +1,134 @@
+.component-monthPickBar {
+    @show-h: 0.85rem;
+    @btn-h: 0.85rem;
+    @font: .24rem;
+    @color: #2e2e2e;
+    z-index: 200;
+    .mask {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        display: none;
+    }
+    .mask-show {
+        display: block;
+        animation: mpb_mask_fadeIn 1s ease-out;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+        -webkit-animation: mpb_mask_fadeIn 1s;
+        -webkit-animation-iteration-count: 1;
+        -webkit-animation-fill-mode: forwards;
+    }
+    .mask-hide {
+        animation: mpb_mask_fadeOut 1s ease-out;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+        -webkit-animation: mpb_mask_fadeOut 1s;
+        -webkit-animation-iteration-count: 1;
+        -webkit-animation-fill-mode: forwards;
+    }
+    .mpb {
+        position: fixed;
+        width: 100vw;
+        height: 4.5rem;
+        top: 100vh;
+        left: 0rem;
+        font-size: @font + 0.1rem;
+        background: #eee;
+        box-shadow: 0 0 0.15rem 0 rgba(37, 42, 48, 0.5);
+        .selected {
+            width: 90%;
+            height: @show-h;
+            line-height: @show-h + 0.1rem;
+            margin: 0 auto;
+            text-align: center;
+            color: @color;
+            font-weight: bold;
+            border-bottom: solid 1px #aaa;
+        }
+        .marquee {
+            position: absolute;
+            top: calc(50% - 56px);
+            left: 0;
+            width: 100%;
+            height: 100px;;
+            background: lightgreen;
+            opacity: .3;
+            pointer-events: none;
+        }
+        .scrollPicker {
+            width: 100%;
+            height: calc(100% - @show-h - @btn-h);
+            text-align: center;
+            div {
+                display: inline-block;
+                width: 20%;
+                height: calc(100% - 0.4rem);
+                margin: .2rem .1rem;
+                padding: .8rem 0;
+                text-align: center;
+                color: @color;
+                overflow: scroll;
+                // background-image: linear-gradient(-180deg, #2e2e2e 0%, #fff 48%, #2e2e2e 100%);
+                // box-shadow: 0 0 0.3rem 0 rgba(20, 20, 20, 0.5);
+                box-sizing: border-box;
+            }
+        }
+        .btnGroup {
+            width: 100%;
+            height: @btn-h;
+            line-height: @btn-h;
+            div {
+                display: inline-block;
+                width: 33.3%;
+                text-align: center;
+                color: @color;
+                box-shadow: 0 0 0.05rem 0 rgba(20, 20, 20, 0.5);
+                box-sizing: border-box;
+            }
+            div:last-child {
+                background: #09CA65;
+                color: #fff;
+            }
+        }
+    }
+    .mpb-show {
+        animation: mpb_slideIn 0.5s ease-out;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+        -webkit-animation: mpb_slideIn 0.5s;
+        -webkit-animation-iteration-count: 1;
+        -webkit-animation-fill-mode: forwards;
+    }
+    .mpb-hide {
+        animation: mpb_slideOut 0.3s ease-out;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+        -webkit-animation: mpb_slideOut 0.3s;
+        -webkit-animation-iteration-count: 1;
+        -webkit-animation-fill-mode: forwards;
+    }
+}
+
+@keyframes mpb_mask_fadeIn {
+    from { opacity: 0;}
+    to { opacity: 1;}
+}
+@keyframes mpb_mask_fadeOut {
+    from { opacity: 1;}
+    to { opacity: 0; display: none;}
+}
+
+@keyframes mpb_slideIn {
+    from {top: 100vh;}
+    to {top: calc(100vh - 4.5rem);}
+}
+
+@keyframes mpb_slideOut {
+    from {top: calc(100vh - 4.5rem);}
+    to {top: 100vh;}
+}

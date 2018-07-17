@@ -67,44 +67,33 @@ class Charts extends React.Component {
 
     /*
      * Create: zhangfs with Atom by 2018/07/01
-     * Func: option generator
+     * Func: 接受一个包含legend和series字段的对象参数
      */
     pieOption(opt) {
         return {
-            textStyle: { color: '#647888', fontSize: 24},
+            color:['#09CA65','#00F977','#D0DFEE','#FFC32B'],
+            textStyle:{ fontSize:28 },
             tooltip : {
                 trigger: 'item',
-                formatter: '{b}<br/>{c} ({d}%)',
-                textStyle: { fontSize: 40 }
+                formatter: "{b} <br/>{c} ({d}%)",
+                textStyle:{ fontSize:28 }
             },
             legend: {
+                show: (this.props.hasLegend ? true : false),
                 x: 'center',
                 y: 'bottom',
-                data: opt.length
+                data: opt.legend
             },
-            series: [
+            series : [
                 {
+                    name: '占比类型',
                     type: 'pie',
-                    legendHoverLink: true,
-                    radius : '60%',
-                    center: ['50%', '35%'],
-                    label: {
-                        normal: {
-                            show: false,
-                            position: 'outside'
-                        },
-                    },
-                    data: opt.series,
-                    itemStyle: {
-                        emphasis: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        }
-                    }
+                    radius : '75%',
+                    label: { show: true },
+                    data: opt.series
                 }
             ]
-        }
+          }
     }
 
     stackedAreaOption(opt) {
