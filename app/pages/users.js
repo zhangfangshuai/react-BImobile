@@ -75,6 +75,20 @@ class Users extends React.Component {
                 interface: 'MUser/getfirstOrderUser',
                 cityId: CITY_LIST[0].value,
                 dateId: getDateOffset().slice(0,6)
+            },
+            recallData: [],
+            recallPage: 1,
+            recallReq: {
+                interface: 'MUser/getthisMonthRecallUser',
+                cityId: CITY_LIST[0].value,
+                dateId: getDateOffset().slice(0,6)
+            },
+            stayData: [],
+            stayPage: 1,
+            stayReq: {
+                interface: 'MUser/getthisMonthKeep',
+                cityId: CITY_LIST[0].value,
+                dateId: getDateOffset().slice(0,6)
             }
         }
     }
@@ -207,7 +221,7 @@ class Users extends React.Component {
 
     // 首单用户分析
     newGuyRequest(p) {
-        if (isParamValid(p, 'order_user_pie')) {
+        if (isParamValid(p, 'first_order')) {
             axiosGet(p, (r) => {
                 this.setState({
                     newGuyData: r,
@@ -224,6 +238,44 @@ class Users extends React.Component {
         this.setState({ newGuyPage: p });
     }
 
+    // 留存用户分析
+    stayRequest(p) {
+        if (isParamValid(p, 'first_order')) {
+            axiosGet(p, (r) => {
+                this.setState({
+                    stayData: r,
+                    stayPage: 1
+                })
+            });
+        }
+    }
+    handleMonthStay(m) {
+        this.state.stayReq.dateId = m;
+        this.stayRequest(this.state.stayReq);
+    }
+    handlePageStay(p) {
+        this.setState({ stayPage: p });
+    }
+
+    // 召回用户
+    recallRequest(p) {
+        if (isParamValid(p, 'recall_user')) {
+            axiosGet(p, (r) => {
+                this.setState({
+                    recallData: r,
+                    recallPage: 1
+                })
+            });
+        }
+    }
+    handleMonthRecall(m) {
+        this.state.recallReq.dateId = m;
+        this.recallRequest(this.state.recallReq);
+    }
+    handlePageRecall(p) {
+        this.setState({ recallPage: p });
+    }
+
 
     // 挂载
     componentDidMount() {
@@ -235,6 +287,8 @@ class Users extends React.Component {
         this.orderUserRequest(this.state.orderUserReq);
         this.pieRequest(this.state.pieReq);
         this.newGuyRequest(this.state.newGuyReq);
+        this.recallRequest(this.state.recallReq);
+        this.stayRequest(this.state.stayReq);
     }
 
     selectCity(c) {
@@ -255,6 +309,10 @@ class Users extends React.Component {
         this.pieRequest(this.state.pieReq);
         this.state.newGuyReq.cityId = c.value;
         this.newGuyRequest(this.state.newGuyReq);
+        this.state.stayReq.cityId = c.value;
+        this.stayRequest(this.state.stayReq);
+        this.state.recallReq.cityId = c.value;
+        this.recallRequest(this.state.recallReq);
     }
 
 
@@ -316,8 +374,29 @@ class Users extends React.Component {
         if (NEW.length > 0) {
             var newGuyTb = NEW.map((i, idx) => {
                 return (
-                    <TableBody key={idx} data={[i.cityName, i.fristorder_users, i.fristorder_nums, i.fristorder_avg,
-                      i.fristorder_rate+'%']} />
+                    <TableBody key={idx} data={[i.cityName, i.fristorder_users, i.fristorder_nums, i.fristorder_avg, i.fristorder_rate+'%']} />
+                )
+            })
+        }
+
+        let S = this.state.stayData, SP = this.state.stayPage;
+        let STAY = S.length < 10 ? S : S.slice((SP-1)*PAGESIZE, SP*PAGESIZE);
+        if (STAY.length > 0) {
+            var stayTb = STAY.map((i, idx) => {
+                return (
+                    <TableBody key={idx} data={[i.cityName, i.retain_users, i.firstorder_users_last, i.nextorder_users_last,
+                      i.retain_orders, i.retain_users_avg, i.retain_users_rate+'%']} />
+                )
+            })
+        }
+
+        let RC = this.state.recallData, RCP = this.state.recallPage;
+        let RECALL = RC.length < 10 ? RC : RC.slice((RCP-1)*PAGESIZE, RCP*PAGESIZE);
+        if (RECALL.length > 0) {
+            var recallTb = RECALL.map((i, idx) => {
+                return (
+                    <TableBody key={idx} data={[i.cityName, i.recall_users, i.recall_orders, i.recall_users_avg,
+                      i.recall_users_rate+'%', i.retain_rate+'%']} />
                 )
             })
         }
@@ -417,6 +496,32 @@ class Users extends React.Component {
                         <Pagination
                             handlePage={this.handlePageNewGuy.bind(this)}
                             length={this.state.newGuyData ? this.state.newGuyData.length : 0}
+                            pageSize={PAGESIZE} />
+                    </div>
+                </section>
+
+                <section>
+                    <div className="wrap">
+                        <Title name="留存用户分析" />
+                        <MonthPicker handleMonth={this.handleMonthStay.bind(this)} />
+                        <Table self="user-stay" tbody={stayTb}
+                            thead={['城市','留存用户数','上月首单用户数','上月老用户数','留存下单量','留存下单频次','本月留存率']} />
+                        <Pagination
+                            handlePage={this.handlePageStay.bind(this)}
+                            length={this.state.stayData ? this.state.stayData.length : 0}
+                            pageSize={PAGESIZE} />
+                    </div>
+                </section>
+
+                <section>
+                    <div className="wrap">
+                        <Title name="召回用户分析" />
+                        <MonthPicker handleMonth={this.handleMonthRecall.bind(this)} />
+                        <Table self="user-recall" tbody={recallTb}
+                            thead={['城市','召回用户数','召回下单数','下单频次','召回占比','本月召回率']} />
+                        <Pagination
+                            handlePage={this.handlePageRecall.bind(this)}
+                            length={this.state.recallData ? this.state.recallData.length : 0}
                             pageSize={PAGESIZE} />
                     </div>
                 </section>
