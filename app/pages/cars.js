@@ -105,7 +105,10 @@ class Cars extends React.Component {
     // 离线图
     offlineRequest(p) {
         if (isParamValid(p, 'cars_offline')) {
-            axiosGet(p, (r) => { this.setState({ offlineData: r }) });
+            axiosGet(p, (r) => {
+                r.series = r.dataList;
+                r.xaxis = r.axisList;
+                this.setState({ offlineData: r }) });
         }
     }
     handleDateOffline(date, picker) {
@@ -195,7 +198,7 @@ class Cars extends React.Component {
                     <div className="wrap">
                         <Title name="机车离线图" />
                         <DoubleDatePicker handleDate={this.handleDateOffline.bind(this)}/>
-                        <Charts self="cars_offline" type="line_basic" data={this.state.offlineData} />
+                        <Charts self="cars_offline" type="line" data={this.state.offlineData} />
                         <DutyPerson sectionId="42" city={this.state.currentCity} />
                     </div>
                 </section>

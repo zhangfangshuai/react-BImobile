@@ -87,6 +87,24 @@ a:hover {
     padding-bottom: .5rem;
 }
 
+// Sample: 实时监控
+.bulge-block {
+    position: relative;
+    width: 5rem;
+    height: .8rem;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 2.67rem;
+    .component-doubleDatePicker, .component-singleDatePicker {
+        position: absolute;
+        top: -.2rem;
+        left: calc(50% - 2.4rem);
+        border: solid .1rem #ffffff;
+        box-sizing: content-box;
+        border-radius: .4rem;
+    }
+}
+
 /*
  * section container style
  */
@@ -269,10 +287,14 @@ section {
             p:nth-child(1), p:nth-child(4), p:nth-child(5) { width: 16%; }
             p:nth-child(2), p:nth-child(3), p:nth-child(6) { width: 17.33%; }
         }
+        .realcash, .realcash ul li {
+            width: 14rem;
+            p:first-child { width: 10%; }
+        }
     }
 
     // charts height unique style
-    .cars_online, .cars_offline, .daufunnel, .user-pie {
+    .cars_online, .cars_offline, .daufunnel, .user-pie, .realcash-line {
         height: 4rem;
     }
     .onlineAvg {

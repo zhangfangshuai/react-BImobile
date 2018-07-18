@@ -68,7 +68,7 @@ class DoubleDatePicker extends React.Component {
 
     render() {
         return (
-            <div className="doubleDatePicker">
+            <div className="component-doubleDatePicker">
                 开始 <span onClick={this.pickStartDate.bind(this)}> {this.state.startDate} </span>
                 结束 <span onClick={this.pickEndDate.bind(this)}> {this.state.endDate} </span>
                 <DatePickBar

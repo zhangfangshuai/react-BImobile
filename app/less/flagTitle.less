@@ -1,0 +1,31 @@
+@w: .62rem;
+.component-flagtitle {
+    position: absolute;
+    left: .23rem;
+    width: @w;
+    height: @w + 0.07rem;
+    line-height: .26rem;
+    color: #ffffff;
+    font-size: .215rem;
+    text-align: center;
+    padding-top: .12rem;
+    margin-top: -.03rem;
+    box-shadow: -.02rem 0 .2rem 0 #ddd;
+    /*background: -moz-linear-gradient(180deg, #f1d591 10%, #ffa313);
+    background: -ms-linear-gradient(180deg, #f1d591 10%, #ffa313);
+    background: -o-linear-gradient(180deg, #f1d591 10%, #ffa313);
+    background: -webkit-linear-gradient(180deg, #f1d591 10%, #ffa313);*/
+    background: linear-gradient(180deg, #f1d591 10%, #ffa313);
+}/* 适配和颜色去页面css单独做,写法如上模板 */
+
+.component-flagtitle:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -0.02rem;
+    width: 0;
+    height: 0;
+    border-bottom: solid .12rem #ffffff;
+    border-right: solid @w/2 #FFA312;
+    border-left: solid @w/2 #FFA312;
+}

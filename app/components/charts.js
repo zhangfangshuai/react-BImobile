@@ -35,8 +35,11 @@ class Charts extends React.Component {
             case 'line_stacked_area':
                 option = this.stackedAreaOption(this.props.data);
                 break;
-            case 'line_basic':
+            case 'line':
                 option = this.lineOption(this.props.data);
+                break;
+            case 'multi_line':
+                option = this.multiLineOption(this.props.data);
                 break;
             case 'bar':
                 option = this.barOption(this.props.data);
@@ -104,54 +107,15 @@ class Charts extends React.Component {
                 trigger: 'axis',
                 textStyle: { color: '#fff', fontWeight: 'bold' },
             },
-            legend: {
-                x: 'center',
-                y: 'bottom',
-                data:[
-                    { name:'上架率', icon : 'circle' },
-                    { name:'故障下架率', icon : 'circle' },
-                    { name:'低电下架率', icon : 'circle' },
-                    { name:'运维下架率', icon : 'circle' }
-                ]
-            },
-            grid: {
-                top:'10%',
-                bottom: '10%',
-                containLabel: true
-            },
+            legend: { y: 'bottom', itemGap: 60 },
+            grid: { left:'10%', top:'6%', bottom: '13%' },
+            yAxis: [{ name: '百分比', type: 'value', nameTextStyle: {fontSize:24}, axisLabel: {fontSize:24} }],
             xAxis: [{ type: 'category', data: opt.date }],
-            yAxis: [{
-                    name: '百分比',
-                    nameTextStyle: { fontSize:24 },
-                    type : 'value',
-                    axisLabel: { fontSize:24 }
-            }],
             series: [
-                {
-                    type: 'line',
-                    name:'上架率',
-                    stack: true,
-                    areaStyle: { opacity:1 },
-                    data:opt.data1
-                }, {
-                    type: 'line',
-                    name:'故障下架率',
-                    stack: true,
-                    areaStyle: { opacity:1 },
-                    data:opt.data2
-                }, {
-                    type: 'line',
-                    name:'低电下架率',
-                    stack: true,
-                    areaStyle: { opacity:1 },
-                    data:opt.data3
-                }, {
-                    type: 'line',
-                    name:'运维下架率',
-                    stack: true,
-                    areaStyle: { opacity:1 },
-                    data:opt.data4
-                }
+                { type: 'line', name:'上架率', stack: true, areaStyle: { opacity:1 }, data:opt.data1 },
+                { type: 'line', name:'故障下架率', stack: true, areaStyle: { opacity:1 }, data:opt.data2 },
+                { type: 'line', name:'低电下架率', stack: true, areaStyle: { opacity:1 }, data:opt.data3 },
+                { type: 'line', name:'运维下架率', stack: true, areaStyle: { opacity:1 }, data:opt.data4 }
             ]
         };
     }
@@ -159,25 +123,21 @@ class Charts extends React.Component {
     lineOption(opt) {
         return {
             color : ['#09CA65'],
-            textStyle:{ color:'#647888', fontSize:24 },
+            textStyle:{ color:'#647888', fontSize: 40 },
             tooltip: {
                 trigger: 'axis',
                 textStyle: { color: '#fff', fontWeight: 'bold' },
             },
-            legend: {
-                x: 'center',
-                y: 'top',
-                data:[{ name:'数量', icon: 'circle' }],
-            },
-            grid:{ left: '10%', right:'15%' },
-            xAxis:  [{ type: 'category', data: opt.axisList }],
+            legend: { show: false },
+            grid:{ left:'10%' },
             yAxis: [{ type: 'value', name: '数量' }],
-            series: [{
-                name:'离线数',
-                type:'line',
-                lineStyle: { width:7 },
-                data: opt.dataList,
-            }]
+            xAxis:  [{
+                type: 'category',
+                data: opt.xaxis
+            }],
+            series: [
+                { type:'line', lineStyle:{ width:4 }, name:'离线数', data: opt.series }
+            ]
         }
     }
 
@@ -266,6 +226,27 @@ class Charts extends React.Component {
                     }
                 }
             }]
+        }
+    }
+
+    multiLineOption(opt) {
+        return {
+            color : ['#09CA65','#F5A623','#0DB0FF','#FF7263','#C584FF','#4D68E5'],
+            textStyle:{ color:'#647888', fontSize: 24 },
+            tooltip: { trigger: 'axis' },
+            legend: { itemGap: 60, y: 'bottom', },
+            grid:{ left: '13%', top:"2%", bottom:"15%" },
+            yAxis: { type: 'value' },
+            xAxis:  {
+                type : 'category',
+                data : opt.data1
+            },
+            series: [
+                { type:'line', smooth:true, lineStyle:{width:4}, name:'收入', data: opt.data2 },
+                { type:'line', smooth:true, lineStyle:{width:4}, name:'收现', data: opt.data3 },
+                { type:'line', smooth:true, lineStyle:{width:4}, name:'优惠', data: opt.data4 },
+                { type:'line', smooth:true, lineStyle:{width:4}, name:'未结算', data: opt.data5 }
+            ]
         }
     }
 
