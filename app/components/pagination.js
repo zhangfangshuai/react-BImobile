@@ -21,7 +21,7 @@ class Pagination extends React.Component {
         this.setState((prevState) => {
             (type === 'prev' && this.state.page > 1) && (prevState.page = this.state.page - 1);
             (type === 'next' && this.state.page < all) && (prevState.page = this.state.page + 1);
-            this.props.handlePage(prevState.page);
+            this.props.handlePage(prevState.page, this.props.master);
         })
     }
 

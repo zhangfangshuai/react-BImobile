@@ -474,7 +474,7 @@ class Users extends React.Component {
                     <div className="wrap">
                         <Title name="订单用户占比分析" />
                         <MonthPicker handleMonth={this.handleMonthOrderUser.bind(this)} />
-                        <Charts self="user-pie" type="pie" data={this.state.pieData} />
+                        <Charts self="small-chart" type="pie" data={this.state.pieData} />
                     </div>
                     <div className="wrap clearTopGap">
                         <Title name="订单用户数据分析" />

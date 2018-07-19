@@ -43,7 +43,7 @@ class SingleDatePicker extends React.Component {
         this.setState((prevState) => {
             prevState.pickedDate = getDateOffset(prevState.offset);
             prevState.week = getWeekOffset(prevState.offset);
-            this.props.handleDate(prevState.pickedDate, "date");
+            this.props.handleDate(prevState.pickedDate, this.props.master);
         })
     }
 

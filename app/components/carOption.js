@@ -20,7 +20,7 @@ class CarOption extends React.Component {
         this.setState((prevState) => {
             if (prevState.ct != type) {
                 prevState.ct = type
-                this.props.handleCar(type, 'car');
+                this.props.handleCar(type, this.props.master);
             }
         })
     }

@@ -32,14 +32,17 @@ class Charts extends React.Component {
             case 'pie':
                 option = this.pieOption(this.props.data);
                 break;
-            case 'line_stacked_area':
-                option = this.stackedAreaOption(this.props.data);
-                break;
             case 'line':
                 option = this.lineOption(this.props.data);
                 break;
             case 'multi_line':
                 option = this.multiLineOption(this.props.data);
+                break;
+            case 'line_stacked_area':
+                option = this.stackedAreaOption(this.props.data);
+                break;
+            case 'multi_line_stacked':
+                option = this.multiStackedOption(this.props.data);
                 break;
             case 'bar':
                 option = this.barOption(this.props.data);
@@ -237,7 +240,7 @@ class Charts extends React.Component {
             legend: { itemGap: 60, y: 'bottom', },
             grid:{ left: '13%', top:"2%", bottom:"15%" },
             yAxis: { type: 'value' },
-            xAxis:  {
+            xAxis: {
                 type : 'category',
                 data : opt.data1
             },
@@ -248,6 +251,27 @@ class Charts extends React.Component {
                 { type:'line', smooth:true, lineStyle:{width:4}, name:'未结算', data: opt.data5 }
             ]
         }
+    }
+
+    multiStackedOption(opt) {
+        let allOption = {
+            color: ['#09CA65','#00F977','#D0DFEE','#FFC32B','#00B74D','#FFAE29'],
+            textStyle: { color:'#647888', fontSize:30 },
+            tooltip: { trigger: 'axis' },
+            grid: { top: "5%", bottom:"15%" },
+            legend: { itemGap: 100, y:'bottom' },
+            yAxis: { type:'value' },
+            xAxis: { type:'category', data: opt.data1 },
+            series: [
+                { areaStyle:{opacity:1}, type:'line', stack:'all', name:'上架', data: opt.data2 },
+                { areaStyle:{opacity:1}, type:'line', stack: 'all', name:'下架', data: opt.data3 },
+                { areaStyle:{opacity:1}, type:'line', stack: '总量',name:'停止运营', data: opt.data4 }
+            ]
+        };
+        return allOption;
+        // let onlineOption = {
+        //
+        // }
     }
 
 };
