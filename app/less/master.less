@@ -87,6 +87,24 @@ a:hover {
     padding-bottom: .5rem;
 }
 
+// Sample: 实时监控
+.bulge-block {
+    position: relative;
+    width: 5rem;
+    height: .8rem;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 2.67rem;
+    .component-doubleDatePicker, .component-singleDatePicker {
+        position: absolute;
+        top: -.2rem;
+        left: calc(50% - 2.4rem);
+        border: solid .1rem #ffffff;
+        box-sizing: content-box;
+        border-radius: .4rem;
+    }
+}
+
 /*
  * section container style
  */
@@ -105,8 +123,26 @@ section {
         padding-bottom: .1rem;
         text-align: center;
     }
+    .bulge-wrap {
+        margin: 0.6rem auto 0;
+    }
     .clearTopGap {
         margin-top: 0.2rem !important;
+    }
+
+    .hook, .hook::after {
+        position: absolute;
+        top: -0.37rem;
+        left: 0.8rem;
+        width: 15px;
+        height: .55rem;
+        background-image: linear-gradient(-180deg, #e0d9d9 0%, #fdfdfd 48%, #d4cece 100%);
+        box-shadow: 0 0 0.2rem 0 rgba(181, 174, 174, 0.5);
+    }
+    .hook::after {
+        content: '';
+        top: initial;
+        left: calc(100vw - 2rem);
     }
 
     // page scroll-table unique style
@@ -269,10 +305,20 @@ section {
             p:nth-child(1), p:nth-child(4), p:nth-child(5) { width: 16%; }
             p:nth-child(2), p:nth-child(3), p:nth-child(6) { width: 17.33%; }
         }
+        .realcash, .realcash ul li {
+            width: 14rem;
+            p:first-child { width: 10%; }
+        }
+        .realcar, .realcar ul li {
+            width: 20rem;
+            p { width: 7%; }
+            p:nth-child(1), p:nth-child(3) { width: 5%; }
+            p:nth-child(5), p:nth-child(6) { width: 10%; }
+        }
     }
 
     // charts height unique style
-    .cars_online, .cars_offline, .daufunnel, .user-pie {
+    .small-chart {
         height: 4rem;
     }
     .onlineAvg {
@@ -281,5 +327,37 @@ section {
         color: #0DB95F;
         font-size: .25rem;
         text-align: center;
+    }
+
+    // flag_title unique style
+    .flag-cash { background: linear-gradient(180deg, #f1d591 10%, #ffa313); }
+    .flag-cash:before {
+        border-right: solid .31rem #ffa313;
+        border-left: solid .31rem #ffa313;
+    }
+    .flag-car { background: linear-gradient(180deg, #32f9a7 10%, #0db95f); }
+    .flag-car:before {
+        border-right: solid .31rem #0db95f;
+        border-left: solid .31rem #0db95f;
+    }
+    .flag-order { background: linear-gradient(180deg, #59ffd1 10%, #01c6b6); }
+    .flag-order:before {
+        border-right: solid .31rem #01c6b6;
+        border-left: solid .31rem #01c6b6;
+    }
+    .flag-newguy { background: linear-gradient(200deg, #81d4ff 10%, #a28fff); }
+    .flag-newguy:before {
+        border-right: solid .31rem #a28fff;
+        border-left: solid .31rem #a28fff;
+    }
+    .flag-battery { background: linear-gradient(200deg, #aee769 10%, #4ab90d); }
+    .flag-battery:before {
+        border-right: solid .31rem #4ab90d;
+        border-left: solid .31rem #4ab90d;
+    }
+
+    // 实时监控 inlineTranglePicker self style
+    .ITP-realCar {
+        top: .58rem;
     }
 }

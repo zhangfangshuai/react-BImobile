@@ -14,9 +14,9 @@ class SingleDatePicker extends React.Component {
         super(props);
         this.state = {
             id: this.props.selfId,
-            offset: -1,
-            pickedDate: getDateOffset(-1),
-            week: getWeekOffset(-1),
+            offset: this.props.today ? 0 : -1,
+            pickedDate: this.props.today ? getDateOffset() : getDateOffset(-1),
+            week: this.props.today ? getWeekOffset() : getWeekOffset(-1),
             dateBarState: {
                 toggled: false,
                 firstIn: true
@@ -43,7 +43,7 @@ class SingleDatePicker extends React.Component {
         this.setState((prevState) => {
             prevState.pickedDate = getDateOffset(prevState.offset);
             prevState.week = getWeekOffset(prevState.offset);
-            this.props.handleDate(prevState.pickedDate, "date");
+            this.props.handleDate(prevState.pickedDate, this.props.master);
         })
     }
 

@@ -10,9 +10,9 @@ import '../less/table.less'
 class Table extends React.Component {
 
     render() {
-        let thList = this.props.thead.map((item) => {
+        let thList = this.props.thead.map((item, idx) => {
             return (
-                <p key={this.props.thead.indexOf(item)}>
+                <p key={idx}>
                     { item }
                 </p>
             )

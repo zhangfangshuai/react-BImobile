@@ -202,8 +202,8 @@ class App extends React.Component {
                         <InlineTranglePicker type="appVersion" master="dauFunnel" handlePick={this.handlePickVersion.bind(this)} />
                         <MultiColSelector cols={['IOS', '安卓', '全部']} handleTCS={this.handleTCS.bind(this)} />
                         <SingleDatePicker handleDate={this.handleDateFunnel.bind(this)} />
-                        <Charts self="daufunnel" type="funnel" data={this.state.dauFunnelData.nums} />
-                        <Charts self="daufunnel" type="funnel" data={this.state.dauFunnelData.userNum} />
+                        <Charts self="small-chart" type="funnel" data={this.state.dauFunnelData.nums} />
+                        <Charts self="small-chart" type="funnel" data={this.state.dauFunnelData.userNum} />
                     </div>
                 </section>
 

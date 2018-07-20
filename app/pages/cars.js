@@ -105,7 +105,10 @@ class Cars extends React.Component {
     // 离线图
     offlineRequest(p) {
         if (isParamValid(p, 'cars_offline')) {
-            axiosGet(p, (r) => { this.setState({ offlineData: r }) });
+            axiosGet(p, (r) => {
+                r.series = r.dataList;
+                r.xaxis = r.axisList;
+                this.setState({ offlineData: r }) });
         }
     }
     handleDateOffline(date, picker) {
@@ -185,7 +188,7 @@ class Cars extends React.Component {
                         <MultiColSelector cols={['10点', '17点', '全天']}
                             handleTCS={this.handleTCS.bind(this)} />
                         <DoubleDatePicker handleDate={this.handleDateOnline.bind(this)}/>
-                        <Charts self="cars_online" type="line_stacked_area" data={this.state.onlineData} />
+                        <Charts self="small-chart" type="line_stacked_area" data={this.state.onlineData} />
                         <div className="onlineAvg">平均上架率: {this.state.onlineAvg}%</div>
                         <DutyPerson sectionId="41" city={this.state.currentCity} />
                     </div>
@@ -195,7 +198,7 @@ class Cars extends React.Component {
                     <div className="wrap">
                         <Title name="机车离线图" />
                         <DoubleDatePicker handleDate={this.handleDateOffline.bind(this)}/>
-                        <Charts self="cars_offline" type="line_basic" data={this.state.offlineData} />
+                        <Charts self="small-chart" type="line" data={this.state.offlineData} />
                         <DutyPerson sectionId="42" city={this.state.currentCity} />
                     </div>
                 </section>
