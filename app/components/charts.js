@@ -61,7 +61,9 @@ class Charts extends React.Component {
 
     componentDidUpdate(prevProps) {
         // 防止堆叠图分页的时候也刷新图表
-        prevProps.data != this.props.data && this.initChart(prevProps);
+        if (prevProps.data != this.props.data || prevProps.carState != this.props.carState) {
+             this.initChart(prevProps);
+        }
     }
 
     render() {
