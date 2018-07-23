@@ -8,6 +8,7 @@ import './less/master.less'
 import Menu from './components/menu'
 import Login from './pages/login'
 import Watch from './pages/watch'
+import Kpi from './pages/kpi'
 import Users from './pages/users'
 import App from './pages/app'
 import Orders from './pages/orders'
@@ -81,8 +82,8 @@ class Root_App extends React.Component {
             return (
                 <div>
                     <Menu menuState={this.state.menuState} user={this.state.user} cItem={this.state.currentMenu} />
-                    { view == 2 && <Watch city={this.state.currentCity}/> }
-                    { view == 3 && <Watch city={this.state.currentCity}/> }
+                    { view == 2 && <Kpi city={this.state.currentCity}/> }
+                    { view == 3 && <Kpi city={this.state.currentCity}/> }
                     { view == 4 && <Users city={this.state.currentCity}/> }
                     { view == 64 && <App city={this.state.currentCity}/> }
                     { view == 5 && <Orders city={this.state.currentCity}/> }

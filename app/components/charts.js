@@ -12,6 +12,7 @@ import 'echarts/lib/chart/bar'
 import 'echarts/lib/chart/pie'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/chart/funnel'
+import 'echarts/lib/chart/scatter'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/legendScroll'
 
@@ -50,6 +51,10 @@ class Charts extends React.Component {
                 break;
             case 'funnel':
                 option = this.funnelOption(this.props.data);
+                break;
+            case 'scatter':
+                echarts.registerMap('china', chinaMapJson);
+                option = this.scatterOption(this.props.data);
                 break;
         }
         chart.setOption(option)
@@ -306,6 +311,160 @@ class Charts extends React.Component {
         }
         return option;
     }
+
+    // KPI全国地图
+    scatterOption(opt) {
+        console.log(opt, 'opt');
+        let option = {
+            geo: {
+                map: 'china',
+                roam: true,  // 只平移:move; 只缩放:scale; 平移和缩放: true; 默认false
+                zoom: 1.2,
+                center: [104, 35],
+                label: {
+                    emphasis: {
+                        show: false
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        areaColor: new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+                            offset: 0,
+                            color: '#2d333a'
+                        }, {
+                            offset: 1,
+                            color: '#2d333a'
+                        }]),
+                        borderColor: '#2d333a',
+                        shadowBlur: 8,
+                        shadowOffsetX: -2,
+                        shadowOffsetY: 2,
+                        shadowColor: '#2d333a'
+                    },
+                    emphasis: {
+                        areaColor: new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+                            offset: 0,
+                            color: '#2d333a'
+                        }, {
+                            offset: 1,
+                            color: '#2d333a'
+                        }]),
+                        borderColor: '#2d333a',
+                        shadowBlur: 8,
+                        shadowOffsetX: -2,
+                        shadowOffsetY: 2,
+                        shadowColor: '#2d333a'
+                    }
+                }
+            },
+            series: [
+                {
+                    name: 'city',
+                    zlevel: 1,
+                    // type: 'effectScatter',
+                    type: 'scatter',
+                    coordinateSystem: 'geo',
+                    data: opt,
+                    symbolSize: [65,65],
+                    symbol: 'image://static/images/hotpot.png',
+                    itemStyle: {
+                        normal: {
+                            color:  new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+                                offset: 0,
+                                color: 'rgba(13,185,95,1)'
+                            }, {
+                                offset: 1,
+                                color: 'rgba(30,221,152,1)'
+                            }]),
+                            opacity:1,
+                            shadowBlur: 12,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 5,
+                            shadowColor: 'rgba(0,0,0,0.4)'
+                        },
+                        emphasis: {
+                            color:  new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+                                offset: 0,
+                                color: '#FFAA25'
+                            }, {
+                                offset: 1,
+                                color: '#FADC61'
+                            }]),
+                            opacity:1,
+                            shadowBlur: 12,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 5,
+                            shadowColor: 'rgba(0,0,0,0.4)'
+                        }
+
+                    },
+                    label: {
+                        normal: {
+                            show: false
+                        },
+                        emphasis: {
+                            show: true,
+                            position:['0%','-70%'],
+                            formatter: '{b}',
+                            fontSize:40,
+                            textBorderColor: '#000',
+                            textBorderWidth: 2,
+                        }
+                    },
+                },
+                {
+                    name: 'cityActive',
+                    zlevel: 2,
+                    type: 'scatter',
+                    coordinateSystem: 'geo',
+                    data: [opt[0]],
+                    symbolSize: [90,90],
+                    symbol: 'image://static/images/hotpot_chose.png',
+                    itemStyle: {
+                        normal: {
+                            opacity:1,
+                            shadowBlur: 12,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 5,
+                            shadowColor: 'rgba(0,0,0,0.4)'
+                        },
+                        emphasis: {
+                            color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+                                offset: 0,
+                                color: '#FFAA25'
+                            }, {
+                                offset: 1,
+                                color: '#FADC61'
+                            }]),
+                            opacity:1,
+                            shadowBlur: 12,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 5,
+                            shadowColor: 'rgba(0,0,0,0.4)'
+                        }
+
+                    },
+                    label: {
+                        normal: {
+                            show: false
+                        },
+                        emphasis: {
+                            show: true,
+                            position:['0%','-70%'],
+                            formatter: '{b}',
+                            fontSize:50,
+                            textBorderColor: '#000',
+                        }
+                    },
+                }
+            ]
+        }
+
+        return option;
+    }
+
+
+
 
 };
 
