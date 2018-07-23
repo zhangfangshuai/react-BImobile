@@ -36,7 +36,6 @@ class Charts extends React.Component {
                 option = this.lineOption(this.props.data);
                 break;
             case 'multi_line':
-                // chart.clear();
                 option = this.multiLineOption(this.props.data);
                 break;
             case 'line_stacked_area':
