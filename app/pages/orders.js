@@ -173,7 +173,7 @@ class Orders extends React.Component {
                         <Title name="订单取消原因" />
                         <CarOption handleCar={this.handleCarReason.bind(this)} />
                         <DoubleDatePicker handleDate={this.handleDateReason.bind(this)} />
-                        <Charts type="bar" data={this.state.reasonData} />
+                        <Charts type="bar" master="cancelReason" data={this.state.reasonData} />
                     </div>
                 </section>
             </div>

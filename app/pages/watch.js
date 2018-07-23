@@ -34,13 +34,34 @@ class Watch extends React.Component {
                 cityId: CITY_LIST[0].value,
                 dateId: getDateOffset(),
                 carType: 0
+            },
+            realOrderData: { table: [] },
+            realOrderPage: 1,
+            realOrderReq: {
+                interface: 'getOrderRealData',
+                cityId: CITY_LIST[0].value,
+                dateId: getDateOffset(),
+                carType: 0
+            },
+            realNewguyData: { table: [] },
+            realNewguyPage: 1,
+            realNewguyReq: {
+                interface: 'getRegisterRealData',
+                cityId: CITY_LIST[0].value,
+                dateId: getDateOffset()
+            },
+            realBatteryData: { table: [] },
+            realBatteryReq: {
+                interface: 'getKpiCarPower',
+                cityId: CITY_LIST[0].value,
+                dateId: getDateOffset()
             }
         }
     }
 
     selectCity(c) {
         this.setState({ currentCity: c });
-        for (let mst of ['realCash', 'realCar']) {
+        for (let mst of ['realCash', 'realCar', 'realOrder', 'realNewguy', 'realBattery']) {
             this.state[mst + 'Req'].cityId = c.value;
             this.axiosRequest(this.state[mst + 'Req'], mst , true);
         }
@@ -77,26 +98,46 @@ class Watch extends React.Component {
     }
 
     componentDidMount() {
-        this.axiosRequest(this.state.realCashReq, 'realCash' , true);
-        this.axiosRequest(this.state.realCarReq, 'realCar' , true);
+        this.axiosRequest(this.state.realCashReq, 'realCash', true);
+        this.axiosRequest(this.state.realCarReq, 'realCar', true);
+        this.axiosRequest(this.state.realOrderReq, 'realOrder', true)
+        this.axiosRequest(this.state.realNewguyReq, 'realNewguy', true)
+        this.axiosRequest(this.state.realBatteryReq, 'realBattery', false)
     }
 
     render() {
-        let RC = this.state.realCashData.table, RCP = this.state.realCashPage;
+        let cashTb, RC = this.state.realCashData.table, RCP = this.state.realCashPage;
         let CASH = RC.length < 10 ? RC : RC.slice((RCP-1)*PAGESIZE, RCP*PAGESIZE);
         if (CASH.length > 0) {
-            var cashTb = CASH.map((i, idx) => {
+            cashTb = CASH.map((i, idx) => {
                 return <TableBody key={idx} data={[i.hour_id, i.amount_hour, i.payamoun_hour, i.couponAmount_hour,
                     i.noPayAmount_hour, i.amount_hour_every, i.payamoun_hour_every, i.couponAmount_hour_every, i.noPayAmount_hour_every]} />
             })
         }
 
-        let CT = this.state.realCarData.table, CTP = this.state.realCarPage;
+        let carTb, CT = this.state.realCarData.table, CTP = this.state.realCarPage;
         let CAR = CT.length < 10 ? CT : CT.slice((CTP-1)*PAGESIZE, CTP*PAGESIZE);
         if (CAR.length > 0) {
-            var carTb = CAR.map((i, idx) => {
+            carTb = CAR.map((i, idx) => {
                 return <TableBody key={idx} data={[i.hour_id, i.car_num3, i.car_num4, i.car_num5,i.car_num6, i.car_num7,
                     i.car_num8, i.car_num9, i.car_num10, i.car_num11, i.car_num12, i.car_num14, i.car_num13, i.car_num15]} />
+            })
+        }
+
+        let orderTb, OD = this.state.realOrderData.table, ODP = this.state.realOrderPage;
+        let ORDER = OD.length < 10 ? OD : OD.slice((ODP-1)*PAGESIZE, ODP*PAGESIZE);
+        if (ORDER.length > 0) {
+            orderTb  = ORDER.map((i, idx) => {
+                return <TableBody key={idx} data={[i.hour_id, i.ordernum_create_hour1, i.ordernum_up_hour1, i.ordernum_cancel_hour1,
+                    i.ordernum_create_hour,i.ordernum_up_hour, i.ordernum_cancel_hour, i.ordernum_up_hour_every, i.sumMileage_hour_every, i.sumMinute_hour_every ]} />
+            })
+        }
+
+        let newguyTb, N = this.state.realNewguyData.table, NP = this.state.realNewguyPage;
+        let NEWGUY = N.length < 10 ? N : N.slice((NP-1)*PAGESIZE, NP*PAGESIZE);
+        if (NEWGUY.length > 0) {
+            newguyTb  = NEWGUY.map((i, idx) => {
+                return <TableBody key={idx} data={[i.hour_id, i.users_reg_hour, i.users_audit_hour, i.deposit_users_hour, i.order_users_hour,i.orderfirst_users_hour ]} />
             })
         }
 
@@ -110,13 +151,14 @@ class Watch extends React.Component {
                             <SingleDatePicker handleDate={this.handleDate.bind(this)} master="realCash" today={true} />
                         </div>
                         <CarOption handleCar={this.handleCar.bind(this)} master="realCash" />
-                        <Charts self="small-chart" type='multi_line' data={this.state.realCashData} />
+                        <Charts self="small-chart" type='multi_line' data={this.state.realCashData} master="realCash" />
                     </div>
                     <div className="wrap clearTopGap">
                         <div className="hook"></div>
                         <Title name="实时营收概况" />
                         <Table self="realcash" tbody={cashTb}
-                            thead={['时刻','累计收入','累计收现','累计优惠','累计未结算', '单均收入', '单均收现','单均优惠','单均未结算']}/>
+                            thead={['时刻','累计收入','累计收现','累计优惠','累计未结算', '单均收入',
+                              '单均收现','单均优惠','单均未结算']}/>
                         <Pagination
                             handlePage={this.handlePage.bind(this)}
                             length={this.state.realCashData.table ? this.state.realCashData.table.length : 0}
@@ -149,6 +191,62 @@ class Watch extends React.Component {
                           master="realCar" />
                       <DutyPerson sectionId="2" city={this.state.currentCity} />
                   </div>
+                </section>
+                <section>
+                    <div className="wrap bulge-wrap">
+                        <FlagTitle self="flag-order" name="实时订单" />
+                        <div className="bulge-block">
+                            <SingleDatePicker handleDate={this.handleDate.bind(this)} master="realOrder" today={true} />
+                        </div>
+                        <CarOption handleCar={this.handleCar.bind(this)} master="realOrder" />
+                        <Charts self="small-chart" type='multi_line' data={this.state.realOrderData} master="realOrder" />
+                        <ChartGist master="realOrder" data={ this.state.realOrderData } />
+                    </div>
+                    <div className="wrap clearTopGap">
+                        <div className="hook"></div>
+                        <Title name="实时订单" />
+                        <Table self="realorder" tbody={ orderTb }
+                            thead={['时刻','订单量','取车订单量','取消订单量','累计订单量','累计取车订单量',
+                              '累计取消订单量','车均单','车均里程','单均时长']} />
+                        <Pagination
+                            handlePage={this.handlePage.bind(this)}
+                            length={this.state.realOrderData.table ? this.state.realOrderData.table.length : 0}
+                            pageSize={PAGESIZE}
+                            master="realOrder" />
+                        <DutyPerson sectionId="4" city={this.state.currentCity} />
+                    </div>
+                </section>
+                <section>
+                    <div className="wrap bulge-wrap">
+                        <FlagTitle self="flag-newguy" name="新增用户" />
+                        <div className="bulge-block">
+                            <SingleDatePicker handleDate={this.handleDate.bind(this)} master="realNewguy" today={true} />
+                        </div>
+                        <Charts self="small-chart" type='multi_line' data={this.state.realNewguyData} master="realNewguy" />
+                        <ChartGist master="realNewguy" data={ this.state.realNewguyData } />
+                    </div>
+                    <div className="wrap clearTopGap">
+                        <div className="hook"></div>
+                        <Title name="实时新增用户" />
+                        <Table self="realnewguy" tbody={ newguyTb }
+                            thead={['时刻','新增注册','新增双证','新增押金','新增下单','新增首单']} />
+                        <Pagination
+                            handlePage={this.handlePage.bind(this)}
+                            length={this.state.realNewguyData.table ? this.state.realNewguyData.table.length : 0}
+                            pageSize={PAGESIZE}
+                            master="realNewguy" />
+                        <DutyPerson sectionId="5" city={this.state.currentCity} />
+                    </div>
+                </section>
+                <section>
+                    <div className="wrap bulge-wrap">
+                        <FlagTitle self="flag-battery" name="车辆续航" />
+                        <div className="bulge-block">
+                            <SingleDatePicker handleDate={this.handleDate.bind(this)} master="realBattery" today={true} />
+                        </div>
+                        <Charts self="small-chart" type='bar' data={this.state.realBatteryData} master="realBattery" />
+                        <ChartGist master="realBattery" data={ this.state.realBatteryData } />
+                    </div>
                 </section>
             </div>
         )

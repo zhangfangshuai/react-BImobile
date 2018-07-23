@@ -1,7 +1,7 @@
 /**
  * Create: zhangfs by Atom
  * Date: 2018/07/09
- * type参数: 图表类型;  data参数: 构建图形的参数
+ * type参数: 图表类型;  data参数: 构建图形的参数;  master: option.series所属图形
  * Sample: <Charts type="bar" data={this.state.data} />
  */
 
@@ -26,9 +26,8 @@ class Charts extends React.Component {
         }
     }
 
-    initChart() {
+    initChart(prevProps) {
         let chart = echarts.init(this.refs.chart), option;
-        chart.clear(); // 如果不clear(), 当已有堆叠数超过即将渲染的堆叠数时,会出现堆叠数错误
         switch (this.props.type) {
             case 'pie':
                 option = this.pieOption(this.props.data);
@@ -37,12 +36,14 @@ class Charts extends React.Component {
                 option = this.lineOption(this.props.data);
                 break;
             case 'multi_line':
+                // chart.clear();
                 option = this.multiLineOption(this.props.data);
                 break;
             case 'line_stacked_area':
                 option = this.stackedAreaOption(this.props.data);
                 break;
             case 'multi_line_stacked':
+                chart.clear();  // 如果不clear(), 当已有堆叠数超过即将渲染的堆叠数时,会出现堆叠数错误
                 option = this.multiStackedOption(this.props.data);
                 break;
             case 'bar':
@@ -59,8 +60,9 @@ class Charts extends React.Component {
         this.initChart();
     }
 
-    componentDidUpdate() {
-        this.initChart();
+    componentDidUpdate(prevProps) {
+        // 防止堆叠图分页的时候也刷新图表
+        prevProps.data != this.props.data && this.initChart(prevProps);
     }
 
     render() {
@@ -87,18 +89,11 @@ class Charts extends React.Component {
             },
             legend: {
                 show: (this.props.hasLegend ? true : false),
-                x: 'center',
                 y: 'bottom',
                 data: opt.legend
             },
             series : [
-                {
-                    name: '占比类型',
-                    type: 'pie',
-                    radius : '75%',
-                    label: { show: true },
-                    data: opt.series
-                }
+                { type:'pie', radius:'75%', label:{show:true }, name:'占比类型', data: opt.series }
             ]
           }
     }
@@ -146,67 +141,50 @@ class Charts extends React.Component {
     }
 
     barOption(opt) {
-        return {
-            color : ['#09CA65'],
-            label:{ position:'bottom' },
-            legend: { fontSize:30 },
-            textStyle:{
-                color:'#647888',
-                fontSize:30
-            },
+        let option = {
+            color: ['#008F4C','#00B054','#09CA65','#59E39B','#C6EFD9'],
+            label: { position:'bottom' },
+            legend: { y:'bottom', fontSize:30 },
+            textStyle: { color:'#647888', fontSize:30 },
             tooltip: {
                 trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow'
-                },
-                textStyle : {
-                    color: '#fff',
-                    decoration: 'none',
-                    fontFamily: 'Verdana, sans-serif',
-                    fontSize: 24,
-                    fontStyle: 'italic',
-                    fontWeight: 'bold'
-                },
+                textStyle: { color: '#fff', fontWeight: 'bold' },
             },
-            grid: {
-                left: '2%',
-                // right: '4%',
-                bottom: '1%',
-                containLabel: true
-            },
+            grid: { left: '2%', bottom: '6%', containLabel: true },
+            yAxis: { type: 'value', axisLabel:{'fontSize':30,'interval':0} },
             xAxis: {
                 type: 'category',
                 data: opt.axis,
                 axisLabel:{'fontSize':30,'interval':0,'rotate':90}
             },
-            yAxis: {
-                type: 'value',
-                axisLabel:{'fontSize':30,'interval':0}
-            },
             series: [
-                {
-                    name: '',
-                    type: 'bar',
-                    data: opt.series,
-                    itemStyle : {
-                        normal : {
-                            lineStyle:{
-                                color: '#5B9BD5'
-                            }
-                        }
-                    }
-                }
+                { name:'', type: 'bar', lineStyle:{ color:'#5B9BD5'}, data: opt.series }
             ]
         }
+
+        switch (this.props.master) {
+            case 'realBattery':
+                option.xAxis.data = opt.data1;
+                option.series = [
+                    { type:'bar', name: '100%-80%', stack:'battery', data: opt.data6 },
+                    { type:'bar', name: '80%-60%', stack:'battery', data: opt.data5 },
+                    { type:'bar', name: '60%-40%', stack:'battery', data: opt.data4 },
+                    { type:'bar', name: '40%-20%', stack:'battery', data: opt.data3 },
+                    { type:'bar', name: '20%-0%', stack:'battery', data: opt.data2 }
+                ];
+                break;
+            case 'cancelReason':
+                option.color = ['#09CA65'];
+                option.series = [ { name:'', type:'bar', lineStyle:{color:'#5B9BD5'}, data: opt.series } ];
+                break;
+        }
+        return option;
     }
 
     funnelOption(opt) {
         return {
             color:['#98ecc0','#59E39B','#2fca78','#0bbb5f','#079c4e'],
-            tooltip: {
-                trigger: 'item',
-                textStyle: { fontSize: 28 }
-            },
+            tooltip: { trigger: 'item', textStyle: { fontSize: 28 } },
             series: [ {
                 name:'DAU占比分析',
                 type:'funnel',
@@ -234,7 +212,7 @@ class Charts extends React.Component {
     }
 
     multiLineOption(opt) {
-        return {
+        let option = {
             color : ['#09CA65','#F5A623','#0DB0FF','#FF7263','#C584FF','#4D68E5'],
             textStyle:{ color:'#647888', fontSize: 24 },
             tooltip: { trigger: 'axis' },
@@ -252,6 +230,35 @@ class Charts extends React.Component {
                 { type:'line', smooth:true, lineStyle:{width:4}, name:'未结算', data: opt.data5 }
             ]
         }
+        // different charts series
+        switch (this.props.master) {
+            case 'realOrder':
+                option.series = [
+                    { type:'line', smooth:true, lineStyle:{width:4}, name:'下单量', data: opt.data2 },
+                    { type:'line', smooth:true, lineStyle:{width:4}, name:'取车单', data: opt.data3 },
+                    { type:'line', smooth:true, lineStyle:{width:4}, name:'取消订单', data: opt.data4 }
+                ]
+                break;
+            case 'realCash':
+                option.series = [
+                    { type:'line', smooth:true, lineStyle:{width:4}, name:'收入', data: opt.data2 },
+                    { type:'line', smooth:true, lineStyle:{width:4}, name:'收现', data: opt.data3 },
+                    { type:'line', smooth:true, lineStyle:{width:4}, name:'优惠', data: opt.data4 },
+                    { type:'line', smooth:true, lineStyle:{width:4}, name:'未结算', data: opt.data5 }
+                ]
+                break;
+            case 'realNewguy':
+                option.series = [
+                    { type:'line', smooth:true, lineStyle:{width:4}, name:'注册', data: opt.data2 },
+                    { type:'line', smooth:true, lineStyle:{width:4}, name:'双证', data: opt.data3 },
+                    { type:'line', smooth:true, lineStyle:{width:4}, name:'押金', data: opt.data4 },
+                    { type:'line', smooth:true, lineStyle:{width:4}, name:'下单用户', data: opt.data5 },
+                    { type:'line', smooth:true, lineStyle:{width:4}, name:'首单用户', data: opt.data6 }
+                ]
+                break;
+        }
+
+        return option;
     }
 
     multiStackedOption(opt) {
