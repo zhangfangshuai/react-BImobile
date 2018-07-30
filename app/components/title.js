@@ -5,7 +5,7 @@ class Title extends React.Component {
 
     render() {
         return (
-            <div className="component-title">{this.props.name}</div>
+            <div className="component-title">{this.props.name + (this.props.variable || '')}</div>
         )
     }
 }

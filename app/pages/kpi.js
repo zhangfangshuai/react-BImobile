@@ -35,6 +35,7 @@ class Watch extends React.Component {
     }
 
     componentDidMount() {
+        // <Charts type='scatter' data={this.state.nationData} master="nation" />
         this.axiosRequest(this.state.nationReq, 'nation', false);
     }
 
@@ -43,8 +44,10 @@ class Watch extends React.Component {
             <div className="container">
                 <Header city={this.state.currentCity} handleCity={this.selectCity.bind(this)} />
                 <section>
-                    <div className="wrap noBG clearTopGap">
-                        <Charts type='scatter' data={this.state.nationData} master="nation" />
+                    <div className="wrap clearTopGap">
+                        <Title name="城市概览 - " variable={this.state.currentCity.text == '全国' ? '北京' : this.state.currentCity.text } />
+
+
                     </div>
                 </section>
             </div>
