@@ -148,6 +148,20 @@ section {
         top: initial;
         left: calc(100vw - 2rem);
     }
+    .cityGistBtn {
+        display: flex;
+        justify-content: space-around;
+        width: 3.2rem;
+        height: 0.75rem;
+        line-height: 0.75rem;
+        font-size: .31rem;
+        color: #ffffff;
+        letter-spacing: .05rem;
+        margin: 0 auto 0.2rem;
+        border-radius: .75rem;
+        background: linear-gradient(-180deg, #14CA77 28%, #0DB95F 85%);
+        box-shadow: 0 0.0533333333rem 0.2133333333rem 0 rgba(13, 185, 95, 0.5);
+    }
 
     // page scroll-table unique style
     .scroll-cont {
@@ -329,6 +343,10 @@ section {
         }
         .realnewguy, .realnewguy ul li {
             width: 8.5rem;
+        }
+        .kpi, .kpi ul li {
+            p:nth-child(1) { width: 31%; };
+            p:nth-child(2), p:nth-child(3), p:nth-child(4), { width: 23%; };
         }
     }
 

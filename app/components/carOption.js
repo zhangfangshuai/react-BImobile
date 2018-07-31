@@ -11,7 +11,7 @@ class CarOption extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            ct: 0
+            ct: this.props.new ? 1: 0
         }
     }
 
@@ -26,8 +26,20 @@ class CarOption extends React.Component {
     }
 
     render() {
-        return (
-            <div className="carType-box">
+        var Ele;
+        if (this.props.new) {
+            Ele = <div className="component-carOption">
+               <p className={`car-type${this.state.ct == 1 ? ' active' : ''}`}
+                  onClick={this.selectCar.bind(this, 1)}>全部</p>
+               <p className={`car-type${this.state.ct == 0 ? ' active' : ''}`}
+                  onClick={this.selectCar.bind(this, 0)}>新电车</p>
+               <p className={`car-type${this.state.ct == 2 ? ' active' : ''}`}
+                  onClick={this.selectCar.bind(this, 2)}>老电车</p>
+               <p className={`car-type${this.state.ct == 3 ? ' active' : ''}`}
+                  onClick={this.selectCar.bind(this, 3)}>燃油车</p>
+            </div>
+        } else {
+            <div className="component-carOption">
                 <p className={`car-type${this.state.ct == 0 ? ' active' : ''}`}
                    onClick={this.selectCar.bind(this, 0)}>全部</p>
                 <p className={`car-type${this.state.ct == 1 ? ' active' : ''}`}
@@ -35,6 +47,9 @@ class CarOption extends React.Component {
                 <p className={`car-type${this.state.ct == 2 ? ' active' : ''}`}
                    onClick={this.selectCar.bind(this, 2)}>燃油车</p>
             </div>
+        }
+        return (
+            <div>{ Ele }</div>
         )
     }
 }
