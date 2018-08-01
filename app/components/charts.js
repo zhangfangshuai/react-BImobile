@@ -303,7 +303,6 @@ class Charts extends React.Component {
     }
 
     circleOption(opt) {
-      console.log(opt, 'opt');
         return {
             color: ["#00C466","#D5D9DD"],
             textStyle: { fontSize:28 },

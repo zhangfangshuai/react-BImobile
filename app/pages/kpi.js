@@ -44,8 +44,8 @@ class Watch extends React.Component {
     selectCity(c) {
         this.setState({
             currentCity: c,
-            cityActive: { 'display': 'block' },
-            nationActive: { 'display': 'none' }
+            cityActive: { 'display': c.value == 1 ? 'none' : 'block' },
+            nationActive: { 'display': c.value == 1 ? 'block' : 'none' }
         });
         for (let mst of ['cityGist','kpi','core']) {
             this.state[mst + 'Req'].cityId = c.value;
