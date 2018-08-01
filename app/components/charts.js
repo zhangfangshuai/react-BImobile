@@ -227,6 +227,9 @@ class Charts extends React.Component {
             case 'pie':
                 option = this.pieOption(this.props.data);
                 break;
+            case 'circle':
+                option = this.circleOption(this.props.data);
+                break;
             case 'line':
                 option = this.lineOption(this.props.data);
                 break;
@@ -236,7 +239,7 @@ class Charts extends React.Component {
             case 'line_stacked_area':
                 option = this.stackedAreaOption(this.props.data);
                 break;
-            case 'multi_line_stacked':geoCoordMap
+            case 'multi_line_stacked':
                 chart.clear();  // 如果不clear(), 当已有堆叠数超过即将渲染的堆叠数时,会出现堆叠数错误
                 option = this.multiStackedOption(this.props.data);
                 break;
@@ -296,6 +299,23 @@ class Charts extends React.Component {
             series: [
                 { type:'pie', radius:'75%', label:{show:true }, name:'占比类型', data: opt.series }
             ]
+        }
+    }
+
+    circleOption(opt) {
+      console.log(opt, 'opt');
+        return {
+            color: ["#00C466","#D5D9DD"],
+            textStyle: { fontSize:28 },
+            series: [{
+                type:'pie',
+                radius: ['100%', '90%'],
+                label: { show: true, position: 'center', formatter:'{c}%' },
+                data:[
+                    { value:opt, name:'', label:{ show:true } },
+                    { value:100, name:'', label:{ show:false } }
+                ]
+            }]
         }
     }
 

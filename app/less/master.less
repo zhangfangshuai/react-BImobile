@@ -65,7 +65,7 @@ h1, h2, h3, h4, h5, h6 {
 a {
     text-decoration:none;
     color:#969696;
-    font-family:AvantiBold,SimHei,'Helvetica Neue',Arial,'Droid Sans',sans-serif;
+    font-family: AvantiBold,SimHei,'Helvetica Neue',Arial,'Droid Sans',sans-serif;
 }
 a:hover {
     text-decoration:none;
@@ -344,10 +344,12 @@ section {
         .realnewguy, .realnewguy ul li {
             width: 8.5rem;
         }
-        .kpi, .kpi ul li {
+        .kpi, .kpi ul li, .kpi div li {
+            p { display: inline-block;}
             p:nth-child(1) { width: 31%; };
             p:nth-child(2), p:nth-child(3), p:nth-child(4), { width: 23%; };
         }
+
     }
 
     // charts height unique style
@@ -392,5 +394,50 @@ section {
     // 实时监控 inlineTranglePicker self style
     .ITP-realCar {
         top: .58rem;
+    }
+
+    // kpi self style
+    .scroll-cont .kpi >div li:hover {
+        transform: initial;
+    }
+    .kpi >div:first-child li { background: #fff !important; }
+    .kpiCity {
+        background: #fff !important;
+    }
+    .kpiArea p:first-child {
+        text-align: left;
+        padding-left: 7.5%;
+        border-right: solid 2px #ccc;
+        box-sizing: border-box;
+        position: relative;
+    }
+    .kpiArea p:first-child::after {
+        content: '';
+        position: absolute;
+        right: 20%;
+        top: calc(50% - 0.055rem);
+        width: 0;
+        height: 0;
+        border-top: solid .09rem #0DB95F;
+        border-left: solid .09rem transparent;
+        border-right: solid .09rem transparent;
+    }
+    .city-kpi {
+        width: 297px;
+        height: 225px;
+        margin-top: .2rem;
+        display: inline-block;
+    }
+
+    // subText
+    .subText {
+        position: absolute;
+        top: 0;
+        right: 3%;
+        height: 0.75rem;
+        line-height: 0.75rem;
+        padding-top: .1rem;
+        font-size: .24rem;
+        color: #0db95f;
     }
 }
