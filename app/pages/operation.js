@@ -179,7 +179,7 @@ class Operation extends React.Component {
         let PUSH = PD.length < 10 ? PD : PD.slice((PP-1)*PAGESIZE, PP*PAGESIZE);
         if (PUSH.length > 0) {
             var pushTb = PUSH.map((i, idx) => {
-                return <TableBody key={idx} data={[i.data0, i.data5, i.data1, i.data2, i.data3, i.data4]} />
+                return <TableBody key={idx} data={[i.data0, i.data5, i.data1, i.data2, i.data3, i.data4+'%']} />
             })
         }
         return (
@@ -216,7 +216,7 @@ class Operation extends React.Component {
                         <Title name="车辆违法详情" />
                         <CarOption handleCar={this.handleCarDetail.bind(this)} />
                         <SingleDatePicker handleDate={this.handleDateDetail.bind(this)} />
-                        <Table self="" tbody={detailTb}
+                        <Table self="carLawDetail" tbody={detailTb}
                             thead={['车牌号','违法次数','已处理','未处理','报警']} />
                         <Pagination
                             handlePage={this.handlePageDetail.bind(this)}

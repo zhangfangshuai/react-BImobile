@@ -104,7 +104,7 @@ function axiosGet(params, s, f) {
     var url = buildGetUrl(params);
     axios.get(url).then(function(response){
         if (response.data.code == '401') {
-            Tip.success('身份信息失效');
+            Tip.success('会话已过期');
             window.location.href = "login";
         } else if (response.data.code == '200'){
             s && s(response.data.data);
@@ -129,7 +129,6 @@ function axiosGet(params, s, f) {
         // }, 2000)
     })
 }
-
 
 
 /**

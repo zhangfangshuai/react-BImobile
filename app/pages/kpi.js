@@ -8,8 +8,9 @@ import CarOption from '../components/carOption'
 import Table from '../components/table'
 import TableBody from '../components/tableBody'
 import KpiArea from '../components/kpiArea'
+import DutyPerson from '../components/dutyPerson'
 
-class Watch extends React.Component {
+class Kpi extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -32,12 +33,8 @@ class Watch extends React.Component {
                 interface: 'kpi/getCoreIndex',
                 cityId: CITY_LIST[0].value
             },
-            cityActive: {
-                'display': 'none'
-            },
-            nationActive: {
-                'display': 'block'
-            }
+            cityActive: { 'display': 'block' },
+            nationActive: { 'display': 'block' }
         }
     }
 
@@ -48,20 +45,16 @@ class Watch extends React.Component {
             nationActive: { 'display': c.value == 1 ? 'block' : 'none' }
         });
         for (let mst of ['cityGist','kpi','core']) {
-            this.state[mst + 'Req'].cityId = c.value;
+            this.state[mst + 'Req'].cityId = (mst == 'cityGist' && c.value ==1) ? 2 : c.value;
             this.axiosRequest(this.state[mst + 'Req'], mst);
         }
 
     }
 
-    cityActive() {
+    cityDetail() {
         this.setState({
-            cityActive: {
-                'display': 'block'
-            },
-            nationActive: {
-                'display': 'none'
-            }
+            cityActive: { 'display': 'block' },
+            nationActive: { 'display': 'none' }
         })
     }
 
@@ -113,45 +106,61 @@ class Watch extends React.Component {
         this.axiosRequest(this.state.cityGistReq, 'cityGist');
         this.axiosRequest(this.state.kpiReq, 'kpi');
         this.axiosRequest(this.state.coreReq, 'core');
+        this.setState({
+            cityActive: { 'display': 'none' },
+            nationActive: { 'display': 'block' }
+        })
     }
 
     render() {
-        var K = this.state.kpiData;
+        var K = this.state.kpiData, kpis = new Array(3), kpiVar = ['j','i','m'];
         if (K.areaKpiList) {
-              var carcashTb = K.areaKpiList.map((area, idx) => {
-                  return <KpiArea data={K} item={area} variable={'j'} key={idx} />
-              })
-              var saleTb = K.areaKpiList.map((area, idx) => {
-                  return <KpiArea data={K} item={area} variable={'i'} key={idx} />
-              })
-              var lawTb = K.areaKpiList.map((area, idx) => {
-                  return <KpiArea data={K} item={area} variable={'m'} key={idx} />
-              })
+              for (let k = 0; k < 3; k++) {
+                  kpis[k] = K.areaKpiList.map((area, idx) => {
+                      return <KpiArea key={idx} data={K} item={area} variable={kpiVar[k]} />
+                  })
+              }
         }
 
-        var C = this.state.coreData;
+        var C = this.state.coreData, core = new Array(5);
         if (C.kpi1) {
-            var coreCarTb = C.kpi1.map((i, idx) => {
-                return <TableBody key={idx} data={[i.kpiname, i.kpi_yes,i.month_total,i.kpi_tongbi,i.tongbi_rate+'%']} />
-            })
-            var coreSiteTb = C.kpi2.map((i, idx) => {
-                return <TableBody key={idx} data={[i.kpiname, i.kpi_yes,i.month_total,i.kpi_tongbi,i.tongbi_rate+'%']} />
-            })
-            var coreUserTb = C.kpi3.map((i, idx) => {
-                return <TableBody key={idx} data={[i.kpiname, i.kpi_yes,i.month_total,i.kpi_tongbi,i.tongbi_rate+'%']} />
-            })
-            var coreOrderTb = C.kpi4.map((i, idx) => {
-                return <TableBody key={idx} data={[i.kpiname, i.kpi_yes,i.month_total,i.kpi_tongbi,i.tongbi_rate+'%']} />
-            })
-            var coreIncomeTb = C.kpi5.map((i, idx) => {
-                return <TableBody key={idx} data={[i.kpiname, i.kpi_yes,i.month_total,i.kpi_tongbi,i.tongbi_rate+'%']} />
-            })
+            for (let c = 1; c <= 5; c++ ) {
+                core[c] = C['kpi'+c].map((i, idx) => {
+                    let icon = <i className={i.tongbi_rate > 0 ? 'rise' : i.tongbi_rate == 0 ? '' : 'down'}></i>;
+                    return (
+                        <li key={idx}>
+                            <p>{i.kpiname}</p><p>{i.kpi_yes}</p><p>{i.month_total}</p>
+                            <p>{i.kpi_tongbi}</p><p>{i.tongbi_rate+'%'}{icon}</p>
+                        </li>
+                    )
+                });
+            }
         }
+
+        var coreObj = [
+            {id:1, name:'车辆'},
+            {id:2, name:'网点'},
+            {id:3, name:'用户'},
+            {id:4, name:'订单'},
+            {id:5, name:'营收'}
+        ];
+        let coreHTML = coreObj.map((i,idx) => {
+            return (
+                <section key={idx}>
+                    <div className="wrap">
+                        <Title name="核心指标-" variable={i.name} />
+                        <Table tbody={core[i.id]} thead={['指标名称','昨日','前日','同比','同比增幅']} />
+                        <DutyPerson sectionId={i.id+9} city={this.state.currentCity} />
+                    </div>
+                </section>
+            )
+        })
 
         var yes = getDateOffset(-1);
         var yesterday = yes.slice(0,4)+'-'+yes.slice(4,6)+'-'+yes.slice(6,8);
 
         var RATE = this.state.coreData.assess ? this.state.coreData.assess[0] : {kpi_ratef:0, kpi_rated:0, kpi_ratec:0, kpi_ratee:0};
+
         return (
             <div className="container">
                 <Header city={this.state.currentCity} handleCity={this.selectCity.bind(this)} />
@@ -159,7 +168,7 @@ class Watch extends React.Component {
                     <div className="wrap clearTopGap">
                         <Title name="城市概览 - " variable={this.state.currentCity.text == '全国' ? '北京' : this.state.currentCity.text } />
                         <VerticalGist data={this.state.cityGistData} master="kpi_nation" />
-                        <div className="cityGistBtn" style={this.state.nationActive} onClick={this.cityActive.bind(this)}>城市详情</div>
+                        <div className="cityGistBtn" style={this.state.nationActive} onClick={this.cityDetail.bind(this)}>城市详情</div>
                     </div>
                 </section>
 
@@ -180,7 +189,7 @@ class Watch extends React.Component {
                     <div className="wrap">
                         <Title name="当月KPI-车均收现" />
                         <CarOption new={true} handleCar={this.handleCar.bind(this)} master="kpi" />
-                        <Table self="kpi" tbody={carcashTb} thead={['大区/城市','目标值','当前值','完成度']} />
+                        <Table self="kpi" tbody={kpis[0]} thead={['大区/城市','目标值','当前值','完成度']} />
                     </div>
                 </section>
 
@@ -188,55 +197,22 @@ class Watch extends React.Component {
                     <div className="wrap clearTopGap">
                         <div className="hook"></div>
                         <Title name="当月KPI-上架率" />
-                        <Table self="kpi" tbody={saleTb} thead={['大区/城市','目标值','当前值','完成度']} />
+                        <Table self="kpi" tbody={kpis[1]} thead={['大区/城市','目标值','当前值','完成度']} />
                     </div>
                 </section>
 
                 <section style={this.state.nationActive}>
                     <div className="wrap">
                         <Title name="当月KPI-违法处理率" />
-                        <Table self="kpi" tbody={lawTb} thead={['大区/城市','目标值','当前值','完成度']} />
+                        <Table self="kpi" tbody={kpis[2]} thead={['大区/城市','目标值','当前值','完成度']} />
                     </div>
                 </section>
 
-                <section style={this.state.nationActive}>
-                    <div className="wrap">
-                        <Title name="核心指标-车辆" />
-                        <Table tbody={coreCarTb} thead={['指标名称','昨日','前日','同比','同比增幅']}/>
-                    </div>
-                </section>
-
-                <section>
-                    <div className="wrap">
-                        <Title name="核心指标-网点" />
-                        <Table tbody={coreSiteTb} thead={['指标名称','昨日','前日','同比','同比增幅']}/>
-                    </div>
-                </section>
-
-                <section>
-                    <div className="wrap">
-                        <Title name="核心指标-用户" />
-                        <Table tbody={coreUserTb} thead={['指标名称','昨日','前日','同比','同比增幅']}/>
-                    </div>
-                </section>
-
-                <section>
-                    <div className="wrap">
-                        <Title name="核心指标-订单" />
-                        <Table tbody={coreOrderTb} thead={['指标名称','昨日','前日','同比','同比增幅']}/>
-                    </div>
-                </section>
-
-                <section>
-                    <div className="wrap">
-                        <Title name="核心指标-营收" />
-                        <Table tbody={coreIncomeTb} thead={['指标名称','昨日','前日','同比','同比增幅']}/>
-                    </div>
-                </section>
+                { coreHTML }
             </div>
         )
     }
 
 }
 
-export default Watch;
+export default Kpi;

@@ -17,6 +17,7 @@ class Watch extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            masters: ['realCash', 'realCar', 'realOrder', 'realNewguy', 'realBattery'],
             currentCity: CITY_LIST[0],
             realCashData: { table: [] },
             realCashPage: 1,
@@ -61,18 +62,18 @@ class Watch extends React.Component {
 
     selectCity(c) {
         this.setState({ currentCity: c });
-        for (let mst of ['realCash', 'realCar', 'realOrder', 'realNewguy', 'realBattery']) {
+        for (let mst of this.state.masters) {
             this.state[mst + 'Req'].cityId = c.value;
-            this.axiosRequest(this.state[mst + 'Req'], mst , true);
+            this.axiosRequest(this.state[mst + 'Req'], mst);
         }
     }
 
-    axiosRequest(p, master, pageflag) {
+    axiosRequest(p, master) {
         if (isParamValid(p, master)) {
             axiosGet(p, (r) => {
                 this.setState((prevState) => {
                     prevState[master + 'Data'] = r;
-                    if (pageflag) { prevState[master + 'Page'] = 1; }
+                    prevState[master + 'Page'] && (prevState[master + 'Page'] = 1);
                 })
             });
         }
@@ -98,11 +99,9 @@ class Watch extends React.Component {
     }
 
     componentDidMount() {
-        this.axiosRequest(this.state.realCashReq, 'realCash', true);
-        this.axiosRequest(this.state.realCarReq, 'realCar', true);
-        this.axiosRequest(this.state.realOrderReq, 'realOrder', true)
-        this.axiosRequest(this.state.realNewguyReq, 'realNewguy', true)
-        this.axiosRequest(this.state.realBatteryReq, 'realBattery', false)
+        for (let mst of this.state.masters) {
+            this.axiosRequest(this.state[mst + 'Req'], mst);
+        }
     }
 
     render() {

@@ -39,7 +39,7 @@ class CarOption extends React.Component {
                   onClick={this.selectCar.bind(this, 3)}>燃油车</p>
             </div>
         } else {
-            <div className="component-carOption">
+            Ele = <div className="component-carOption">
                 <p className={`car-type${this.state.ct == 0 ? ' active' : ''}`}
                    onClick={this.selectCar.bind(this, 0)}>全部</p>
                 <p className={`car-type${this.state.ct == 1 ? ' active' : ''}`}

@@ -82,7 +82,7 @@ class Root_App extends React.Component {
             return (
                 <div>
                     <Menu menuState={this.state.menuState} user={this.state.user} cItem={this.state.currentMenu} />
-                    { view == 2 && <Kpi city={this.state.currentCity}/> }
+                    { view == 2 && <Income city={this.state.currentCity}/> }
                     { view == 3 && <Kpi city={this.state.currentCity}/> }
                     { view == 4 && <Users city={this.state.currentCity}/> }
                     { view == 64 && <App city={this.state.currentCity}/> }
